@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using D.Util.Interface;
 using D.Util.Test;
+using D.Util.Event;
 
 namespace D.Util.Tests
 {
@@ -50,7 +51,7 @@ namespace D.Util.Tests
         }
 
         /// <summary>
-        /// 同步发布事件
+        /// 异步发布事件
         /// </summary>
         [TestMethod()]
         public void SubscribeTest_Sync()
