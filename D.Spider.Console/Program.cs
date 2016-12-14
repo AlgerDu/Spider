@@ -13,7 +13,7 @@ namespace D.Spider.Console
         static void Main(string[] args)
         {
             var spider = new DSpider()
-                .UnityConfigerPath(@"Unity.config")
+                .UnityConfigerPath(AppDomain.CurrentDomain.BaseDirectory + @"Unity.config")
                 .Initialization()
                 .Run();
 

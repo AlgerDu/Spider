@@ -50,9 +50,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\D.Spider.Base\D.Spider.Core.csproj">
-      <Project>{96d8a6c2-c50c-4961-9458-04ebed78cb69}</Project>
+    <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
+      <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
       <Name>D.Spider.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Util\D.Util.csproj">
+      <Project>{573803C2-538A-4ED1-8A98-D990DCB83B9E}</Project>
+      <Name>D.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
