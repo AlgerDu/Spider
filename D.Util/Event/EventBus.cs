@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.Util
+namespace D.Util.Event
 {
     /// <summary>
     /// IEventBus 的一个实现

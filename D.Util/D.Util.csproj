@@ -40,12 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventBus.cs" />
+    <Compile Include="Event\BaseEvent.cs" />
+    <Compile Include="Event\EventBus.cs" />
     <Compile Include="Interface\IEvent.cs" />
     <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="Interface\IEventHandler.cs" />
+    <Compile Include="Interface\ILogger.cs" />
+    <Compile Include="Interface\ILoggerFactory.cs" />
+    <Compile Include="Logger\NullLogger\NullLogger.cs" />
+    <Compile Include="Logger\NullLogger\NullLoggerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
