@@ -46,6 +46,8 @@ namespace D.Spider.Core
         {
             var find = _allUrl.Find(uu => uu.Equal(url));
 
+            _logger.LogInformation("向 UrlManager 中添加 Url " + url.UrlString);
+
             if (find == null)
             {
                 _allUrl.Add(url);

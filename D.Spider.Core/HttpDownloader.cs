@@ -42,21 +42,23 @@ namespace D.Spider.Core
             {
                 try
                 {
-                    HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url.RelativePath);
+                    HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url.UrlString);
 
                     using (WebResponse wr = myReq.GetResponse())
                     {
+                        var r = wr as HttpWebResponse;
+
                         Stream respStream = wr.GetResponseStream();
-                        using (StreamReader reader = new StreamReader(respStream))
+                        using (StreamReader reader = new StreamReader(respStream, Encoding.GetEncoding(r.CharacterSet)))
                         {
-                            var html = reader.ReadToEnd();
-                            _eventBus.Publish(new UrlCrawledEvent(new Page(url, html)));
+                            var htmlTxt = reader.ReadToEnd();
+                            _eventBus.Publish(new UrlCrawledEvent(new Page(url, htmlTxt)));
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogInformation("爬取 url 发生错误：" + ex.ToString());
                 }
             }
         }
