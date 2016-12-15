@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace D.Spider.Core
@@ -12,8 +13,28 @@ namespace D.Spider.Core
     /// </summary>
     public class Url : IUrl
     {
-        string _relativeUrl;
+        string _relativePath;
+        string _host;
+        string _urlString;
 
+        public Url(string url)
+        {
+            _urlString = url;
+
+            var array = Regex.Split(url, @"(^http(s)?://[^/:]+(:\d*)?)");
+
+            if (array.Length == 3)
+            {
+                _host = array[1];
+                _relativePath = array[2];
+            }
+            else
+            {
+                throw new Exception("使用正则表达式获取 url 中的主机地址时失败");
+            }
+        }
+
+        #region IRul 属性
         public IList<IUrl> FromUrls
         {
             get
@@ -26,7 +47,7 @@ namespace D.Spider.Core
         {
             get
             {
-                return "";
+                return _host;
             }
         }
 
@@ -42,23 +63,47 @@ namespace D.Spider.Core
         {
             get
             {
-                return _relativeUrl;
+                return _relativePath;
             }
         }
 
+        public string UrlString
+        {
+            get
+            {
+                return _urlString;
+            }
+        }
+        #endregion
+
+        #region IUrl 方法
         public bool Equal(IUrl r)
         {
-            return Host == r.Host && RelativePath == r.RelativePath;
+            return UrlString == r.UrlString;
         }
 
         public bool NeedCrawl()
         {
             return true;
         }
+        #endregion
 
-        public Url(string url)
+        /// <summary>
+        /// 判断一个字符串是否为url
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsUrl(string str)
         {
-            _relativeUrl = url;
+            try
+            {
+                string Url = @"^http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$";
+                return Regex.IsMatch(str, Url);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

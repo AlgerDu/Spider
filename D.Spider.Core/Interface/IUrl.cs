@@ -32,6 +32,12 @@ namespace D.Spider.Core.Interface
         DateTime? LastCrawledTime { get; }
 
         /// <summary>
+        /// 获取完整的 Url 字符串
+        /// </summary>
+        /// <returns></returns>
+        string UrlString { get; }
+
+        /// <summary>
         /// 判断两个 url 是否时同一个 url
         /// </summary>
         /// <param name="r"></param>
