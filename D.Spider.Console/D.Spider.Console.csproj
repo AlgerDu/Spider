@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,6 +53,10 @@
     <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
       <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
       <Name>D.Spider.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Util.Logger.Console\D.Util.Logger.Console.csproj">
+      <Project>{ac63c144-70f3-44ff-9650-b530654f7b8a}</Project>
+      <Name>D.Util.Logger.Console</Name>
     </ProjectReference>
     <ProjectReference Include="..\D.Util\D.Util.csproj">
       <Project>{573803C2-538A-4ED1-8A98-D990DCB83B9E}</Project>

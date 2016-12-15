@@ -1,5 +1,6 @@
 ﻿using D.Spider.Core;
 using D.Spider.Core.Interface;
+using D.Util.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +24,35 @@ namespace D.Spider.Console
 
             while ((url = System.Console.ReadLine()) != "q")
             {
-                manager.AddUrl(new Url(url));
+                if (Url.IsUrl(url))
+                {
+                    manager.AddUrl(new Url(url));
+                }
+                else
+                {
+                    System.Console.WriteLine(url + " 不是一个正确的 url");
+                }
             }
         }
     }
 
     class ConsolePageProcess : IPageProcess
     {
+        ILogger _logger;
+
+        public ConsolePageProcess(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<ConsolePageProcess>();
+        }
+
         public void Process(IPage page)
         {
-            System.Console.WriteLine(page.HtmlTxt);
+            _logger.LogDebug("test dbug");
+            _logger.LogError("test fail");
+            _logger.LogCritical("test crit");
+            _logger.LogTrace("test trac");
+            _logger.LogWarning("test warn");
+            //System.Console.WriteLine(page.HtmlTxt.Substring(0, 50)[0]);
         }
     }
 }
