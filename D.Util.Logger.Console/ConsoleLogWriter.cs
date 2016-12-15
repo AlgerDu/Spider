@@ -52,7 +52,7 @@ namespace D.Util.Logger.Console
             switch (type)
             {
                 case LogContextType.trce: return ConsoleColor.Gray;
-                case LogContextType.dbug: return ConsoleColor.Black;
+                case LogContextType.dbug: return ConsoleColor.Blue;
                 case LogContextType.info: return ConsoleColor.Green;
                 case LogContextType.warn: return ConsoleColor.Yellow;
                 case LogContextType.fail: return ConsoleColor.Red;
