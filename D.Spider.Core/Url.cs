@@ -21,8 +21,13 @@ namespace D.Spider.Core
         {
             _urlString = url;
 
-            var array = Regex.Split(url, @"(^http(s)?://[^/:]+(:\d*)?)");
+            var array = Regex.Split(url, @"(^http[s]?://[^/:]+(:\d*)?)");
 
+            if (array.Length == 2)
+            {
+                _host = array[1];
+                _relativePath = "";
+            }
             if (array.Length == 3)
             {
                 _host = array[1];
@@ -32,6 +37,14 @@ namespace D.Spider.Core
             {
                 throw new Exception("使用正则表达式获取 url 中的主机地址时失败");
             }
+        }
+
+        public Url(string host, string relativePath)
+        {
+            _host = host;
+            _relativePath = relativePath;
+
+            _urlString = _host + _relativePath;
         }
 
         #region IRul 属性
