@@ -28,7 +28,7 @@ namespace D.Spider.Core
                 _host = array[1];
                 _relativePath = "";
             }
-            if (array.Length == 3)
+            else if (array.Length == 3)
             {
                 _host = array[1];
                 _relativePath = array[2];
