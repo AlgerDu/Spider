@@ -17,7 +17,16 @@ namespace D.Spider.Core
         string _host;
         string _urlString;
 
-        public Url(string url)
+        DateTime? _lastCrawledTime;
+        int _interval;
+
+        private Url()
+        {
+            _lastCrawledTime = null;
+            _interval = -1;
+        }
+
+        public Url(string url) : this()
         {
             _urlString = url;
 
@@ -26,7 +35,7 @@ namespace D.Spider.Core
             if (array.Length == 2)
             {
                 _host = array[1];
-                _relativePath = "";
+                _relativePath = "/";
             }
             else if (array.Length == 3)
             {
@@ -68,7 +77,27 @@ namespace D.Spider.Core
         {
             get
             {
-                throw new NotImplementedException();
+                return _lastCrawledTime;
+            }
+            set
+            {
+                _lastCrawledTime = value;
+            }
+        }
+
+        /// <summary>
+        /// Url 爬取的时间间隔
+        /// 时间单位 秒
+        /// </summary>
+        public int Interval
+        {
+            get
+            {
+                return _interval;
+            }
+            set
+            {
+                _interval = value;
             }
         }
 
@@ -97,7 +126,15 @@ namespace D.Spider.Core
 
         public bool NeedCrawl()
         {
-            return true;
+            if (LastCrawledTime == null
+                || (Interval > 0 && DateTime.Now - LastCrawledTime > new TimeSpan(0, 0, Interval)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
 
