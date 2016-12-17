@@ -29,12 +29,17 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 最后一次爬取的时间
         /// </summary>
-        DateTime? LastCrawledTime { get; }
+        DateTime? LastCrawledTime { get; set; }
+
+        /// <summary>
+        /// Url 爬取的时间间隔
+        /// 时间单位 秒
+        /// </summary>
+        int Interval { get; set; }
 
         /// <summary>
         /// 获取完整的 Url 字符串
         /// </summary>
-        /// <returns></returns>
         string UrlString { get; }
 
         /// <summary>
