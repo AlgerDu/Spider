@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace D.Spider.Core.Events
 {
+    /// <summary>
+    /// IDownloader 下载完一个 Url 对应的页面之后发布此事件
+    /// </summary>
     public class UrlCrawledEvent : BaseEvent, IEvent
     {
         IPage _page;

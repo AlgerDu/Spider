@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace D.Spider.Core.Events
 {
+    /// <summary>
+    /// 当有 Url 需要爬取的时候，UrlManager 发布这个事件
+    /// </summary>
     public class UrlWaitingEvent : BaseEvent, IEvent
     {
     }
