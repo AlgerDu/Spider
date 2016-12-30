@@ -8,6 +8,8 @@ using D.Spider.Core.Events;
 using D.Util.Interface;
 using System.Net;
 using System.IO;
+using D.Util.Web;
+using D.Util.Models;
 
 namespace D.Spider.Core
 {
@@ -21,15 +23,19 @@ namespace D.Spider.Core
         ILogger _logger;
 
         IUrlManager _urlManager;
+        IjQuery _jQuery;
 
         public HttpDownloader(
             IEventBus eventBus
             , ILoggerFactory loggerFactory
-            , IUrlManager urlManager)
+            , IUrlManager urlManager
+            , IjQuery jQuery)
         {
             _eventBus = eventBus;
             _logger = loggerFactory.CreateLogger<HttpDownloader>();
+
             _urlManager = urlManager;
+            _jQuery = jQuery;
 
             _eventBus.Subscribe(this);
         }
@@ -42,19 +48,12 @@ namespace D.Spider.Core
             {
                 try
                 {
-                    HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url.UrlString);
-
-                    using (WebResponse wr = myReq.GetResponse())
+                    _jQuery.Get(
+                        url.UrlString,
+                        (object sender, jQuerySuccessEventArgs<string> se) =>
                     {
-                        var r = wr as HttpWebResponse;
-
-                        Stream respStream = wr.GetResponseStream();
-                        using (StreamReader reader = new StreamReader(respStream, Encoding.GetEncoding(r.CharacterSet)))
-                        {
-                            var htmlTxt = reader.ReadToEnd();
-                            _eventBus.Publish(new UrlCrawledEvent(new Page(url, htmlTxt)));
-                        }
-                    }
+                        _eventBus.Publish(new UrlCrawledEvent(new Page(url, se.Data)));
+                    });
                 }
                 catch (Exception ex)
                 {
