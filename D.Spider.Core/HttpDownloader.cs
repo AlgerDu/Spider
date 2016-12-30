@@ -10,20 +10,52 @@ using System.Net;
 using System.IO;
 using D.Util.Web;
 using D.Util.Models;
+using System.Threading;
 
 namespace D.Spider.Core
 {
     /// <summary>
     /// IDownloader 的实现
-    /// 只是提交的 http 请求，不解析 js
+    /// 使用 IjQuery 进行网页下载
     /// </summary>
     public class HttpDownloader : IDownloader
     {
+        /// <summary>
+        /// 同时下载的最大数量
+        /// </summary>
+        const int _maxDownloadNumber = 5;
+
         IEventBus _eventBus;
         ILogger _logger;
 
         IUrlManager _urlManager;
         IjQuery _jQuery;
+
+        Task _dealTask;
+
+        int _downloadingNumber;
+        ManualResetEvent _mre;
+
+        /// <summary>
+        /// 正在下载的页面数量
+        /// </summary>
+        int DownloadingNumber
+        {
+            get
+            {
+                lock (this)
+                {
+                    return _downloadingNumber;
+                }
+            }
+            set
+            {
+                lock (this)
+                {
+                    _downloadingNumber = value;
+                }
+            }
+        }
 
         public HttpDownloader(
             IEventBus eventBus
@@ -37,34 +69,75 @@ namespace D.Spider.Core
             _urlManager = urlManager;
             _jQuery = jQuery;
 
+            _downloadingNumber = 0;
+            _mre = new ManualResetEvent(true);
+
             _eventBus.Subscribe(this);
         }
 
         public void Handle(UrlWaitingEvent e)
         {
-            var url = _urlManager.NextCrawl();
-
-            if (url != null)
+            if (DownloadingNumber >= _maxDownloadNumber)
             {
-                try
-                {
-                    _jQuery.Get(
-                        url.UrlString,
-                        (object sender, jQuerySuccessEventArgs<string> se) =>
-                    {
-                        _eventBus.Publish(new UrlCrawledEvent(new Page(url, se.Data)));
-                    });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogInformation("爬取 url 发生错误：" + ex.ToString());
-                }
+                _logger.LogInformation("正在下载的网页数量已经达到最大数 " + _maxDownloadNumber);
+            }
+            else
+            {
+                _mre.Set();
             }
         }
 
         public void Run()
         {
+            _dealTask = new Task(() =>
+            {
+                while (DownloadingNumber >= 0)
+                {
+                    if (DownloadingNumber >= _maxDownloadNumber)
+                    {
+                        _logger.LogInformation("正在下载的网页数量已经达到最大数 " + _maxDownloadNumber);
 
+                        _mre.Reset();
+                    }
+                    else
+                    {
+                        var nextCrawlUrl = _urlManager.NextCrawl();
+
+                        if (nextCrawlUrl == null)
+                        {
+                            _logger.LogInformation("暂时已经没有需要爬取的网页");
+                            _mre.Reset();
+                        }
+                        else
+                        {
+                            try
+                            {
+                                _downloadingNumber++;
+
+                                _logger.LogInformation("开始爬取 " + nextCrawlUrl.String);
+
+                                _jQuery.Get(
+                                    nextCrawlUrl.String,
+                                    (object sender, jQuerySuccessEventArgs<string> sea) =>
+                                    {
+                                        _downloadingNumber--;
+
+                                        _eventBus.Publish(new UrlCrawledEvent(new Page(nextCrawlUrl, sea.Data)));
+                                    });
+                            }
+                            catch (Exception ex)
+                            {
+                                _downloadingNumber--;
+                                _logger.LogInformation("爬取 url 发生错误：" + ex.ToString());
+                            }
+                        }
+                    }
+
+                    _mre.WaitOne();
+                }
+            });
+
+            _dealTask.Start();
         }
     }
 }
