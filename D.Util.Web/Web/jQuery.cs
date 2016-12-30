@@ -18,6 +18,13 @@ namespace D.Util.Web
     {
         const int _defaultTimeout = 10000;
 
+        ILogger _logger;
+
+        public jQuery(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<jQuery>();
+        }
+
         public Task Ajax<T>(AjaxRequestTypes type, string url, object data, EventHandler<jQuerySuccessEventArgs<T>> success, EventHandler<jQueryErrorEventArgs> error = null, int timeout = -1) where T : class
         {
             return Task.Run(() =>
@@ -39,21 +46,36 @@ namespace D.Util.Web
                     }
                 }
 
-                using (var response = request.GetResponse() as HttpWebResponse)
+                try
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    using (var response = request.GetResponse() as HttpWebResponse)
                     {
-                        Stream respStream = response.GetResponseStream();
-                        using (StreamReader reader = new StreamReader(respStream, Encoding.GetEncoding(response.CharacterSet)))
+                        if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            var txt = reader.ReadToEnd();
-                            var rData = TxtToObject<T>(txt);
-                            success?.BeginInvoke(this, new jQuerySuccessEventArgs<T>(rData as T), null, null);
+                            Stream respStream = response.GetResponseStream();
+                            using (StreamReader reader = new StreamReader(respStream, Encoding.GetEncoding(response.CharacterSet)))
+                            {
+                                var txt = reader.ReadToEnd();
+                                var rData = TxtToObject<T>(txt);
+                                success?.BeginInvoke(this, new jQuerySuccessEventArgs<T>(rData as T), null, null);
+                            }
                         }
+                        else
+                        {
+                            error?.BeginInvoke(this, new jQueryErrorEventArgs(response.StatusCode), null, null);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetType() == typeof(WebException))
+                    {
+                        var response = (ex as WebException).Response as HttpWebResponse;
+                        error?.BeginInvoke(this, new jQueryErrorEventArgs(response.StatusCode), null, null);
                     }
                     else
                     {
-                        error?.BeginInvoke(this, new jQueryErrorEventArgs(), null, null);
+                        _logger.LogWarning("jQuery 执行 ajax 请求时发生错误：" + ex.ToString());
                     }
                 }
             });
