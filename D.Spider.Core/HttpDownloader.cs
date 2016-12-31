@@ -18,7 +18,7 @@ namespace D.Spider.Core
     /// IDownloader 的实现
     /// 使用 IjQuery 进行网页下载
     /// </summary>
-    public class HttpDownloader : IDownloader
+    public class HttpDownloader : IDownloader, IDisposable
     {
         /// <summary>
         /// 同时下载的最大数量
@@ -75,6 +75,11 @@ namespace D.Spider.Core
             _eventBus.Subscribe(this);
         }
 
+        ~HttpDownloader()
+        {
+            Dispose();
+        }
+
         public void Handle(UrlWaitingEvent e)
         {
             if (DownloadingNumber >= _maxDownloadNumber)
@@ -116,13 +121,21 @@ namespace D.Spider.Core
 
                                 _logger.LogInformation("开始爬取 " + nextCrawlUrl.String);
 
-                                _jQuery.Get(
+                                _jQuery.Ajax(
+                                    AjaxRequestTypes.GET,
                                     nextCrawlUrl.String,
+                                    null,
                                     (object sender, jQuerySuccessEventArgs<string> sea) =>
                                     {
                                         _downloadingNumber--;
 
                                         _eventBus.Publish(new UrlCrawledEvent(new Page(nextCrawlUrl, sea.Data)));
+                                    },
+                                    (object sender, jQueryErrorEventArgs eea) =>
+                                    {
+                                        _downloadingNumber--;
+
+                                        _logger.LogWarning("请求 Url：" + nextCrawlUrl.String + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
                                     });
                             }
                             catch (Exception ex)
@@ -138,6 +151,12 @@ namespace D.Spider.Core
             });
 
             _dealTask.Start();
+        }
+
+        public void Dispose()
+        {
+            _downloadingNumber = -100;
+            _mre.Set();
         }
     }
 }
