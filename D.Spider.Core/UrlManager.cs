@@ -33,7 +33,7 @@ namespace D.Spider.Core
             _urlCheckTimer = new Timer(_urlCheckInterval);
             _urlCheckTimer.Elapsed += new ElapsedEventHandler(UrlCheckTimer_Elapsed);
 
-            _urlCheckTimer.Start();
+            //_urlCheckTimer.Start();
 
             _allUrl = new List<IUrl>();
             _waitingCrawlUrl = new List<IUrl>();
@@ -57,7 +57,7 @@ namespace D.Spider.Core
         {
             var find = _allUrl.Find(uu => uu.Equal(url));
 
-            _logger.LogInformation("向 UrlManager 中添加 Url " + url.UrlString);
+            _logger.LogInformation("向 UrlManager 中添加 Url " + url.String);
 
             if (find == null)
             {
@@ -131,6 +131,7 @@ namespace D.Spider.Core
         {
             lock (this)
             {
+                e.Page.Url.LastCrawledTime = DateTime.Now;
 
                 var findIndex = _crawlingUrl.FindIndex(u => u.Equal(e.Page.Url));
                 if (findIndex > -1)

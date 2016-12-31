@@ -40,7 +40,7 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 获取完整的 Url 字符串
         /// </summary>
-        string UrlString { get; }
+        string String { get; }
 
         /// <summary>
         /// 判断两个 url 是否时同一个 url

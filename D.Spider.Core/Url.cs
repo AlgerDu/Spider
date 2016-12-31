@@ -109,7 +109,7 @@ namespace D.Spider.Core
             }
         }
 
-        public string UrlString
+        public string String
         {
             get
             {
@@ -121,7 +121,7 @@ namespace D.Spider.Core
         #region IUrl 方法
         public bool Equal(IUrl r)
         {
-            return UrlString == r.UrlString;
+            return String == r.String;
         }
 
         public bool NeedCrawl()
@@ -147,7 +147,7 @@ namespace D.Spider.Core
         {
             try
             {
-                string Url = @"^http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$";
+                string Url = @"^http[s]?://[^/:]+(:\d*)?";
                 return Regex.IsMatch(str, Url);
             }
             catch
