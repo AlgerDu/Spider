@@ -53,6 +53,11 @@ namespace D.Spider.Core
                 lock (this)
                 {
                     _downloadingNumber = value;
+
+                    if (_downloadingNumber < _maxDownloadNumber)
+                    {
+                        _mre.Set();
+                    }
                 }
             }
         }
@@ -117,7 +122,7 @@ namespace D.Spider.Core
                         {
                             try
                             {
-                                _downloadingNumber++;
+                                DownloadingNumber++;
 
                                 _logger.LogInformation("开始爬取 " + nextCrawlUrl.String);
 
@@ -127,20 +132,20 @@ namespace D.Spider.Core
                                     null,
                                     (object sender, jQuerySuccessEventArgs<string> sea) =>
                                     {
-                                        _downloadingNumber--;
+                                        DownloadingNumber--;
 
                                         _eventBus.Publish(new UrlCrawledEvent(new Page(nextCrawlUrl, sea.Data)));
                                     },
                                     (object sender, jQueryErrorEventArgs eea) =>
                                     {
-                                        _downloadingNumber--;
+                                        DownloadingNumber--;
 
                                         _logger.LogWarning("请求 Url：" + nextCrawlUrl.String + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
                                     });
                             }
                             catch (Exception ex)
                             {
-                                _downloadingNumber--;
+                                DownloadingNumber--;
                                 _logger.LogInformation("爬取 url 发生错误：" + ex.ToString());
                             }
                         }
@@ -155,8 +160,7 @@ namespace D.Spider.Core
 
         public void Dispose()
         {
-            _downloadingNumber = -100;
-            _mre.Set();
+            DownloadingNumber = -100;
         }
     }
 }
