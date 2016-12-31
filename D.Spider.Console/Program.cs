@@ -1,10 +1,14 @@
 ﻿using D.Spider.Core;
 using D.Spider.Core.Interface;
 using D.Util.Interface;
+using D.Util.Models;
+using D.Util.Web;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace D.Spider.Console
@@ -20,19 +24,9 @@ namespace D.Spider.Console
 
             var manager = spider.UrlManager;
 
-            string url = string.Empty;
+            manager.AddUrl("http://book.qidian.com/info/36026917#Catalog");
 
-            while ((url = System.Console.ReadLine()) != "q")
-            {
-                if (Url.IsUrl(url))
-                {
-                    manager.AddUrl(new Url(url));
-                }
-                else
-                {
-                    System.Console.WriteLine(url + " 不是一个正确的 url");
-                }
-            }
+            System.Console.ReadKey();
         }
     }
 
@@ -47,12 +41,26 @@ namespace D.Spider.Console
 
         public void Process(IPage page)
         {
-            _logger.LogDebug("test dbug");
-            _logger.LogError("test fail");
-            _logger.LogCritical("test crit");
-            _logger.LogTrace("test trac");
-            _logger.LogWarning("test warn");
-            //System.Console.WriteLine(page.HtmlTxt.Substring(0, 50)[0]);
+            _logger.LogInformation("解析 html");
+            //_logger.LogInformation(page.HtmlTxt);
+            ////Regex regex = new Regex("<!-- start 目录分卷 -->[\\s\\S]*<!-- end 目录分卷 -->");
+            ////var mc = regex.Matches(page.HtmlTxt);
+            ////var html = mc[0].Value;
+            ////regex = new Regex("<a[^>]*>(?<name>[\\s\\S]*?)</a>");
+            ////mc = regex.Matches(html);
+            ////foreach (Match m in mc)
+            ////{
+            ////    _logger.LogInformation(m.Groups["name"].Value);
+            ////}
+
+            //NSoup.Nodes.Document doc = NSoup.NSoupClient.Parse(page.HtmlTxt);
+            ////var e = doc.GetElementsByAttribute("data-rid");
+            //var es = doc.Select("div.volume li a");
+
+            //foreach (var e in es)
+            //{
+            //    _logger.LogInformation(e.OuterHtml());
+            //}
         }
     }
 }

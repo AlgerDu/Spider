@@ -33,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NSoup, Version=0.8.0.0, Culture=neutral, PublicKeyToken=6d44e53f0a65e802, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSoup.0.8.0\lib\net40\NSoup.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,12 +66,17 @@
       <Project>{ac63c144-70f3-44ff-9650-b530654f7b8a}</Project>
       <Name>D.Util.Logger.Console</Name>
     </ProjectReference>
+    <ProjectReference Include="..\D.Util.Web\D.Util.Web.csproj">
+      <Project>{D6F61554-7F08-486F-80CC-2015D0B40610}</Project>
+      <Name>D.Util.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\D.Util\D.Util.csproj">
       <Project>{573803C2-538A-4ED1-8A98-D990DCB83B9E}</Project>
       <Name>D.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Unity.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
