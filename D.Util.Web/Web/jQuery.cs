@@ -57,12 +57,12 @@ namespace D.Util.Web
                             {
                                 var txt = reader.ReadToEnd();
                                 var rData = TxtToObject<T>(txt);
-                                success?.BeginInvoke(this, new jQuerySuccessEventArgs<T>(rData as T), null, null);
+                                success?.Invoke(this, new jQuerySuccessEventArgs<T>(rData as T));
                             }
                         }
                         else
                         {
-                            error?.BeginInvoke(this, new jQueryErrorEventArgs(response.StatusCode), null, null);
+                            error?.Invoke(this, new jQueryErrorEventArgs(response.StatusCode));
                         }
                     }
                 }
@@ -74,7 +74,7 @@ namespace D.Util.Web
 
                         if (response != null)
                         {
-                            error?.BeginInvoke(this, new jQueryErrorEventArgs(response.StatusCode), null, null);
+                            error?.Invoke(this, new jQueryErrorEventArgs(response.StatusCode));
                         }
                         else
                         {
