@@ -33,21 +33,21 @@ namespace D.Util.Web
                 request.Method = type.ToString();
                 request.Timeout = timeout == -1 ? _defaultTimeout : timeout;
 
-                if (type == AjaxRequestTypes.POST && data != null)
-                {
-                    var json = JsonConvert.SerializeObject(data);
-
-                    request.ContentType = "application/json";
-
-                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                    {
-                        streamWriter.Write(json);
-                        streamWriter.Flush();
-                    }
-                }
-
                 try
                 {
+                    if (type == AjaxRequestTypes.POST && data != null)
+                    {
+                        var json = JsonConvert.SerializeObject(data);
+
+                        request.ContentType = "application/json";
+
+                        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                        {
+                            streamWriter.Write(json);
+                            streamWriter.Flush();
+                        }
+                    }
+
                     using (var response = request.GetResponse() as HttpWebResponse)
                     {
                         if (response.StatusCode == HttpStatusCode.OK)
@@ -71,7 +71,15 @@ namespace D.Util.Web
                     if (ex.GetType() == typeof(WebException))
                     {
                         var response = (ex as WebException).Response as HttpWebResponse;
-                        error?.BeginInvoke(this, new jQueryErrorEventArgs(response.StatusCode), null, null);
+
+                        if (response != null)
+                        {
+                            error?.BeginInvoke(this, new jQueryErrorEventArgs(response.StatusCode), null, null);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("jQuery 执行 ajax 请求时发生错误 WebException：" + ex.ToString());
+                        }
                     }
                     else
                     {
