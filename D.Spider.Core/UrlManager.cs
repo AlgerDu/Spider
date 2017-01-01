@@ -53,6 +53,11 @@ namespace D.Spider.Core
 
         #region IUrlManager 接口实现
 
+        public IUrlManager Run()
+        {
+            return this;
+        }
+
         public IUrl AddUrl(IUrl url)
         {
             var find = _allUrl.Find(uu => uu.Equal(url));

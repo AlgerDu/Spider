@@ -17,6 +17,12 @@ namespace D.Spider.Core.Interface
         : IEventHandler<UrlCrawledEvent>
     {
         /// <summary>
+        /// 启动 UrlManager 支持链式编程
+        /// </summary>
+        /// <returns></returns>
+        IUrlManager Run();
+
+        /// <summary>
         /// 向 IUrlList 中添加一个的 URL
         /// </summary>
         /// <param name="url">待爬取的 URL</param>
