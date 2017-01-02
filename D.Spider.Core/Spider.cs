@@ -35,6 +35,8 @@ namespace D.Spider.Core
 
         public IUrlManager UrlManager { get { return _urlManager; } }
 
+        public IUnityContainer UnityContainer { get { return _unityContainer; } }
+
         #endregion
 
         #region ISpider 接口

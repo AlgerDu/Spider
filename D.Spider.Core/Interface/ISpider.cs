@@ -1,5 +1,6 @@
 ﻿using D.Spider.Core.Events;
 using D.Util.Interface;
+using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace D.Spider.Core.Interface
     public interface ISpider
         : IEventHandler<UrlCrawledEvent>
     {
+        /// <summary>
+        /// IOc Unity 的容器
+        /// </summary>
+        IUnityContainer UnityContainer { get; }
+
         /// <summary>
         /// Url 管理器
         /// </summary>
