@@ -153,6 +153,8 @@ namespace D.Spider.Core
 
                     _mre.WaitOne();
                 }
+
+                _logger.LogDebug("DealTask 任务结束");
             });
 
             _dealTask.Start();
