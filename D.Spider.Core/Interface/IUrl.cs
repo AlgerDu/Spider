@@ -27,6 +27,11 @@ namespace D.Spider.Core.Interface
         string RelativePath { get; }
 
         /// <summary>
+        /// 自定类型，供使用者使用
+        /// </summary>
+        int CustomType { get; set; }
+
+        /// <summary>
         /// 最后一次爬取的时间
         /// </summary>
         DateTime? LastCrawledTime { get; set; }

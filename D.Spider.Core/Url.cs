@@ -65,6 +65,8 @@ namespace D.Spider.Core
             }
         }
 
+        public int CustomType { get; set; }
+
         public string Host
         {
             get
