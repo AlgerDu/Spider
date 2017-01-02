@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using D.Spider.Core.Events;
 using D.Util.Interface;
 using D.Spider.Core;
+using D.NovelCrawl.Core.DTO;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace D.NovelCrawl.Core
 {
@@ -76,7 +79,62 @@ namespace D.NovelCrawl.Core
         #region IPageProcess 实现
         public void Process(IPage page)
         {
-            _logger.LogInformation(page.HtmlTxt.Substring(0, 20));
+            switch ((UrlTypes)page.Url.CustomType)
+            {
+                case UrlTypes.NovleCatalog: NovleCatalogPage(page); break;
+                case UrlTypes.NovleChapterTxt: NovleChapterTxtPage(page); break;
+            }
+        }
+
+        /// <summary>
+        /// 处理小说目录页面
+        /// </summary>
+        /// <param name="page"></param>
+        public void NovleCatalogPage(IPage page)
+        {
+            var step = _websiteProxy.PageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
+            JObject data = new JObject();
+            ExecuteStep(page.HtmlTxt, step, ref data);
+
+        }
+
+        public void NovleChapterTxtPage(IPage page)
+        {
+            var step = _websiteProxy.PageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
+        }
+
+        /// <summary>
+        /// 解析页面获取数据
+        /// </summary>
+        /// <param name="step"></param>
+        /// <param name="data"></param>
+        public void ExecuteStep(string html, PageProcessStep step, ref JObject data)
+        {
+            if (step.Type == PageProcessStepTypes.Html)
+            {
+                var array = new JArray();
+                NSoup.Nodes.Document doc = NSoup.NSoupClient.Parse(html);
+
+                var es = doc.Select(step.ProcessStr);
+
+                foreach (var e in es)
+                {
+                    var item = new JObject();
+                    ExecuteStep(e.OuterHtml(), step.NextProcessStep, ref item);
+                    array.Add(item);
+                }
+
+                data["array"] = array;
+            }
+            else if (step.Type == PageProcessStepTypes.RegExp)
+            {
+                Regex regex = new Regex(step.ProcessStr);
+                var m = regex.Matches(html)[0];
+                foreach (var n in step.DataNames.Split(';'))
+                {
+                    data[n] = m.Groups[n].Value;
+                }
+            }
         }
         #endregion
 
@@ -98,13 +156,15 @@ namespace D.NovelCrawl.Core
                 }
                 else
                 {
-                    deal.OfficialUrl =
-                        deal.OfficialUrl == null || deal.OfficialUrl.String != official.Url
-                        ? new Url(official.Url) : deal.OfficialUrl;
+                    if (deal.OfficialUrl == null || deal.OfficialUrl.String != official.Url)
+                    {
+                        deal.OfficialUrl = new Url(official.Url);
 
-                    deal.OfficialUrl.Interval = 10;
+                        deal.OfficialUrl.Interval = 1800;
+                        deal.OfficialUrl.CustomType = (int)UrlTypes.NovleCatalog;
 
-                    _urlManager.AddUrl(deal.OfficialUrl);
+                        _urlManager.AddUrl(deal.OfficialUrl);
+                    }
                 }
             }
             else

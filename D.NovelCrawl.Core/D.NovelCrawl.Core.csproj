@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NSoup, Version=0.8.0.0, Culture=neutral, PublicKeyToken=6d44e53f0a65e802, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSoup.0.8.0\lib\net40\NSoup.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,12 +52,16 @@
     <Compile Include="DTO\ListResult.cs" />
     <Compile Include="DTO\NovelListModel.cs" />
     <Compile Include="DTO\PageModel.cs" />
+    <Compile Include="DTO\PageProcessStep.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Novel.cs" />
     <Compile Include="NovelCrawl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebsiteProxy.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
       <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>

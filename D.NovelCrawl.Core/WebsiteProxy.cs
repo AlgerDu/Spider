@@ -93,5 +93,35 @@ namespace D.NovelCrawl.Core
 
             return result;
         }
+
+        /// <summary>
+        /// 获取一个主机某种类型的url页面的处理方式
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public PageProcessStep PageProcess(string host, UrlTypes type)
+        {
+            var url = _host + "/NovelCrawl/PageProcess";
+
+            var result = new PageProcessStep();
+            var task = _jQuery.Ajax(
+               AjaxRequestTypes.POST,
+               url,
+               "host=" + host + "&type=" + type,
+               (object sender, jQuerySuccessEventArgs<PageProcessStep> sea) =>
+               {
+                   result = sea.Data;
+               },
+               (object sender, jQueryErrorEventArgs eea) =>
+               {
+                   _logger.LogWarning("请求 Url：" + url + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
+                   result = null;
+               });
+
+            Task.WaitAll(task);
+
+            return result;
+        }
     }
 }
