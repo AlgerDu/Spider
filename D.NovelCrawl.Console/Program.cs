@@ -1,14 +1,6 @@
-﻿using D.NovelCrawl.Core;
-using D.Spider.Core;
-using D.Util.Logger.Console;
-using D.Util.Web;
+﻿using D.Spider.Core;
+using Microsoft.Practices.Unity;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace D.NovelCrawl.Console
 {
@@ -20,6 +12,10 @@ namespace D.NovelCrawl.Console
                 .UnityConfigerPath(AppDomain.CurrentDomain.BaseDirectory + @"Unity.config")
                 .Initialization()
                 .Run();
+
+            var novelCrawl = spider.UnityContainer.Resolve<D.NovelCrawl.Core.NovelCrawl>();
+
+            novelCrawl.Run();
 
             System.Console.ReadKey();
         }
