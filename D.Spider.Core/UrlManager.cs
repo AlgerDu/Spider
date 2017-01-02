@@ -33,7 +33,7 @@ namespace D.Spider.Core
             _urlCheckTimer = new Timer(_urlCheckInterval);
             _urlCheckTimer.Elapsed += new ElapsedEventHandler(UrlCheckTimer_Elapsed);
 
-            //_urlCheckTimer.Start();
+            _urlCheckTimer.Start();
 
             _allUrl = new List<IUrl>();
             _waitingCrawlUrl = new List<IUrl>();
