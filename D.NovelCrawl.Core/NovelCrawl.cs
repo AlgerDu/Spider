@@ -10,6 +10,7 @@ using D.Spider.Core;
 using D.NovelCrawl.Core.DTO;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using NSoup.Nodes;
 
 namespace D.NovelCrawl.Core
 {
@@ -93,9 +94,21 @@ namespace D.NovelCrawl.Core
         public void NovleCatalogPage(IPage page)
         {
             var step = _websiteProxy.PageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
-            JObject data = new JObject();
-            ExecuteStep(page.HtmlTxt, step, ref data);
 
+            Document doc = NSoup.NSoupClient.Parse(page.HtmlTxt);
+            JToken data = new JObject();
+
+            try
+            {
+                ExecuteStep(doc, step, ref data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
+                return;
+            }
+
+            _logger.LogInformation(data.ToString());
         }
 
         public void NovleChapterTxtPage(IPage page)
@@ -108,32 +121,37 @@ namespace D.NovelCrawl.Core
         /// </summary>
         /// <param name="step"></param>
         /// <param name="data"></param>
-        public void ExecuteStep(string html, PageProcessStep step, ref JObject data)
+        public void ExecuteStep(Element ele, PageProcessStep step, ref JToken data)
         {
+            if (step == null)
+            {
+                return;
+            }
+
             if (step.Type == PageProcessStepTypes.Html)
             {
                 var array = new JArray();
-                NSoup.Nodes.Document doc = NSoup.NSoupClient.Parse(html);
-
-                var es = doc.Select(step.ProcessStr);
+                var es = ele.Select(step.ProcessStr);
 
                 foreach (var e in es)
                 {
-                    var item = new JObject();
-                    ExecuteStep(e.OuterHtml(), step.NextProcessStep, ref item);
+                    JToken item = new JObject();
+                    ExecuteStep(e, step.NextProcessStep, ref item);
                     array.Add(item);
                 }
 
-                data["array"] = array;
+                data[step.DataNames] = array;
             }
             else if (step.Type == PageProcessStepTypes.RegExp)
             {
                 Regex regex = new Regex(step.ProcessStr);
-                var m = regex.Matches(html)[0];
+                var m = regex.Matches(ele.OuterHtml())[0];
                 foreach (var n in step.DataNames.Split(';'))
                 {
                     data[n] = m.Groups[n].Value;
                 }
+
+                ExecuteStep(ele, step.NextProcessStep, ref data);
             }
         }
         #endregion

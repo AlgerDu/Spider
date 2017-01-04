@@ -18,6 +18,11 @@ namespace D.NovelCrawl.Core.DTO
         public PageProcessStepTypes Type { get; set; }
 
         /// <summary>
+        /// 这一步获取到的是不是数组
+        /// </summary>
+        public bool IsArray { get; set; }
+
+        /// <summary>
         /// 处理字符串
         /// </summary>
         /// <returns></returns>
