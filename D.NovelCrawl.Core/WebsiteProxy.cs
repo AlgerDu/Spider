@@ -1,4 +1,5 @@
 ﻿using D.NovelCrawl.Core.DTO;
+using D.NovelCrawl.Core.Models;
 using D.Util.Interface;
 using D.Util.Models;
 using D.Util.Web;
@@ -102,26 +103,69 @@ namespace D.NovelCrawl.Core
         /// <returns></returns>
         public PageProcessStep PageProcess(string host, UrlTypes type)
         {
-            var url = _host + "/NovelCrawl/PageProcess";
+            //var url = _host + "/NovelCrawl/PageProcess";
 
-            var result = new PageProcessStep();
-            var task = _jQuery.Ajax(
-               AjaxRequestTypes.POST,
-               url,
-               "host=" + host + "&type=" + type,
-               (object sender, jQuerySuccessEventArgs<PageProcessStep> sea) =>
-               {
-                   result = sea.Data;
-               },
-               (object sender, jQueryErrorEventArgs eea) =>
-               {
-                   _logger.LogWarning("请求 Url：" + url + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
-                   result = null;
-               });
+            //var result = new PageProcessStep();
+            //var task = _jQuery.Ajax(
+            //   AjaxRequestTypes.POST,
+            //   url,
+            //   "host=" + host + "&type=" + type,
+            //   (object sender, jQuerySuccessEventArgs<PageProcessStep> sea) =>
+            //   {
+            //       result = sea.Data;
+            //   },
+            //   (object sender, jQueryErrorEventArgs eea) =>
+            //   {
+            //       _logger.LogWarning("请求 Url：" + url + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
+            //       result = null;
+            //   });
 
-            Task.WaitAll(task);
+            //Task.WaitAll(task);
 
-            return result;
+            //return result;
+
+            return new PageProcessStep
+            {
+                Type = PageProcessStepTypes.Html,
+                DataNames = "Volumes",
+                IsArray = true,
+                ProcessStr = "div.volume",
+                NextProcessStep = new PageProcessStep
+                {
+                    Type = PageProcessStepTypes.RegExp,
+                    DataNames = "Name",
+                    IsArray = false,
+                    ProcessStr = @"<h3>[\s\S]*?</a>(?<Name>[\s\S]*?)<i>",
+                    NextProcessStep = new PageProcessStep
+                    {
+                        Type = PageProcessStepTypes.Html,
+                        DataNames = "Chapters",
+                        IsArray = true,
+                        ProcessStr = "ul.cf li a",
+                        NextProcessStep = new PageProcessStep
+                        {
+                            Type = PageProcessStepTypes.RegExp,
+                            DataNames = "Name",
+                            IsArray = false,
+                            ProcessStr = @"<a[^>]*>(?<Name>[\s\S]*?)</a>",
+                            NextProcessStep = null
+                        }
+                    }
+                }
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public IEnumerable<Volume> NovelVCInfo(Guid guid)
+        {
+            return new Volume[]
+            {
+
+            };
         }
     }
 }

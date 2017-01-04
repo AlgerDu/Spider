@@ -11,6 +11,7 @@ using D.NovelCrawl.Core.DTO;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using NSoup.Nodes;
+using D.NovelCrawl.Core.Models;
 
 namespace D.NovelCrawl.Core
 {
