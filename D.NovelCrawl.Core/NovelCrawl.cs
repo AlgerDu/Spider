@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using NSoup.Nodes;
 using D.NovelCrawl.Core.Models;
+using D.NovelCrawl.Core.Interface;
 
 namespace D.NovelCrawl.Core
 {
@@ -19,7 +20,7 @@ namespace D.NovelCrawl.Core
     /// 小说爬虫使用的 UrlManager 负责和个人网站交互
     /// 实现两个接口 IUrlManager, IPageProcess
     /// </summary>
-    public class NovelCrawl : IPageProcess
+    public class NovelCrawl : INvoelCrawl
     {
         ILogger _logger;
 
@@ -44,7 +45,7 @@ namespace D.NovelCrawl.Core
             _websiteProxy = proxy;
         }
 
-        public void Run()
+        public INvoelCrawl Run()
         {
             //从网站上面获取需要爬取的小说
             var novelList = _websiteProxy.NovelList();
@@ -76,6 +77,8 @@ namespace D.NovelCrawl.Core
                     DealNovel(dealNovel);
                 }
             }
+
+            return this;
         }
 
         #region IPageProcess 实现

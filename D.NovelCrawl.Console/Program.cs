@@ -1,4 +1,5 @@
-﻿using D.Spider.Core;
+﻿using D.NovelCrawl.Core.Interface;
+using D.Spider.Core;
 using Microsoft.Practices.Unity;
 using System;
 
@@ -13,7 +14,7 @@ namespace D.NovelCrawl.Console
                 .Initialization()
                 .Run();
 
-            var novelCrawl = spider.UnityContainer.Resolve<D.NovelCrawl.Core.NovelCrawl>();
+            var novelCrawl = spider.UnityContainer.Resolve<INvoelCrawl>();
 
             novelCrawl.Run();
 

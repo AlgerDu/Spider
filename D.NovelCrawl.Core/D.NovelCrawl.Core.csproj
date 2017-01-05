@@ -48,11 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\CrawlUrlModel.cs" />
-    <Compile Include="DTO\ListResult.cs" />
-    <Compile Include="DTO\NovelListModel.cs" />
-    <Compile Include="DTO\PageModel.cs" />
-    <Compile Include="DTO\PageProcessStep.cs" />
+    <Compile Include="Models\DTO\CrawlUrlModel.cs" />
+    <Compile Include="Models\DTO\ListResult.cs" />
+    <Compile Include="Models\DTO\NovelListModel.cs" />
+    <Compile Include="Models\DTO\PageModel.cs" />
+    <Compile Include="Models\DTO\PageProcessStep.cs" />
+    <Compile Include="Interface\INvoelCrawl.cs" />
+    <Compile Include="Interface\IWebsitProxy.cs" />
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\Volume.cs" />
     <Compile Include="Models\Enums.cs" />
