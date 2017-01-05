@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="Models\DTO\CrawlUrlModel.cs" />
     <Compile Include="Models\DTO\ListResult.cs" />
+    <Compile Include="Models\DTO\NovelCatalogModel.cs" />
+    <Compile Include="Models\DTO\NovelChapterDetailModel.cs" />
     <Compile Include="Models\DTO\NovelListModel.cs" />
     <Compile Include="Models\DTO\PageModel.cs" />
     <Compile Include="Models\DTO\PageProcessStep.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Models\Novel.cs" />
     <Compile Include="NovelCrawl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualWebsetProxy.cs" />
     <Compile Include="WebsiteProxy.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -22,5 +22,10 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// </summary>
         /// <returns></returns>
         public bool Official { get; set; }
+
+        /// <summary>
+        /// 页面的处理步骤
+        /// </summary>
+        public PageProcessStep ProcessStep { get; set; }
     }
 }
