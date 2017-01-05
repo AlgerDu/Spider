@@ -2,31 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D.Spider.Core.Events;
 using D.Util.Interface;
 using D.Spider.Core;
-using D.NovelCrawl.Core.DTO;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using NSoup.Nodes;
 using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Interface;
+using D.NovelCrawl.Core.Models.DTO;
 
 namespace D.NovelCrawl.Core
 {
     /// <summary>
     /// 小说爬虫使用的 UrlManager 负责和个人网站交互
-    /// 实现两个接口 IUrlManager, IPageProcess
+    /// 实现两个接口  IPageProcess
     /// </summary>
-    public class NovelCrawl : INvoelCrawl
+    public class NovelCrawl : INvoelCrawl, IPageProcess
     {
         ILogger _logger;
 
         IUrlManager _urlManager;
 
-        WebsiteProxy _websiteProxy;
+        IWebsitProxy _web;
 
         /// <summary>
         /// 所有的小说信息
@@ -36,27 +33,27 @@ namespace D.NovelCrawl.Core
         public NovelCrawl(
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
-            , WebsiteProxy proxy)
+            , IWebsitProxy webProxy)
         {
             _logger = loggerFactory.CreateLogger<NovelCrawl>();
 
             _urlManager = urlManager;
 
-            _websiteProxy = proxy;
+            _web = webProxy;
         }
 
         public INvoelCrawl Run()
         {
             //从网站上面获取需要爬取的小说
-            var novelList = _websiteProxy.NovelList();
+            var novels = _web.NovelList();
 
-            if (novelList.RecordCount <= 0)
+            if (novels.RecordCount <= 0)
             {
                 _logger.LogWarning("没有需要爬取的小说");
             }
             else
             {
-                foreach (var n in novelList.CurrPageData)
+                foreach (var n in novels.CurrPageData)
                 {
                     Novel dealNovel = null;
 
@@ -97,7 +94,7 @@ namespace D.NovelCrawl.Core
         /// <param name="page"></param>
         public void NovleCatalogPage(IPage page)
         {
-            var step = _websiteProxy.PageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
+            var step = _web.UrlPageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
 
             Document doc = NSoup.NSoupClient.Parse(page.HtmlTxt);
             JToken data = new JObject();
@@ -117,7 +114,7 @@ namespace D.NovelCrawl.Core
 
         public void NovleChapterTxtPage(IPage page)
         {
-            var step = _websiteProxy.PageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
+            var step = _web.UrlPageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
         }
 
         /// <summary>
@@ -167,7 +164,7 @@ namespace D.NovelCrawl.Core
         /// <param name="deal"></param>
         private void DealNovel(Novel deal)
         {
-            var urls = _websiteProxy.NovelCrawlUrlList(deal.Guid);
+            var urls = _web.NovelCrawlUrls(deal.Guid);
             if (urls != null && urls.Count() > 0)
             {
                 var official = urls.Where(uu => uu.Official).FirstOrDefault();
