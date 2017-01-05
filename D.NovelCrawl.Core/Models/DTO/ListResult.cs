@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.DTO
+namespace D.NovelCrawl.Core.Models.DTO
 {
     public class ListResult<T>
         where T : class, new()

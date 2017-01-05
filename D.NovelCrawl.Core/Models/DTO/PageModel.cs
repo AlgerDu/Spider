@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.DTO
+namespace D.NovelCrawl.Core.Models.DTO
 {
     /// <summary>
     /// 通用分页 dto 用来做分页过滤的基类，形成统一的分页操作

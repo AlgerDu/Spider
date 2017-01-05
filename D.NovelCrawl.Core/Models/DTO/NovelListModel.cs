@@ -1,6 +1,6 @@
 using System;
 
-namespace D.NovelCrawl.Core.DTO
+namespace D.NovelCrawl.Core.Models.DTO
 {
     /// <summary>
     /// 小说列表信息

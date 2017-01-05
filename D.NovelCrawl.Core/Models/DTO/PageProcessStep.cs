@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.DTO
+namespace D.NovelCrawl.Core.Models.DTO
 {
     /// <summary>
     /// 如何处理爬取好的页面
