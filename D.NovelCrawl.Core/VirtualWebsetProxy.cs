@@ -36,41 +36,12 @@ namespace D.NovelCrawl.Core
                 new NovelCrawlUrlModel
                 {
                     Url = "http://book.qidian.com/info/3602691#Catalog",
-                    Official = true,
-                    ProcessStep = new PageProcessStep
-                    {
-                        Type = PageProcessStepTypes.Html,
-                        DataNames = "Volumes",
-                        IsArray = true,
-                        ProcessStr = "div.volume",
-                        NextProcessStep = new PageProcessStep
-                        {
-                            Type = PageProcessStepTypes.RegExp,
-                            DataNames = "Name",
-                            IsArray = false,
-                            ProcessStr = @"<h3>[\s\S]*?</a>(?<Name>[\s\S]*?)<i>",
-                            NextProcessStep = new PageProcessStep
-                            {
-                                Type = PageProcessStepTypes.Html,
-                                DataNames = "Chapters",
-                                IsArray = true,
-                                ProcessStr = "ul.cf li a",
-                                NextProcessStep = new PageProcessStep
-                                {
-                                    Type = PageProcessStepTypes.RegExp,
-                                    DataNames = "Name",
-                                    IsArray = false,
-                                    ProcessStr = @"<a[^>]*>(?<Name>[\s\S]*?)</a>",
-                                    NextProcessStep = null
-                                }
-                            }
-                        }
-                    }
+                    Official = true
                 }
             };
         }
 
-        public ListResult<NovelListModel> NovelList(PageModel page)
+        public ListResult<NovelListModel> NovelList(PageModel page = null)
         {
             return new ListResult<NovelListModel>
             {
@@ -93,6 +64,39 @@ namespace D.NovelCrawl.Core
         {
             _logger.LogInformation("上传爬取到的章节信息\r\n" + chapter.ToString());
             return true;
+        }
+
+        public PageProcessStep UrlPageProcess(string host, UrlTypes type)
+        {
+            return new PageProcessStep
+            {
+                Type = PageProcessStepTypes.Html,
+                DataNames = "Volumes",
+                IsArray = true,
+                ProcessStr = "div.volume",
+                NextProcessStep = new PageProcessStep
+                {
+                    Type = PageProcessStepTypes.RegExp,
+                    DataNames = "Name",
+                    IsArray = false,
+                    ProcessStr = @"<h3>[\s\S]*?</a>(?<Name>[\s\S]*?)<i>",
+                    NextProcessStep = new PageProcessStep
+                    {
+                        Type = PageProcessStepTypes.Html,
+                        DataNames = "Chapters",
+                        IsArray = true,
+                        ProcessStr = "ul.cf li a",
+                        NextProcessStep = new PageProcessStep
+                        {
+                            Type = PageProcessStepTypes.RegExp,
+                            DataNames = "Name",
+                            IsArray = false,
+                            ProcessStr = @"<a[^>]*>(?<Name>[\s\S]*?)</a>",
+                            NextProcessStep = null
+                        }
+                    }
+                }
+            };
         }
     }
 }

@@ -19,7 +19,7 @@ namespace D.NovelCrawl.Core.Interface
         /// </summary>
         /// <param name="page">页码信息</param>
         /// <returns></returns>
-        ListResult<NovelListModel> NovelList(PageModel page);
+        ListResult<NovelListModel> NovelList(PageModel page = null);
 
         /// <summary>
         /// 获取个人网站上面保存的完整的小说目录信息
@@ -42,5 +42,13 @@ namespace D.NovelCrawl.Core.Interface
         /// <param name="chapter"></param>
         /// <returns></returns>
         bool UploadNovelChapter(NovelChapterDetailModel chapter);
+
+        /// <summary>
+        /// 获取某个域名下某个类型的页面的处理方法
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        PageProcessStep UrlPageProcess(string host, UrlTypes type);
     }
 }
