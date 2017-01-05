@@ -44,6 +44,6 @@ namespace D.NovelCrawl.Core.Models
         /// <summary>
         /// 是否vip章节
         /// </summary>
-        public bool VipChaper { get; set; }
+        public bool VipChapter { get; set; }
     }
 }
