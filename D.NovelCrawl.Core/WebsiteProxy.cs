@@ -1,12 +1,9 @@
-﻿using D.NovelCrawl.Core.DTO;
-using D.NovelCrawl.Core.Models;
+﻿using D.NovelCrawl.Core.Models;
+using D.NovelCrawl.Core.Models.DTO;
 using D.Util.Interface;
 using D.Util.Models;
-using D.Util.Web;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace D.NovelCrawl.Core
@@ -70,16 +67,16 @@ namespace D.NovelCrawl.Core
         /// </summary>
         /// <param name="guid"></param>
         /// <returns></returns>
-        public IEnumerable<CrawlUrlModel> NovelCrawlUrlList(Guid guid)
+        public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrlList(Guid guid)
         {
             var url = _host + "/NovelCrawl/UrlList";
 
-            var result = new CrawlUrlModel[0];
+            var result = new NovelCrawlUrlModel[0];
             var task = _jQuery.Ajax(
                AjaxRequestTypes.POST,
                url,
                guid,
-               (object sender, jQuerySuccessEventArgs<CrawlUrlModel[]> sea) =>
+               (object sender, jQuerySuccessEventArgs<NovelCrawlUrlModel[]> sea) =>
                {
                    result = sea.Data;
                    _logger.LogInformation("爬取小说需要的 Url 数量 " + result.Length);
