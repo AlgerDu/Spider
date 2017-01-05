@@ -89,9 +89,9 @@ namespace D.NovelCrawl.Core
                         NextProcessStep = new PageProcessStep
                         {
                             Type = PageProcessStepTypes.RegExp,
-                            DataNames = "Name",
+                            DataNames = "Name;WordCount;PublicTime",
                             IsArray = false,
-                            ProcessStr = @"<a[^>]*>(?<Name>[\s\S]*?)</a>",
+                            ProcessStr = @"<a[^>]*时间：(?<PublicTime>[\s\S]*?)章节字数：(?<WordCount>[\d]{0,5})[^>]*>(?<Name>[\s\S]*?)</a>",
                             NextProcessStep = null
                         }
                     }
