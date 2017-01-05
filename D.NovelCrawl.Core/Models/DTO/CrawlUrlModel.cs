@@ -9,7 +9,7 @@ namespace D.NovelCrawl.Core.Models.DTO
     /// <summary>
     /// 小说爬取 Url 列表
     /// </summary>
-    public class CrawlUrlModel
+    public class NovelCrawlUrlModel
     {
         /// <summary>
         /// Url
