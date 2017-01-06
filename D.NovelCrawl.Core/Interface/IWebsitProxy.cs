@@ -44,11 +44,11 @@ namespace D.NovelCrawl.Core.Interface
         bool UploadNovelChapter(NovelChapterDetailModel chapter);
 
         /// <summary>
-        /// 获取某个域名下某个类型的页面的处理方法
+        /// 获取某个域名下某个类型的页面的 Spiderscript 处理代码
         /// </summary>
         /// <param name="host"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        PageProcessStep UrlPageProcess(string host, UrlTypes type);
+        string UrlPageProcessSpiderscriptCode(string host, UrlTypes type);
     }
 }

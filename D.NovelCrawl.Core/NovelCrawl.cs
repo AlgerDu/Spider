@@ -10,6 +10,7 @@ using NSoup.Nodes;
 using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Interface;
 using D.NovelCrawl.Core.Models.DTO;
+using Newtonsoft.Json;
 
 namespace D.NovelCrawl.Core
 {
@@ -20,6 +21,7 @@ namespace D.NovelCrawl.Core
     public class NovelCrawl : INvoelCrawl, IPageProcess
     {
         ILogger _logger;
+        ISpiderscriptEngine _spiderscriptEngine;
 
         IUrlManager _urlManager;
 
@@ -30,12 +32,19 @@ namespace D.NovelCrawl.Core
         /// </summary>
         Dictionary<Guid, Novel> _novels = new Dictionary<Guid, Novel>();
 
+        /// <summary>
+        /// url 与 Novel 的对应关系
+        /// </summary>
+        Dictionary<IUrl, Novel> _url2novel = new Dictionary<IUrl, Novel>();
+
         public NovelCrawl(
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
-            , IWebsitProxy webProxy)
+            , IWebsitProxy webProxy
+            , ISpiderscriptEngine spiderscriptEngine)
         {
             _logger = loggerFactory.CreateLogger<NovelCrawl>();
+            _spiderscriptEngine = spiderscriptEngine;
 
             _urlManager = urlManager;
 
@@ -94,14 +103,13 @@ namespace D.NovelCrawl.Core
         /// <param name="page"></param>
         public void NovleCatalogPage(IPage page)
         {
-            var step = _web.UrlPageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
+            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (UrlTypes)page.Url.CustomType);
 
-            Document doc = NSoup.NSoupClient.Parse(page.HtmlTxt);
-            JToken data = new JObject();
+            JToken data = null;
 
             try
             {
-                ExecuteStep(doc, step, ref data);
+                data = _spiderscriptEngine.Run(page.HtmlTxt, code);
             }
             catch (Exception ex)
             {
@@ -114,46 +122,7 @@ namespace D.NovelCrawl.Core
 
         public void NovleChapterTxtPage(IPage page)
         {
-            var step = _web.UrlPageProcess(page.Url.Host, (UrlTypes)page.Url.CustomType);
-        }
-
-        /// <summary>
-        /// 解析页面获取数据
-        /// </summary>
-        /// <param name="step"></param>
-        /// <param name="data"></param>
-        public void ExecuteStep(Element ele, PageProcessStep step, ref JToken data)
-        {
-            if (step == null)
-            {
-                return;
-            }
-
-            if (step.Type == PageProcessStepTypes.Html)
-            {
-                var array = new JArray();
-                var es = ele.Select(step.ProcessStr);
-
-                foreach (var e in es)
-                {
-                    JToken item = new JObject();
-                    ExecuteStep(e, step.NextProcessStep, ref item);
-                    array.Add(item);
-                }
-
-                data[step.DataNames] = array;
-            }
-            else if (step.Type == PageProcessStepTypes.RegExp)
-            {
-                Regex regex = new Regex(step.ProcessStr);
-                var m = regex.Matches(ele.OuterHtml())[0];
-                foreach (var n in step.DataNames.Split(';'))
-                {
-                    data[n] = m.Groups[n].Value;
-                }
-
-                ExecuteStep(ele, step.NextProcessStep, ref data);
-            }
+            var step = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (UrlTypes)page.Url.CustomType);
         }
         #endregion
 
@@ -181,6 +150,8 @@ namespace D.NovelCrawl.Core
 
                         deal.OfficialUrl.Interval = 1800;
                         deal.OfficialUrl.CustomType = (int)UrlTypes.NovleCatalog;
+
+                        _url2novel.Add(deal.OfficialUrl, deal);
 
                         _urlManager.AddUrl(deal.OfficialUrl);
                     }

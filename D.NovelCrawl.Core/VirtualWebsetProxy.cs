@@ -66,37 +66,20 @@ namespace D.NovelCrawl.Core
             return true;
         }
 
-        public PageProcessStep UrlPageProcess(string host, UrlTypes type)
+        public string UrlPageProcessSpiderscriptCode(string host, UrlTypes type)
         {
-            return new PageProcessStep
+            if (host == "http://book.qidian.com" && type == UrlTypes.NovleCatalog)
             {
-                Type = PageProcessStepTypes.Html,
-                DataNames = "Volumes",
-                IsArray = true,
-                ProcessStr = "div.volume",
-                NextProcessStep = new PageProcessStep
-                {
-                    Type = PageProcessStepTypes.RegExp,
-                    DataNames = "Name",
-                    IsArray = false,
-                    ProcessStr = @"<h3>[\s\S]*?</a>(?<Name>[\s\S]*?)<i>",
-                    NextProcessStep = new PageProcessStep
-                    {
-                        Type = PageProcessStepTypes.Html,
-                        DataNames = "Chapters",
-                        IsArray = true,
-                        ProcessStr = "ul.cf li a",
-                        NextProcessStep = new PageProcessStep
-                        {
-                            Type = PageProcessStepTypes.RegExp,
-                            DataNames = "Name;WordCount;PublicTime",
-                            IsArray = false,
-                            ProcessStr = @"<a[^>]*时间：(?<PublicTime>[\s\S]*?)章节字数：(?<WordCount>[\d]{0,5})[^>]*>(?<Name>[\s\S]*?)</a>",
-                            NextProcessStep = null
-                        }
-                    }
-                }
-            };
+                return "";
+            }
+            //else if ()
+            //{
+
+            //}
+            else
+            {
+                return null;
+            }
         }
     }
 }

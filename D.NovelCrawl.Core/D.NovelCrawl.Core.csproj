@@ -54,7 +54,6 @@
     <Compile Include="Models\DTO\NovelChapterDetailModel.cs" />
     <Compile Include="Models\DTO\NovelListModel.cs" />
     <Compile Include="Models\DTO\PageModel.cs" />
-    <Compile Include="Models\DTO\PageProcessStep.cs" />
     <Compile Include="Interface\INvoelCrawl.cs" />
     <Compile Include="Interface\IWebsitProxy.cs" />
     <Compile Include="Models\Chapter.cs" />
