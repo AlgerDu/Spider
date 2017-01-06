@@ -45,10 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\IjQuery.cs" />
+    <Compile Include="Interface\ISpiderscriptEngine.cs" />
     <Compile Include="Models\jQueryErrorEventArgs.cs" />
     <Compile Include="Models\jQuerySuccessEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\jQuery.cs" />
+    <Compile Include="Web\SpiderscriptEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
