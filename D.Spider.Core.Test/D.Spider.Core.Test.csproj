@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -51,7 +55,25 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SsEngineTests.cs" />
     <Compile Include="UrlManagerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
+      <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
+      <Name>D.Spider.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Util.Logger.Console\D.Util.Logger.Console.csproj">
+      <Project>{AC63C144-70F3-44FF-9650-B530654F7B8A}</Project>
+      <Name>D.Util.Logger.Console</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Util\D.Util.csproj">
+      <Project>{573803c2-538a-4ed1-8a98-d990dcb83b9e}</Project>
+      <Name>D.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
