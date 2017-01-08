@@ -13,9 +13,9 @@ namespace D.Spider.Core.SpiderscriptEngine
         public SsKeywordTypes Type { get; set; }
 
         /// <summary>
-        /// 代码块层级编号
+        /// 字符串开始空格数
         /// </summary>
-        public int CodeBlockNumber { get; set; }
+        public int SpaceCount { get; set; }
 
         /// <summary>
         /// 行号

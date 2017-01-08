@@ -101,12 +101,15 @@ namespace D.Spider.Core
             {
                 var sline = slines[i];
 
+                var trimsline = sline.TrimStart();
+
                 foreach (var handler in _keywordHandlers.Values)
                 {
-                    var line = handler.Analysis(sline);
+                    var line = handler.Analysis(trimsline);
                     if (line != null)
                     {
                         line.LineIndex = i;
+                        line.SpaceCount = sline.Length - trimsline.Length;
 
                         lines.Add(line);
                         break;
@@ -120,7 +123,8 @@ namespace D.Spider.Core
                 CodeLines = lines,
                 CurrDealLineIndex = 0,
                 ReturnObject = null,
-                RootScope = new SsScope()
+                RootScope = new SsScope(),
+                KeywordHandlers = _keywordHandlers
             };
         }
 

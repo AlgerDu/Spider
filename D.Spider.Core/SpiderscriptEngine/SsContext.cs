@@ -35,5 +35,7 @@ namespace D.Spider.Core.SpiderscriptEngine
         /// 根作用域
         /// </summary>
         public SsScope RootScope { get; set; }
+
+        public Dictionary<SsKeywordTypes, ISsKeywordHandler> KeywordHandlers { get; set; }
     }
 }
