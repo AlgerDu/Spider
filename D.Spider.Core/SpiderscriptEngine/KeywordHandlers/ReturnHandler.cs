@@ -44,11 +44,9 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
             }
         }
 
-        public void Execute(SsCodeLines lines, Element ele, SsScope scope)
+        public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
             //TODO
-            lines.Finish = false;
-            return false;
         }
     }
 }

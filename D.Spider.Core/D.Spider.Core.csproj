@@ -82,6 +82,7 @@
     <Compile Include="SpiderscriptEngine\KeywordHandlers\ReturnHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\VarHandler.cs" />
     <Compile Include="SpiderscriptEngine\SsCodeLines.cs" />
+    <Compile Include="SpiderscriptEngine\SsContext.cs" />
     <Compile Include="SsEngine.cs" />
     <Compile Include="SpiderscriptEngine\Enums.cs" />
     <Compile Include="SpiderscriptEngine\SsCodeLine.cs" />

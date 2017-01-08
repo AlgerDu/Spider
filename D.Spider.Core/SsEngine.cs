@@ -39,16 +39,17 @@ namespace D.Spider.Core
         public JToken Run(string html, string spiderscriptCode)
         {
             Document doc = NSoup.NSoupClient.Parse(html);
-            var scope = new SsScope();
 
-            var lines = AnalysisCodeString(spiderscriptCode);
+            var context = AnalysisCodeString(spiderscriptCode);
 
-            while (lines.CurrDealIndex < lines.Count)
+            while (context.CodeExecuteFinish)
             {
-                _keywordHandlers[lines[lines.CurrDealIndex].Type].Execute(lines, doc, scope);
+                var line = context.CodeLines[context.CurrDealLineIndex];
+
+                _keywordHandlers[line.Type].Execute(context, line, doc, context.RootScope);
             }
 
-            return new JObject();
+            return context.ReturnObject as JToken;
         }
         #endregion
 
@@ -88,7 +89,7 @@ namespace D.Spider.Core
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        private SsCodeLines AnalysisCodeString(string code)
+        private SsContext AnalysisCodeString(string code)
         {
             var lines = new SsCodeLines();
 
@@ -113,7 +114,14 @@ namespace D.Spider.Core
                 }
             }
 
-            return lines;
+            return new SsContext
+            {
+                CodeExecuteFinish = false,
+                CodeLines = lines,
+                CurrDealLineIndex = 0,
+                ReturnObject = null,
+                RootScope = new SsScope()
+            };
         }
 
         #region 待删除

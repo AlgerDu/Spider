@@ -28,10 +28,9 @@ namespace D.Spider.Core.SpiderscriptEngine
         /// <summary>
         /// 执行代码
         /// </summary>
-        /// <param name="lines"></param>
+        /// <param name="context"></param>
         /// <param name="ele"></param>
         /// <param name="scope"></param>
-        /// <returns>整个代码是否结束</returns>
-        void Execute(SsCodeLines lines, Element ele, SsScope scope);
+        void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope);
     }
 }

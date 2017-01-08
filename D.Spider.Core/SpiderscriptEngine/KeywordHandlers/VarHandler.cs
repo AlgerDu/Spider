@@ -23,7 +23,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
             return null;
         }
 
-        public void Execute(SsCodeLines lines, Element ele, SsScope scope)
+        public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
             //TODO
         }
