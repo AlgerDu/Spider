@@ -31,6 +31,10 @@ namespace D.Spider.Core.SpiderscriptEngine
                     {
                         return Variables[name];
                     }
+                    else if (Parent != null)
+                    {
+                        return Parent[name];
+                    }
                     else
                     {
                         return null;

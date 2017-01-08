@@ -42,7 +42,7 @@ namespace D.Spider.Core
 
             var context = AnalysisCodeString(spiderscriptCode);
 
-            while (context.CodeExecuteFinish)
+            while (!context.CodeExecuteFinish)
             {
                 var line = context.CodeLines[context.CurrDealLineIndex];
 

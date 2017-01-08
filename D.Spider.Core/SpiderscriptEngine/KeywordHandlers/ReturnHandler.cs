@@ -47,6 +47,8 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
             //TODO
+            context.ReturnObject = scope[line.Codes[0]];
+            context.CodeExecuteFinish = true;
         }
     }
 }

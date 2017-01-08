@@ -38,7 +38,7 @@ namespace D.Spider.Core.Tests
         {
             var engine = new SsEngine(new ConsoleLoggerFactory());
 
-            var data = engine.Run("", "return a");
+            var data = engine.Run("", "var a:object\r\nreturn a");
 
             Assert.IsNull(data);
         }
