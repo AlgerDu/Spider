@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSoup.Nodes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,13 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
 
         public SsCodeLine Analysis(string line)
         {
-            throw new NotImplementedException();
+            //TODO
+            return null;
         }
 
-        public void Execute(SsCodeLines lines, int index, SsScope scope)
+        public void Execute(SsCodeLines lines, Element ele, SsScope scope)
         {
-            throw new NotImplementedException();
+            //TODO
         }
     }
 }

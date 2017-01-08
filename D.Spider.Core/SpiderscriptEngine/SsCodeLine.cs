@@ -25,6 +25,6 @@ namespace D.Spider.Core.SpiderscriptEngine
         /// <summary>
         /// 操作代码
         /// </summary>
-        public string[] Cpdes { get; set; }
+        public string[] Codes { get; set; }
     }
 }

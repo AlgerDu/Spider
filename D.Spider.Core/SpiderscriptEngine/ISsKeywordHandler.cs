@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSoup.Nodes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,8 +29,9 @@ namespace D.Spider.Core.SpiderscriptEngine
         /// 执行代码
         /// </summary>
         /// <param name="lines"></param>
-        /// <param name="index"></param>
+        /// <param name="ele"></param>
         /// <param name="scope"></param>
-        void Execute(SsCodeLines lines, int index, SsScope scope);
+        /// <returns>整个代码是否结束</returns>
+        void Execute(SsCodeLines lines, Element ele, SsScope scope);
     }
 }

@@ -39,6 +39,14 @@ namespace D.Spider.Core
         public JToken Run(string html, string spiderscriptCode)
         {
             Document doc = NSoup.NSoupClient.Parse(html);
+            var scope = new SsScope();
+
+            var lines = AnalysisCodeString(spiderscriptCode);
+
+            while (lines.CurrDealIndex < lines.Count)
+            {
+                _keywordHandlers[lines[lines.CurrDealIndex].Type].Execute(lines, doc, scope);
+            }
 
             return new JObject();
         }
@@ -75,27 +83,40 @@ namespace D.Spider.Core
             }
         }
 
-        #region 待删除
         /// <summary>
         /// 解析代码字符串
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        private SsCodeLine[] AnalysisCodeString(string code)
+        private SsCodeLines AnalysisCodeString(string code)
         {
-            var lins = code
+            var lines = new SsCodeLines();
+
+            var slines = code
                 .Replace("\r\n", "\r")
                 .Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var codeLine = new SsCodeLine[lins.Length];
-
-            foreach (var line in lins)
+            for (var i = 0; i < slines.Length; i++)
             {
+                var sline = slines[i];
 
+                foreach (var handler in _keywordHandlers.Values)
+                {
+                    var line = handler.Analysis(sline);
+                    if (line != null)
+                    {
+                        line.LineIndex = i;
+
+                        lines.Add(line);
+                        break;
+                    }
+                }
             }
 
-            return codeLine;
+            return lines;
         }
+
+        #region 待删除
 
         /// <summary>
         /// 执行 Spiderscript 代码块

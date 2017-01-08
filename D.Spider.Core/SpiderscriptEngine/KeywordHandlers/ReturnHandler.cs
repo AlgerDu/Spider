@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NSoup.Nodes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
@@ -21,12 +23,32 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
 
         public SsCodeLine Analysis(string line)
         {
-            throw new NotImplementedException();
+            if (Regex.IsMatch(line, "return"))
+            {
+                var ws = line
+                    .Replace("return", "")
+                    .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (ws.Length != 1)
+                    throw new Exception("return 格式错误");
+
+                return new SsCodeLine
+                {
+                    Type = SsKeywordTypes.SsReturn,
+                    Codes = ws
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public void Execute(SsCodeLines lines, int index, SsScope scope)
+        public void Execute(SsCodeLines lines, Element ele, SsScope scope)
         {
-            throw new NotImplementedException();
+            //TODO
+            lines.Finish = false;
+            return false;
         }
     }
 }

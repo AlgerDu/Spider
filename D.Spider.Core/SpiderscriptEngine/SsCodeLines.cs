@@ -11,6 +11,32 @@ namespace D.Spider.Core.SpiderscriptEngine
     {
         Dictionary<int, SsCodeLine> _lines;
 
+        public bool Finish
+        {
+            get
+            {
+                return CurrDealIndex >= Count;
+            }
+
+            set
+            {
+                CurrDealIndex = Count;
+            }
+        }
+
+        /// <summary>
+        /// 当前需要处理的代码行
+        /// </summary>
+        public int CurrDealIndex { get; set; }
+
+        public int Count
+        {
+            get
+            {
+                return _lines.Count;
+            }
+        }
+
         public SsCodeLines()
         {
             _lines = new Dictionary<int, SsCodeLine>();
@@ -20,6 +46,11 @@ namespace D.Spider.Core.SpiderscriptEngine
         {
             Clear();
         }
+
+        /// <summary>
+        /// 返回值的变量名称
+        /// </summary>
+        public string RuturnVarName { get; set; }
 
         /// <summary>
         /// 获取某一行的代码
@@ -38,14 +69,6 @@ namespace D.Spider.Core.SpiderscriptEngine
                 {
                     return null;
                 }
-            }
-        }
-
-        public int Count
-        {
-            get
-            {
-                return _lines.Count;
             }
         }
 
