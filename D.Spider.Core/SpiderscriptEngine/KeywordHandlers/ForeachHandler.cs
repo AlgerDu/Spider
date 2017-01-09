@@ -46,12 +46,14 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
             Regex r = new Regex(@"(?<=\$\(')[^']*(?='\))");
             var m = r.Match(line.Codes[0]);
 
-            var index = context.CurrDealLineIndex;
-
             context.CurrDealLineIndex++;
+
+            var backIndex = context.CurrDealLineIndex;
 
             foreach (var e in ele.Select(m.Value))
             {
+                context.CurrDealLineIndex = backIndex;
+
                 var childScope = new SsScope(scope);
 
                 while (!context.CodeExecuteFinish)
@@ -61,7 +63,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                     if (nline.SpaceCount < line.SpaceCount)
                         break;
 
-                    context.KeywordHandlers[line.Type].Execute(context, line, e, childScope);
+                    context.KeywordHandlers[nline.Type].Execute(context, nline, e, childScope);
                 }
             }
         }

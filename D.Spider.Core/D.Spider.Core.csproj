@@ -81,6 +81,7 @@
     <Compile Include="SpiderscriptEngine\ISsKeywordHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\ForeachHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\ReturnHandler.cs" />
+    <Compile Include="SpiderscriptEngine\KeywordHandlers\SetHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\VarHandler.cs" />
     <Compile Include="SpiderscriptEngine\SsCodeLines.cs" />
     <Compile Include="SpiderscriptEngine\SsContext.cs" />
