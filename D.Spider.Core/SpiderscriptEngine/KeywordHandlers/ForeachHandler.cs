@@ -60,7 +60,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                 {
                     var nline = context.CodeLines[context.CurrDealLineIndex];
 
-                    if (nline.SpaceCount < line.SpaceCount)
+                    if (nline.SpaceCount <= line.SpaceCount)
                         break;
 
                     context.KeywordHandlers[nline.Type].Execute(context, nline, e, childScope);

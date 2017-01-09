@@ -21,12 +21,14 @@ namespace D.Spider.Core.Tests
                     var vs:array
                     foreach $('div.volume')
                         var v:object
-                        v.Name = $('h3').html()
+                        v.Name = $('h3').text
                         var cs:array
                         foreach $('li')
                             var c:object
-                            c.Name = $('a').attr('title')
+                            c.Time = $('a').attr('title')
+                            c.Name = $('a').text
                             cs[] = c
+                        v.Chapters = cs
                         vs[] = v
                     return vs";
 

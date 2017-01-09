@@ -63,10 +63,13 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                     throw new Exception(ops[0] + " 对象不存在");
 
                 var op2s = codes[1].Split(new char[] { '$', '\'', '(', ')', '.' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (op2s[1] == "html")
+                if (op2s.Length == 1)
                 {
-                    (toSet.Data as JObject)[ops[1]] = ele.Select(op2s[0]).Html();
+                    (toSet.Data as JObject)[ops[1]] = scope[op2s[0]].Data as JToken;
+                }
+                else if (op2s[1] == "text")
+                {
+                    (toSet.Data as JObject)[ops[1]] = ele.Select(op2s[0]).Text;
                 }
                 else if (op2s[1] == "attr")
                 {
