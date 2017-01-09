@@ -70,19 +70,21 @@ namespace D.NovelCrawl.Core
         {
             if (host == "http://book.qidian.com" && type == UrlTypes.NovleCatalog)
             {
-                return @"var Volumes:array
-                         foreach $('div.volume')
-                             var v:object
-                             v.Name = $('h3').inner
-                             foreach $('li')
-                                 var c:object
-                                 c.Name = $('a').attr('title')
-                         return Volumes";
+                return @"
+                    var vs:array
+                    foreach $('div.volume')
+                        var v:object
+                        v.Name = $('h3').text
+                        var cs:array
+                        foreach $('li')
+                            var c:object
+                            c.Time = $('a').attr('title')
+                            c.Name = $('a').text
+                            cs[] = c
+                        v.Chapters = cs
+                        vs[] = v
+                    return vs";
             }
-            //else if ()
-            //{
-
-            //}
             else
             {
                 return null;
