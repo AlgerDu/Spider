@@ -44,7 +44,7 @@ namespace D.Spider.Core.Tests
 
             var data = engine.Run("", "var a:object\r\nreturn a");
 
-            Assert.IsNull(data);
+            Assert.IsNotNull(data);
         }
     }
 }

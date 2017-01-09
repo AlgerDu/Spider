@@ -49,7 +49,7 @@ namespace D.Spider.Core
                 _keywordHandlers[line.Type].Execute(context, line, doc, context.RootScope);
             }
 
-            return context.ReturnObject as JToken;
+            return context.ReturnObject.Data as JToken;
         }
         #endregion
 

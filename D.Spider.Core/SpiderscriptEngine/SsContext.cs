@@ -29,7 +29,7 @@ namespace D.Spider.Core.SpiderscriptEngine
         /// <summary>
         /// 返回值
         /// </summary>
-        public object ReturnObject { get; set; }
+        public SsVariable ReturnObject { get; set; }
 
         /// <summary>
         /// 根作用域
