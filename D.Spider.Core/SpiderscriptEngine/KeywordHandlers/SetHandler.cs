@@ -75,18 +75,41 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                     toSet.Data = setVal.Data as JToken;
                 }
             }
-            else if (rcodes.Length == 2)
+            else if (rcodes.Length >= 2 && rcodes.Length <= 5)
             {
+                var index = 0;
+                var e = ele.Select(rcodes[0]);
+                var val = string.Empty;
+
                 if (rcodes[1] == "text")
                 {
-                    (toSet.Data as JObject)[lcodes[1]] = ele.Select(rcodes[0]).Text;
+                    val = e.Text;
+                    index = 2;
                 }
-            }
-            else if (rcodes.Length == 3)
-            {
-                if (rcodes[1] == "attr")
+                else if (rcodes[1] == "attr")
                 {
-                    (toSet.Data as JObject)[lcodes[1]] = ele.Select(rcodes[0]).Attr(rcodes[2]);
+                    val = e.Attr(rcodes[2]);
+                    index = 3;
+                }
+
+                if (rcodes.Length <= index)
+                {
+                    (toSet.Data as JObject)[lcodes[1]] = val;
+                }
+                else if (rcodes[index] == "regex")
+                {
+                    var r = new Regex(rcodes[index + 1]);
+                    var m = r.Match(val);
+
+                    var names = r.GetGroupNames();
+                    for (var i = 1; i < names.Length; i++)
+                    {
+                        (toSet.Data as JObject)[names[i]] = m.Groups[names[i]].Value;
+                    }
+                }
+                else
+                {
+                    throw new Exception("不能处理赋值操作形式");
                 }
             }
             else
