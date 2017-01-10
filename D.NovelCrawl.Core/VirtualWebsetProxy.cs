@@ -78,7 +78,7 @@ namespace D.NovelCrawl.Core
                         var cs:array
                         foreach $('li')
                             var c:object
-                            c.Time = $('a').attr('title')
+                            c = $('a').attr('title').regex('时间：(?<PublicTime>[\s\S]*?)章节字数：(?<WordCount>[\d]{0,5})')
                             c.Name = $('a').text
                             cs[] = c
                         v.Chapters = cs
