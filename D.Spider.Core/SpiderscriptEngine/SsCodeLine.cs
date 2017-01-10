@@ -23,8 +23,13 @@ namespace D.Spider.Core.SpiderscriptEngine
         public int LineIndex { get; set; }
 
         /// <summary>
-        /// 操作代码
+        /// 解析后的代码
         /// </summary>
-        public string[] Codes { get; set; }
+        public string[] LCodes { get; set; }
+
+        /// <summary>
+        /// 解析后的代码
+        /// </summary>
+        public string[] RCodes { get; set; }
     }
 }

@@ -26,17 +26,25 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         {
             if (Regex.IsMatch(line, " = "))
             {
-                var ws = line
+                var result = line
                     .Replace("=", "")
                     .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (ws.Length != 2)
+                if (result.Length != 2)
                     throw new Exception("赋值操作格式错误");
+
+                var rms = Regex.Matches(result[1], @"(?<=\(')[^']*(?='\))|(?<=\.)[a-z]*|^[a-z]+");
+                var rc = new string[rms.Count];
+                for (var i = 0; i < rms.Count; i++)
+                {
+                    rc[i] = rms[i].Value;
+                }
 
                 return new SsCodeLine
                 {
                     Type = SsKeywordTypes.SsSet,
-                    Codes = ws
+                    LCodes = result[0].Split('.'),
+                    RCodes = rc
                 };
             }
             else
@@ -47,52 +55,39 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
 
         public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
-            //v.Name = $('h3').inner
-            //c.Name = $('a').attr('title')
-            //cs[] = c
+            var lcodes = line.LCodes;
+            var rcodes = line.RCodes;
 
-            var codes = line.Codes;
+            var toSet = scope[lcodes[0]];
+            if (toSet == null)
+                throw new Exception(lcodes[0] + " 对象不存在");
 
-            if (Regex.IsMatch(codes[0], @"\."))
+            if (rcodes.Length == 1)
             {
-                var ops = codes[0].Split('.');
+                var setVal = scope[rcodes[0]];
 
-                var toSet = scope[ops[0]];
-
-                if (toSet == null)
-                    throw new Exception(ops[0] + " 对象不存在");
-
-                var op2s = codes[1].Split(new char[] { '$', '\'', '(', ')', '.' }, StringSplitOptions.RemoveEmptyEntries);
-                if (op2s.Length == 1)
+                if (lcodes.Length == 2)
                 {
-                    (toSet.Data as JObject)[ops[1]] = scope[op2s[0]].Data as JToken;
-                }
-                else if (op2s[1] == "text")
-                {
-                    (toSet.Data as JObject)[ops[1]] = ele.Select(op2s[0]).Text;
-                }
-                else if (op2s[1] == "attr")
-                {
-                    (toSet.Data as JObject)[ops[1]] = ele.Select(op2s[0]).Attr(op2s[2]);
+                    (toSet.Data as JObject)[lcodes[1]] = setVal.Data as JToken;
                 }
                 else
                 {
-                    throw new Exception("不支持的 " + codes[1]);
+                    toSet.Data = setVal.Data as JToken;
                 }
             }
-            else if (Regex.IsMatch(codes[0], @"\[\]"))
+            else if (rcodes.Length == 2)
             {
-                var toAdd = scope[codes[0].Replace("[]", "")];
-
-                if (toAdd.Type != SsVariableTypes.SsArray)
-                    throw new Exception(codes[0].Replace("[]", "") + " 不是一个 json 数组");
-
-                var setVal = scope[codes[1]];
-
-                if (setVal == null)
-                    throw new Exception(codes + " 对象不存在");
-
-                (toAdd.Data as JArray).Add(setVal.Data as JToken);
+                if (rcodes[1] == "text")
+                {
+                    (toSet.Data as JObject)[lcodes[1]] = ele.Select(rcodes[0]).Text;
+                }
+            }
+            else if (rcodes.Length == 3)
+            {
+                if (rcodes[1] == "attr")
+                {
+                    (toSet.Data as JObject)[lcodes[1]] = ele.Select(rcodes[0]).Attr(rcodes[2]); ;
+                }
             }
             else
             {

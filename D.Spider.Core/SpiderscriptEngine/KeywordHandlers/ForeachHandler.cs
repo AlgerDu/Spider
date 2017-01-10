@@ -22,17 +22,17 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         {
             if (Regex.IsMatch(line, "foreach"))
             {
-                var ws = line
+                var result = line
                     .Replace("foreach", "")
                     .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (ws.Length != 1)
+                if (result.Length != 1)
                     throw new Exception("foreach 格式错误");
 
                 return new SsCodeLine
                 {
                     Type = SsKeywordTypes.SsForeach,
-                    Codes = ws
+                    LCodes = result
                 };
             }
             else
@@ -44,7 +44,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
             Regex r = new Regex(@"(?<=\$\(')[^']*(?='\))");
-            var m = r.Match(line.Codes[0]);
+            var m = r.Match(line.LCodes[0]);
 
             context.CurrDealLineIndex++;
 

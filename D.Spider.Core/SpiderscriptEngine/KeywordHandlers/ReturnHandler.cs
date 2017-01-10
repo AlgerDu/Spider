@@ -25,17 +25,17 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         {
             if (Regex.IsMatch(line, "return"))
             {
-                var ws = line
+                var result = line
                     .Replace("return", "")
                     .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (ws.Length != 1)
+                if (result.Length != 1)
                     throw new Exception("return 格式错误");
 
                 return new SsCodeLine
                 {
                     Type = SsKeywordTypes.SsReturn,
-                    Codes = ws
+                    LCodes = result
                 };
             }
             else
@@ -47,7 +47,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
             //TODO
-            context.ReturnObject = scope[line.Codes[0]];
+            context.ReturnObject = scope[line.LCodes[0]];
             context.CodeExecuteFinish = true;
         }
     }

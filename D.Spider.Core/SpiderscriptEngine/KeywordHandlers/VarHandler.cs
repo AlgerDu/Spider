@@ -23,17 +23,17 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         {
             if (Regex.IsMatch(line, "var"))
             {
-                var ws = line
+                var result = line
                     .Replace("var", "")
                     .Split(new char[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (ws.Length != 2)
+                if (result.Length != 2)
                     throw new Exception("var 格式错误");
 
                 return new SsCodeLine
                 {
                     Type = SsKeywordTypes.SsVar,
-                    Codes = ws
+                    LCodes = result
                 };
             }
             else
@@ -44,9 +44,9 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
 
         public void Execute(SsContext context, SsCodeLine line, Element ele, SsScope scope)
         {
-            var name = line.Codes[0];
+            var name = line.LCodes[0];
 
-            switch (line.Codes[1])
+            switch (line.LCodes[1])
             {
                 case "object":
                     scope[name] = new SsVariable
@@ -63,7 +63,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                     };
                     break;
                 default:
-                    throw new Exception("var 定义了未知的变量类型 " + line.Codes[1]);
+                    throw new Exception("var 定义了未知的变量类型 " + line.LCodes[1]);
             }
 
             context.CurrDealLineIndex++;
