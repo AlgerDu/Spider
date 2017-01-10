@@ -79,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spider.cs" />
     <Compile Include="SpiderscriptEngine\ISsKeywordHandler.cs" />
+    <Compile Include="SpiderscriptEngine\KeywordHandlers\ArrayAddHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\ForeachHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\ReturnHandler.cs" />
     <Compile Include="SpiderscriptEngine\KeywordHandlers\SetHandler.cs" />
