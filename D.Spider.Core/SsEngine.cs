@@ -97,13 +97,15 @@ namespace D.Spider.Core
                 .Replace("\r\n", "\r")
                 .Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var handlers = _keywordHandlers.Values.OrderBy(h => h.Type);
+
             for (var i = 0; i < slines.Length; i++)
             {
                 var sline = slines[i];
 
                 var trimsline = sline.TrimStart();
 
-                foreach (var handler in _keywordHandlers.Values)
+                foreach (var handler in handlers)
                 {
                     var line = handler.Analysis(trimsline);
                     if (line != null)
