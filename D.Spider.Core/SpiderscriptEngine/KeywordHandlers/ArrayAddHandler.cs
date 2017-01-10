@@ -24,7 +24,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
 
         public SsCodeLine Analysis(string line)
         {
-            if (Regex.IsMatch(line, "[] = "))
+            if (Regex.IsMatch(line, @"\[] = "))
             {
                 var result = line
                     .Replace("[] =", "")
@@ -35,7 +35,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
 
                 return new SsCodeLine
                 {
-                    Type = SsKeywordTypes.SsSet,
+                    Type = SsKeywordTypes.SsArrayAddItem,
                     LCodes = result
                 };
             }

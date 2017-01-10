@@ -86,7 +86,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
             {
                 if (rcodes[1] == "attr")
                 {
-                    (toSet.Data as JObject)[lcodes[1]] = ele.Select(rcodes[0]).Attr(rcodes[2]); ;
+                    (toSet.Data as JObject)[lcodes[1]] = ele.Select(rcodes[0]).Attr(rcodes[2]);
                 }
             }
             else
