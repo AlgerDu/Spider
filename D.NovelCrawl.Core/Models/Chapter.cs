@@ -12,6 +12,11 @@ namespace D.NovelCrawl.Core.Models
     public class Chapter
     {
         /// <summary>
+        /// 所属的卷编号
+        /// </summary>
+        public int VolumeNumber { get; set; }
+
+        /// <summary>
         /// 在卷内的编号
         /// </summary>
         public int Number { get; set; }
@@ -45,5 +50,10 @@ namespace D.NovelCrawl.Core.Models
         /// 是否vip章节
         /// </summary>
         public bool VipChapter { get; set; }
+
+        /// <summary>
+        /// 来源 Url
+        /// </summary>
+        public string SourceUrl { get; set; }
     }
 }

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\CrawlModel\CrawlCatalogModel.cs" />
     <Compile Include="Models\DTO\CrawlUrlModel.cs" />
     <Compile Include="Models\DTO\ListResult.cs" />
     <Compile Include="Models\DTO\NovelCatalogModel.cs" />

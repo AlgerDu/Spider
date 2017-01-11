@@ -45,6 +45,11 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// 是否vip章节
         /// </summary>
         public bool VipChapter { get; set; }
+
+        /// <summary>
+        /// 来源 Url
+        /// </summary>
+        public string SourceUrl { get; set; }
     }
 
     /// <summary>

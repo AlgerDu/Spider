@@ -12,6 +12,7 @@ using D.NovelCrawl.Core.Interface;
 using D.NovelCrawl.Core.Models.DTO;
 using Newtonsoft.Json;
 using Microsoft.Practices.Unity;
+using D.NovelCrawl.Core.Models.CrawlModel;
 
 namespace D.NovelCrawl.Core
 {
@@ -54,6 +55,7 @@ namespace D.NovelCrawl.Core
             _web = webProxy;
         }
 
+        #region INvoelCrawl 实现
         public INvoelCrawl Initialization(IUnityContainer container)
         {
             _container = container;
@@ -82,7 +84,7 @@ namespace D.NovelCrawl.Core
                     }
                     else
                     {
-                        dealNovel = new Novel();
+                        dealNovel = _container.Resolve<Novel>();
                         dealNovel.Update(n);
 
                         _logger.LogInformation("添加需要爬取的小说：" + n.Name);
@@ -95,6 +97,7 @@ namespace D.NovelCrawl.Core
 
             return this;
         }
+        #endregion
 
         #region IPageProcess 实现
         public void Process(IPage page)
@@ -117,6 +120,15 @@ namespace D.NovelCrawl.Core
             try
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+
+                var novel = _novels.Values
+                    .Where(nn => nn.OfficialUrl.Equal(page.Url))
+                    .FirstOrDefault();
+
+                if (novel != null)
+                {
+                    novel.CmpareOfficialCatalog(data.ToObject<CrawlVolumeModel[]>());
+                }
 
                 _logger.LogInformation(data.ToString());
             }
