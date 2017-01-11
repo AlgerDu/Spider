@@ -11,6 +11,7 @@ using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Interface;
 using D.NovelCrawl.Core.Models.DTO;
 using Newtonsoft.Json;
+using Microsoft.Practices.Unity;
 
 namespace D.NovelCrawl.Core
 {
@@ -21,6 +22,8 @@ namespace D.NovelCrawl.Core
     public class NovelCrawl : INvoelCrawl, IPageProcess
     {
         ILogger _logger;
+        IUnityContainer _container;
+
         ISpiderscriptEngine _spiderscriptEngine;
 
         IUrlManager _urlManager;
@@ -49,6 +52,12 @@ namespace D.NovelCrawl.Core
             _urlManager = urlManager;
 
             _web = webProxy;
+        }
+
+        public INvoelCrawl Initialization(IUnityContainer container)
+        {
+            _container = container;
+            return this;
         }
 
         public INvoelCrawl Run()
@@ -105,19 +114,17 @@ namespace D.NovelCrawl.Core
         {
             var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (UrlTypes)page.Url.CustomType);
 
-            JToken data = null;
-
             try
             {
-                data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+                var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+
+                _logger.LogInformation(data.ToString());
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
                 return;
             }
-
-            _logger.LogInformation(data.ToString());
         }
 
         public void NovleChapterTxtPage(IPage page)

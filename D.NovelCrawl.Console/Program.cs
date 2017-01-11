@@ -16,7 +16,9 @@ namespace D.NovelCrawl.Console
 
             var novelCrawl = spider.UnityContainer.Resolve<INvoelCrawl>();
 
-            novelCrawl.Run();
+            novelCrawl
+                .Initialization(spider.UnityContainer)
+                .Run();
 
             System.Console.ReadKey();
         }
