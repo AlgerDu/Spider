@@ -80,6 +80,7 @@ namespace D.NovelCrawl.Core
                             var c:object
                             c = $('a').attr('title').regex('时间：(?<PublicTime>[\s\S]*?)章节字数：(?<WordCount>[\d]{0,5})')
                             c.Name = $('a').text
+                            c.Url = $('a').attr('href')
                             cs[] = c
                         v.Chapters = cs
                         vs[] = v
