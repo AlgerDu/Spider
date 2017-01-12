@@ -90,6 +90,10 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                 {
                     val = e.Attr(rcodes[2]);
                     index = 3;
+                }else if (rcodes[1] == "html")
+                {
+                    val = e.Html();
+                    index = 3;
                 }
 
                 if (rcodes.Length <= index)
