@@ -65,7 +65,7 @@ namespace D.Spider.Core
             }
         }
 
-        public int CustomType { get; set; }
+        public object CustomData { get; set; }
 
         public string Host
         {

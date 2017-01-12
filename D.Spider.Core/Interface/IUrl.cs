@@ -27,9 +27,9 @@ namespace D.Spider.Core.Interface
         string RelativePath { get; }
 
         /// <summary>
-        /// 自定类型，供使用者使用
+        /// 自定义数据
         /// </summary>
-        int CustomType { get; set; }
+        object CustomData { get; set; }
 
         /// <summary>
         /// 最后一次爬取的时间
@@ -39,6 +39,7 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// Url 爬取的时间间隔
         /// 时间单位 秒
+        /// 为 -1 时只爬取一次
         /// </summary>
         int Interval { get; set; }
 
