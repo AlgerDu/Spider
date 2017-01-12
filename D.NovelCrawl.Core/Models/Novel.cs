@@ -1,6 +1,7 @@
 ﻿using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Models.CrawlModel;
 using D.NovelCrawl.Core.Models.DTO;
+using D.Spider.Core;
 using D.Spider.Core.Interface;
 using D.Util.Interface;
 using System;
@@ -16,6 +17,8 @@ namespace D.NovelCrawl.Core.Models
         ILogger _logger;
 
         IUrlManager _urlManager;
+
+        int _needCrawlChapterCount;
 
         #region 对外属性
         /// <summary>
@@ -38,6 +41,21 @@ namespace D.NovelCrawl.Core.Models
         /// 官网目录 Url
         /// </summary>
         public IUrl OfficialUrl { get; set; }
+
+        public int NeedCrawlChapterCount
+        {
+            get
+            {
+                return _needCrawlChapterCount;
+            }
+            set
+            {
+                lock (this)
+                {
+                    _needCrawlChapterCount = value;
+                }
+            }
+        }
         #endregion
 
         public Novel(
@@ -48,6 +66,7 @@ namespace D.NovelCrawl.Core.Models
             _urlManager = urlManager;
 
             Volumes = new Dictionary<int, Volume>();
+            _needCrawlChapterCount = 0;
         }
 
         /// <summary>
@@ -111,7 +130,63 @@ namespace D.NovelCrawl.Core.Models
         /// <param name="crawledVolumes"></param>
         public void CmpareOfficialCatalog(CrawlVolumeModel[] crawledVolumes)
         {
+            _logger.LogInformation("共获得卷信息：" + crawledVolumes.Length);
 
+            for (var i = 0; i < crawledVolumes.Length; i++)
+            {
+                var cv = crawledVolumes[i];
+
+                if (!Volumes.ContainsKey(i + 1))
+                {
+                    var v = new Volume
+                    {
+                        Number = i + 1,
+                        Name = cv.Name
+                    };
+
+                    Volumes.Add(v.Number, v);
+
+                    _logger.LogInformation("未收录的卷：" + v.Name);
+
+                    NeedCrawlChapterCount += cv.Chapters.Length;
+
+                    for (var j = 0; j < cv.Chapters.Length; j++)
+                    {
+                        var cc = cv.Chapters[j];
+
+                        var c = new Chapter
+                        {
+                            Name = cc.Name,
+                            Number = j,
+                            //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
+                            ReCrawl = true,
+                            VipChapter = string.IsNullOrEmpty(cc.Vip) ? false : true,
+                            VolumeNumber = i + 1,
+                            WordCount = Convert.ToInt32(cc.WordCount)
+                        };
+
+                        v.Chapters.Add(c.Number, c);
+
+                        if (!c.VipChapter)
+                        {
+                            IUrl url = new Url("http:" + cc.Url);
+                            url.CustomData = new UrlData
+                            {
+                                NovelInfo = this,
+                                Type = UrlTypes.NovleChapterTxt
+                            };
+                            url.Interval = -1;
+
+                            _urlManager.AddUrl(url);
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+
+            }
         }
     }
 }

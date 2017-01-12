@@ -62,6 +62,7 @@
     <Compile Include="Interface\INvoelCrawl.cs" />
     <Compile Include="Interface\IWebsitProxy.cs" />
     <Compile Include="Models\Chapter.cs" />
+    <Compile Include="Models\UrlData.cs" />
     <Compile Include="Models\Volume.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Novel.cs" />

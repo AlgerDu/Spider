@@ -102,7 +102,7 @@ namespace D.NovelCrawl.Core
         #region IPageProcess 实现
         public void Process(IPage page)
         {
-            switch ((UrlTypes)page.Url.CustomType)
+            switch ((page.Url.CustomData as UrlData).Type)
             {
                 case UrlTypes.NovleCatalog: NovleCatalogPage(page); break;
                 case UrlTypes.NovleChapterTxt: NovleChapterTxtPage(page); break;
@@ -115,22 +115,19 @@ namespace D.NovelCrawl.Core
         /// <param name="page"></param>
         public void NovleCatalogPage(IPage page)
         {
-            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (UrlTypes)page.Url.CustomType);
+            var urlData = page.Url.CustomData as UrlData;
+            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, urlData.Type);
 
             try
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
 
-                var novel = _novels.Values
-                    .Where(nn => nn.OfficialUrl.Equal(page.Url))
-                    .FirstOrDefault();
-
-                if (novel != null)
+                if (urlData.NovelInfo != null)
                 {
-                    novel.CmpareOfficialCatalog(data.ToObject<CrawlVolumeModel[]>());
+                    urlData.NovelInfo.CmpareOfficialCatalog(data.ToObject<CrawlVolumeModel[]>());
                 }
 
-                _logger.LogInformation(data.ToString());
+                //_logger.LogInformation(data.ToString());
             }
             catch (Exception ex)
             {
@@ -141,7 +138,18 @@ namespace D.NovelCrawl.Core
 
         public void NovleChapterTxtPage(IPage page)
         {
-            var step = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (UrlTypes)page.Url.CustomType);
+            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (page.Url.CustomData as UrlData).Type);
+            try
+            {
+                var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+
+                _logger.LogInformation(data.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
+                return;
+            }
         }
         #endregion
 
@@ -168,7 +176,11 @@ namespace D.NovelCrawl.Core
                         deal.OfficialUrl = new Url(official.Url);
 
                         deal.OfficialUrl.Interval = 1800;
-                        deal.OfficialUrl.CustomType = (int)UrlTypes.NovleCatalog;
+                        deal.OfficialUrl.CustomData = new UrlData
+                        {
+                            NovelInfo = deal,
+                            Type = UrlTypes.NovleCatalog
+                        };
 
                         _url2novel.Add(deal.OfficialUrl, deal);
 
