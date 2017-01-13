@@ -91,7 +91,7 @@ namespace D.NovelCrawl.Core
             {
                 return @"
                     var c:object
-                    c.Name = $('h3').text
+                    c.Name = $('div.main-text-wrap h3.j_chapterName').text
                     c.Txt = $('div.read-content').html
                     return c";
             }
