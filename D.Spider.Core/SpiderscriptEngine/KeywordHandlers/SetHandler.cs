@@ -26,9 +26,10 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
         {
             if (Regex.IsMatch(line, " = "))
             {
-                var result = line
-                    .Replace("=", "")
-                    .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var result = Regex.Split(line, " = ");
+                //var result = line
+                //    .Replace("=", "")
+                //    .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (result.Length != 2)
                     throw new Exception("赋值操作格式错误");
@@ -90,7 +91,8 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                 {
                     val = e.Attr(rcodes[2]);
                     index = 3;
-                }else if (rcodes[1] == "html")
+                }
+                else if (rcodes[1] == "html")
                 {
                     val = e.Html();
                     index = 3;
