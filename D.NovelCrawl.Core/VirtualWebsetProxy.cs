@@ -81,7 +81,7 @@ namespace D.NovelCrawl.Core
                             c = $('a').attr('title').regex('时间：(?<PublicTime>[\s\S]*?)章节字数：(?<WordCount>[\d]{0,5})')
                             c.Name = $('a').text
                             c = $('a').attr('href').regex('(?<Vip>vip)')
-                            c.Url = $('a').attr('href')
+                            c.Href = $('a').attr('href')
                             cs[] = c
                         v.Chapters = cs
                         vs[] = v

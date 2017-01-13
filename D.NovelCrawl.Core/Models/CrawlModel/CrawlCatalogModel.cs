@@ -14,7 +14,7 @@ namespace D.NovelCrawl.Core.Models.CrawlModel
         public string Name { get; set; }
         public string PublicTime { get; set; }
         public string WordCount { get; set; }
-        public string Url { get; set; }
+        public string Href { get; set; }
         public string Vip { get; set; }
     }
 
