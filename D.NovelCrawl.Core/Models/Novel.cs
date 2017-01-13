@@ -135,10 +135,11 @@ namespace D.NovelCrawl.Core.Models
             for (var i = 0; i < crawledVolumes.Length; i++)
             {
                 var cv = crawledVolumes[i];
+                Volume v;
 
                 if (!Volumes.ContainsKey(i + 1))
                 {
-                    var v = new Volume
+                    v = new Volume
                     {
                         Number = i + 1,
                         Name = cv.Name
@@ -147,17 +148,23 @@ namespace D.NovelCrawl.Core.Models
                     Volumes.Add(v.Number, v);
 
                     _logger.LogInformation("未收录的卷：" + v.Name);
+                }
+                else
+                {
+                    v = Volumes[i + 1];
+                }
 
-                    NeedCrawlChapterCount += cv.Chapters.Length;
+                for (var j = 0; j < cv.Chapters.Length; j++)
+                {
+                    var cc = cv.Chapters[j];
+                    Chapter c;
 
-                    for (var j = 0; j < cv.Chapters.Length; j++)
+                    if (!v.Chapters.ContainsKey(j + 1))
                     {
-                        var cc = cv.Chapters[j];
-
-                        var c = new Chapter
+                        c = new Chapter
                         {
                             Name = cc.Name,
-                            Number = j,
+                            Number = j + 1,
                             //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
                             ReCrawl = true,
                             VipChapter = string.IsNullOrEmpty(cc.Vip) ? false : true,
@@ -166,26 +173,29 @@ namespace D.NovelCrawl.Core.Models
                         };
 
                         v.Chapters.Add(c.Number, c);
+                    }
+                    else
+                    {
+                        c = v.Chapters[j + 1];
+                    }
 
-                        if (!c.VipChapter)
+                    if (c.ReCrawl) NeedCrawlChapterCount++;
+
+                    if (c.ReCrawl && !c.VipChapter)
+                    {
+                        //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
+
+                        IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
+                        url.CustomData = new UrlData
                         {
-                            IUrl url = new Url("http:" + cc.Url);
-                            url.CustomData = new UrlData
-                            {
-                                NovelInfo = this,
-                                Type = UrlTypes.NovleChapterTxt
-                            };
-                            url.Interval = -1;
+                            NovelInfo = this,
+                            Type = UrlTypes.NovleChapterTxt
+                        };
+                        url.Interval = -1;
 
-                            _urlManager.AddUrl(url);
-                        }
+                        _urlManager.AddUrl(url);
                     }
                 }
-                else
-                {
-
-                }
-
             }
         }
     }
