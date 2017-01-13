@@ -56,6 +56,13 @@ namespace D.Spider.Core.Interface
         bool Equal(IUrl r);
 
         /// <summary>
+        /// 通过页面下的 href 创建完整的 url
+        /// </summary>
+        /// <param name="href"></param>
+        /// <returns></returns>
+        IUrl CreateCompleteUrl(string href);
+
+        /// <summary>
         /// URL 是否需要爬取
         /// </summary>
         /// <returns></returns>

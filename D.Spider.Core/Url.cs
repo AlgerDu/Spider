@@ -126,6 +126,37 @@ namespace D.Spider.Core
             return String == r.String;
         }
 
+        /// <summary>
+        /// 通过页面下的 href 创建完整的 url
+        /// </summary>
+        /// <param name="href"></param>
+        /// <returns></returns>
+        public IUrl CreateCompleteUrl(string href)
+        {
+            //href 可能的类型
+            //1、完整的 url          eg: http://www.google.com
+            //2、缺少 http: 的 url   eg: //read.qidian.com
+            //3、                   eg: /1_1439/482060.html
+            //4、                   eg: 5367499.html
+
+            if (IsUrl(href))
+            {
+                return new Url(href);
+            }
+            else if (Regex.IsMatch(href, @"^//"))
+            {
+                return new Url("http:" + href);
+            }
+            else if (Regex.IsMatch(href, @"^/"))
+            {
+                return new Url(_host, href);
+            }
+            else
+            {
+                return new Url(String + href);
+            }
+        }
+
         public bool NeedCrawl()
         {
             if (LastCrawledTime == null
