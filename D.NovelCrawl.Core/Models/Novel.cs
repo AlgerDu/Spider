@@ -18,7 +18,7 @@ namespace D.NovelCrawl.Core.Models
 
         IUrlManager _urlManager;
 
-        int _needCrawlChapterCount;
+        int _vipChapterNeedCrawlCount;
 
         #region 对外属性
         /// <summary>
@@ -42,17 +42,17 @@ namespace D.NovelCrawl.Core.Models
         /// </summary>
         public IUrl OfficialUrl { get; set; }
 
-        public int NeedCrawlChapterCount
+        public int VipChapterNeedCrawlCount
         {
             get
             {
-                return _needCrawlChapterCount;
+                return _vipChapterNeedCrawlCount;
             }
             set
             {
                 lock (this)
                 {
-                    _needCrawlChapterCount = value;
+                    _vipChapterNeedCrawlCount = value;
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace D.NovelCrawl.Core.Models
             _urlManager = urlManager;
 
             Volumes = new Dictionary<int, Volume>();
-            _needCrawlChapterCount = 0;
+            _vipChapterNeedCrawlCount = 0;
         }
 
         /// <summary>
@@ -173,13 +173,13 @@ namespace D.NovelCrawl.Core.Models
                         };
 
                         v.Chapters.Add(c.Number, c);
+
+                        if (c.VipChapter) VipChapterNeedCrawlCount++;
                     }
                     else
                     {
                         c = v.Chapters[j + 1];
                     }
-
-                    if (c.ReCrawl) NeedCrawlChapterCount++;
 
                     if (c.ReCrawl && !c.VipChapter)
                     {
