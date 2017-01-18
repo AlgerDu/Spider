@@ -71,6 +71,6 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 设置 Url 需要重新爬取
         /// </summary>
-        void NeedRecrwal();
+        void Recrwal();
     }
 }

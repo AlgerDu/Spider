@@ -189,7 +189,7 @@ namespace D.Spider.Core
             }
         }
 
-        void NeedRecrwal()
+        public void Recrwal()
         {
             LastCrawledTime = null;
         }
