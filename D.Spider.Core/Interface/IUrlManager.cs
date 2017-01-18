@@ -24,9 +24,10 @@ namespace D.Spider.Core.Interface
 
         /// <summary>
         /// 向 IUrlList 中添加一个的 URL
+        /// 当 urlManager 中已经添加了相同的 url，返回已经添加的 Url 引用，同时替换已有的 url 的数据
         /// </summary>
         /// <param name="url">待爬取的 URL</param>
-        /// <returns>返回 url（当 urlManager 中已经添加了相同的 url，返回已经添加的 Url 引用）</returns>
+        /// <returns></returns>
         IUrl AddUrl(IUrl url);
 
         /// <summary>
