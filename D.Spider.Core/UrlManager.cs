@@ -73,6 +73,7 @@ namespace D.Spider.Core
             else
             {
                 find.Interval = url.Interval;
+                find.CustomData = url.CustomData;
             }
 
             if (url.NeedCrawl() && !IsWaitingCrawl(url))
