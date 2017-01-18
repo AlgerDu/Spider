@@ -14,5 +14,10 @@ namespace D.NovelCrawl.Core.Models
         public Novel NovelInfo { get; set; }
 
         public UrlTypes Type { get; set; }
+
+        /// <summary>
+        /// 是否官网
+        /// </summary>
+        public bool Official { get; set; }
     }
 }
