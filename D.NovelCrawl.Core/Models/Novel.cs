@@ -6,6 +6,7 @@ using D.Spider.Core.Interface;
 using D.Util.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace D.NovelCrawl.Core.Models
 {
@@ -19,6 +20,11 @@ namespace D.NovelCrawl.Core.Models
         IUrlManager _urlManager;
 
         int _vipChapterNeedCrawlCount;
+
+        /// <summary>
+        /// 非官方的目录url
+        /// </summary>
+        List<IUrl> _unofficialUrls = new List<IUrl>();
 
         #region 对外属性
         /// <summary>
@@ -67,6 +73,43 @@ namespace D.NovelCrawl.Core.Models
 
             Volumes = new Dictionary<int, Volume>();
             _vipChapterNeedCrawlCount = 0;
+        }
+
+        /// <summary>
+        /// 设置小说相关的需要爬取的 url
+        /// </summary>
+        /// <param name="urls"></param>
+        public void SetRelatedUrls(IEnumerable<NovelCrawlUrlModel> urls)
+        {
+            var official = urls.Where(uu => uu.Official).FirstOrDefault();
+
+            if (official == null)
+            {
+                _logger.LogWarning(Name + " 没有设置对应的官网目录页面，不对其进行爬取");
+                return;
+            }
+
+            if (OfficialUrl.String != official.Url)
+            {
+                OfficialUrl.Interval = -1;
+
+                OfficialUrl = new Url(official.Url);
+                OfficialUrl.CustomData = new UrlData
+                {
+                    NovelInfo = this,
+                    Official = true,
+                    Type = UrlTypes.NovleCatalog
+                };
+                OfficialUrl.Interval = 1800;
+
+                OfficialUrl = _urlManager.AddUrl(OfficialUrl);
+            }
+            else
+            {
+                OfficialUrl.Recrwal();
+            }
+
+
         }
 
         /// <summary>
@@ -193,9 +236,15 @@ namespace D.NovelCrawl.Core.Models
                         };
                         url.Interval = -1;
 
-                        _urlManager.AddUrl(url);
+                        var inManager = _urlManager.AddUrl(url);
+                        inManager.Recrwal();
                     }
                 }
+            }
+
+            if (VipChapterNeedCrawlCount > 0)
+            {
+
             }
         }
     }
