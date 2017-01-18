@@ -188,5 +188,10 @@ namespace D.Spider.Core
                 return false;
             }
         }
+
+        void NeedRecrwal()
+        {
+            LastCrawledTime = null;
+        }
     }
 }
