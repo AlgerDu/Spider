@@ -8,6 +8,7 @@ namespace D.Util.Interface
 {
     /// <summary>
     /// 日志接口，仿 .net core 日志记录
+    /// 使用 factory 传入的 writer 进行日志的写入
     /// </summary>
     public interface ILogger
     {
