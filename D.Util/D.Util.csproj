@@ -54,6 +54,7 @@
     <Compile Include="Logger\LoggerFacctory.cs" />
     <Compile Include="Logger\NullLogger\NullLogger.cs" />
     <Compile Include="Logger\NullLogger\NullLoggerFactory.cs" />
+    <Compile Include="Logger\NullLogWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
