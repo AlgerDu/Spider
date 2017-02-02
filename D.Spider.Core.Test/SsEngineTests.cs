@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using D.Util.Logger.Console;
 using Newtonsoft.Json.Linq;
+using D.Util.Logger;
 
 namespace D.Spider.Core.Tests
 {
@@ -32,7 +32,7 @@ namespace D.Spider.Core.Tests
                         vs[] = v
                     return vs";
 
-            var engine = new SsEngine(new ConsoleLoggerFactory());
+            var engine = new SsEngine(new NullLogFactory());
 
             var data = engine.Run(html, spiderscriptCode);
             Assert.AreEqual(data.GetType(), typeof(JArray));
@@ -41,7 +41,7 @@ namespace D.Spider.Core.Tests
         [TestMethod()]
         public void RunTestReturn()
         {
-            var engine = new SsEngine(new ConsoleLoggerFactory());
+            var engine = new SsEngine(new NullLogFactory());
 
             var data = engine.Run("", "var a:object\r\nreturn a");
 
