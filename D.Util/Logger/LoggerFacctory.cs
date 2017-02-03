@@ -10,13 +10,14 @@ namespace D.Util.Logger
     /// <summary>
     /// ILoggerFactory 实现
     /// </summary>
-    public class LoggerFacctory : ILoggerFactory
+    public class LoggerFactory : ILoggerFactory
     {
         ILogWriter[] _writers;
         Dictionary<Type, ILogger> _records = new Dictionary<Type, ILogger>();
 
-        public LoggerFacctory(
-            ILogWriter[] writers)
+        public LoggerFactory(
+            ILogWriter[] writers
+            )
         {
             _writers = writers;
         }
