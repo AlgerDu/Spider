@@ -47,7 +47,7 @@ namespace D.Util.Logger
                 EventID = eventID,
                 Text = text,
                 ThreadID = Thread.CurrentThread.ManagedThreadId,
-                Type = LogContextType.crit
+                Type = type
             };
 
             foreach (var writer in _writers)
