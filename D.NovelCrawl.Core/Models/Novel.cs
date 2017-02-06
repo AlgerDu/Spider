@@ -204,16 +204,15 @@ namespace D.NovelCrawl.Core.Models
 
                     if (!v.Chapters.ContainsKey(j + 1))
                     {
-                        c = new Chapter
-                        {
-                            Name = cc.Name,
-                            Number = j + 1,
-                            //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
-                            ReCrawl = true,
-                            VipChapter = string.IsNullOrEmpty(cc.Vip) ? false : true,
-                            VolumeNumber = i + 1,
-                            WordCount = Convert.ToInt32(cc.WordCount)
-                        };
+                        c = new Chapter();
+
+                        c.Name = cc.Name;
+                        c.Number = j + 1;
+                        //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
+                        c.ReCrawl = true;
+                        c.VipChapter = string.IsNullOrEmpty(cc.Vip) ? false : true;
+                        c.VolumeNumber = i + 1;
+                        //c.WordCount = Convert.ToInt32(cc.WordCount);
 
                         v.Chapters.Add(c.Number, c);
 
