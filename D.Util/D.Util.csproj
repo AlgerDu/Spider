@@ -49,8 +49,12 @@
     <Compile Include="Interface\ILogger.cs" />
     <Compile Include="Interface\ILoggerFactory.cs" />
     <Compile Include="Interface\ILogWriter.cs" />
-    <Compile Include="Logger\NullLogger\NullLogger.cs" />
-    <Compile Include="Logger\NullLogger\NullLoggerFactory.cs" />
+    <Compile Include="Logger\ConsoleLogWriter.cs" />
+    <Compile Include="Logger\LogContext.cs" />
+    <Compile Include="Logger\Logger.cs" />
+    <Compile Include="Logger\LoggerFacctory.cs" />
+    <Compile Include="Logger\NullLogFactory.cs" />
+    <Compile Include="Logger\NullLogWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

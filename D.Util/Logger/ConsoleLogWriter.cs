@@ -5,9 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.Util.Logger.Console
+namespace D.Util.Logger
 {
-    class ConsoleLogWriter : ILogWriter
+    /// <summary>
+    /// 控制台日志 writer
+    /// </summary>
+    public class ConsoleLogWriter : ILogWriter
     {
         public ConsoleLogWriter()
         {
@@ -43,10 +46,15 @@ namespace D.Util.Logger.Console
 
         void Print(string txt, ConsoleColor color = ConsoleColor.Gray)
         {
-            System.Console.ForegroundColor = color;
-            System.Console.Write(txt);
+            Console.ForegroundColor = color;
+            Console.Write(txt);
         }
 
+        /// <summary>
+        /// 根据不同的日志类型输出不同的颜色
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         ConsoleColor LogContextTypeColor(LogContextType type)
         {
             switch (type)

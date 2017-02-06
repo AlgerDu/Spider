@@ -64,9 +64,9 @@
       <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
       <Name>D.Spider.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\D.Util.Logger.Console\D.Util.Logger.Console.csproj">
-      <Project>{AC63C144-70F3-44FF-9650-B530654F7B8A}</Project>
-      <Name>D.Util.Logger.Console</Name>
+    <ProjectReference Include="..\D.Util.Logger.Log4net\D.Util.Logger.Log4net.csproj">
+      <Project>{b0b9b1a2-a984-497f-b03f-5810451b06c9}</Project>
+      <Name>D.Util.Logger.Log4net</Name>
     </ProjectReference>
     <ProjectReference Include="..\D.Util.Web\D.Util.Web.csproj">
       <Project>{D6F61554-7F08-486F-80CC-2015D0B40610}</Project>

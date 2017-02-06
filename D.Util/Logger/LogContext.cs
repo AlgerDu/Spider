@@ -5,13 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.Util.Logger.Console
+namespace D.Util.Logger
 {
-    class LogContext : ILogContext
+    public class LogContext : ILogContext
     {
         public string ClassFullName { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+        public int EventID { get; set; }
 
         public string Text { get; set; }
 

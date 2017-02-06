@@ -63,10 +63,6 @@
       <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
       <Name>D.Spider.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\D.Util.Logger.Console\D.Util.Logger.Console.csproj">
-      <Project>{AC63C144-70F3-44FF-9650-B530654F7B8A}</Project>
-      <Name>D.Util.Logger.Console</Name>
-    </ProjectReference>
     <ProjectReference Include="..\D.Util\D.Util.csproj">
       <Project>{573803c2-538a-4ed1-8a98-d990dcb83b9e}</Project>
       <Name>D.Util</Name>

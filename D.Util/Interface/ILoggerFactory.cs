@@ -8,6 +8,8 @@ namespace D.Util.Interface
 {
     /// <summary>
     /// 日志工厂
+    /// 持有多个 logWriter 对象
+    /// 创造 logger 对象，并且将持有的 writer 对象传递给 logger
     /// </summary>
     public interface ILoggerFactory
     {
