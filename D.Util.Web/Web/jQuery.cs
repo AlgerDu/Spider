@@ -32,6 +32,7 @@ namespace D.Util.Web
                 HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
                 request.Method = type.ToString();
                 request.Timeout = timeout == -1 ? _defaultTimeout : timeout;
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36";
 
                 try
                 {
@@ -53,7 +54,10 @@ namespace D.Util.Web
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
                             Stream respStream = response.GetResponseStream();
-                            using (StreamReader reader = new StreamReader(respStream, Encoding.GetEncoding(response.CharacterSet)))
+                            using (StreamReader reader = new StreamReader(
+                                respStream,
+                                Encoding.GetEncoding(response.CharacterSet)
+                                ))
                             {
                                 var txt = reader.ReadToEnd();
                                 var rData = TxtToObject<T>(txt);
