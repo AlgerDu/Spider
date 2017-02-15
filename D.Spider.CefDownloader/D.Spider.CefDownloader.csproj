@@ -49,6 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CefBrowserMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CefBrowserMainForm.Designer.cs">
+      <DependentUpon>CefBrowserMainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CefDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -69,6 +76,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
+      <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
+      <Name>D.Spider.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Util\D.Util.csproj">
+      <Project>{573803c2-538a-4ed1-8a98-d990dcb83b9e}</Project>
+      <Name>D.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
