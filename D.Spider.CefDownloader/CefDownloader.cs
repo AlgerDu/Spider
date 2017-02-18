@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using D.Spider.Core.Events;
+using D.Util.Interface;
 
 namespace D.Spider
 {
@@ -13,6 +14,29 @@ namespace D.Spider
     /// </summary>
     public class CefDownloader : IDownloader
     {
+        IEventBus _eventBus;
+        ILogger _logger;
+
+        IUrlManager _urlManager;
+
+        int _downloadingNumber;
+        CefBrowserMainForm _hideForm;
+
+        public CefDownloader(
+            IEventBus eventBus
+            , ILoggerFactory loggerFactory
+            , IUrlManager urlManager)
+        {
+            _eventBus = eventBus;
+            _logger = loggerFactory.CreateLogger<CefDownloader>();
+
+            _urlManager = urlManager;
+
+            _downloadingNumber = 0;
+
+            _eventBus.Subscribe(this);
+        }
+
         /// <summary>
         /// 处理 urlManager 发布的 UrlWaitingEvent
         /// 
