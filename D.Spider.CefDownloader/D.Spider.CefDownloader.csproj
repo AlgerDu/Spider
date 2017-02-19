@@ -79,6 +79,9 @@
     </Compile>
     <Compile Include="CefDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CefBrowserMainForm.resx">
+      <DependentUpon>CefBrowserMainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

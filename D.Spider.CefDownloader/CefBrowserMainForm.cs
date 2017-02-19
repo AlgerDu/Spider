@@ -45,7 +45,7 @@ namespace D.Spider
         /// 加载 address 对应的页面
         /// </summary>
         /// <param name="address"></param>
-        public void Load(string address)
+        public void LoadHtml(string address)
         {
 
         }
@@ -57,7 +57,11 @@ namespace D.Spider
         {
             if (_cefInited)
             {
-                Cef.Initialize();
+                var setting = new CefSettings();
+                setting.Locale = "zh-CN"; //设置默认的本地语言
+                //setting.p
+
+                Cef.Initialize(setting);
                 _cefInited = true;
             }
         }
@@ -70,7 +74,17 @@ namespace D.Spider
         {
             //MessageBox.Show("end");
             var html = await _wb.GetSourceAsync();
-            //MessageBox.Show(html);
+            MessageBox.Show(html.Substring(0, 20));
+        }
+
+        private void CefBrowserMainForm_Shown(object sender, EventArgs e)
+        {
+            //this.Visible = false;
+        }
+
+        private void CefBrowserMainForm_Load(object sender, EventArgs e)
+        {
+            //this.Visible = false;
         }
     }
 }

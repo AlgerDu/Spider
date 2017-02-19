@@ -12,8 +12,13 @@ namespace D.Spider.CefDownloader.Test
         static void Main(string[] args)
         {
             Form form = new CefBrowserMainForm();
+            //form.Activate();
             form.ShowDialog();
-            Console.ReadKey();
+            //form.();
+            //form.Show();
+            //form.Hide();
+            //Console.ReadKey();
+            //Environment.Exit(0);
         }
     }
 }

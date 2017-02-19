@@ -28,9 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // CefBrowserMainForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "CefBrowserMainForm";
+            this.ClientSize = new System.Drawing.Size(1293, 585);
+            this.Name = "CefBrowserMainForm";
+            this.Text = "Cef 标签页";
+            this.Load += new System.EventHandler(this.CefBrowserMainForm_Load);
+            this.Shown += new System.EventHandler(this.CefBrowserMainForm_Shown);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
