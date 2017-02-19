@@ -66,13 +66,11 @@ namespace D.Spider
         /// cef 浏览器页面加载完毕
         /// </summary>
         /// <param name="e"></param>
-        private void CefWbLoadEnd(object sender, FrameLoadEndEventArgs e)
+        private async void CefWbLoadEnd(object sender, FrameLoadEndEventArgs e)
         {
             //MessageBox.Show("end");
-            var task = _wb.GetSourceAsync();
-            task.Wait();
-            var html = task.Result;
-            MessageBox.Show(html);
+            var html = await _wb.GetSourceAsync();
+            //MessageBox.Show(html);
         }
     }
 }
