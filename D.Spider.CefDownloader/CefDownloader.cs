@@ -67,6 +67,11 @@ namespace D.Spider.Core
 
         public void Run()
         {
+            lock (this)
+            {
+                _running = true;
+            }
+
             DownloaderPage();
         }
         #endregion
@@ -74,6 +79,11 @@ namespace D.Spider.Core
         #region IDisposable 实现
         public void Dispose()
         {
+            lock (this)
+            {
+                _running = false;
+            }
+
             ShutdownCef();
         }
         #endregion
@@ -150,6 +160,9 @@ namespace D.Spider.Core
         {
             lock (this)
             {
+                if (!_running)
+                    return;
+
                 if (_downloaderUrl != null)
                     return;
                 else
