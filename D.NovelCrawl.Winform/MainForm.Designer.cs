@@ -49,6 +49,7 @@
             this.Name = "MainForm";
             this.Text = "小说爬虫";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
 
         }
