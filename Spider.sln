@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Util.Logger.Log4net", "D.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Spider.Core.Test", "D.Spider.Core.Test\D.Spider.Core.Test.csproj", "{3A643056-8765-4E8A-9AC8-5734A016870F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Spider.CefDownloader", "D.Spider.CefDownloader\D.Spider.CefDownloader.csproj", "{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,18 @@ Global
 		{3A643056-8765-4E8A-9AC8-5734A016870F}.Release|x64.Build.0 = Release|Any CPU
 		{3A643056-8765-4E8A-9AC8-5734A016870F}.Release|x86.ActiveCfg = Release|Any CPU
 		{3A643056-8765-4E8A-9AC8-5734A016870F}.Release|x86.Build.0 = Release|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Debug|x64.Build.0 = Debug|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Debug|x86.Build.0 = Debug|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Release|x64.ActiveCfg = Release|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Release|x64.Build.0 = Release|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9E71634-CF18-48D6-BE39-3D0F8220BEB0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
