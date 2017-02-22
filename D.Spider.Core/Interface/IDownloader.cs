@@ -12,6 +12,7 @@ namespace D.Spider.Core.Interface
     /// 下载器
     /// 发布事件：UrlCrawedEvent
     /// 订阅事件：UrlWaitingEvent
+    /// TODO 0206 接口需要修改
     /// </summary>
     public interface IDownloader
         : IEventHandler<UrlWaitingEvent>
