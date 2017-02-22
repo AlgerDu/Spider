@@ -27,7 +27,7 @@ namespace D.Spider.Core
         /// <summary>
         /// 防止在网页加载完成之后还有部分需要的数据还没有加载完成，需要等待一段时间 （ms）
         /// </summary>
-        const int _cefBrowserLoadEndSleepTime = 300;
+        const int _cefBrowserLoadEndSleepTime = 500;
         #endregion
 
         ILogger _logger;
@@ -39,6 +39,9 @@ namespace D.Spider.Core
         ChromiumWebBrowser _browser;
         IUrl _downloaderUrl;
 
+        Task _downloadTask;
+        ManualResetEvent _mre;
+
         public CefDownloader(
             IEventBus eventBus
             , ILoggerFactory loggerFactory
@@ -49,9 +52,9 @@ namespace D.Spider.Core
 
             _urlManager = urlManager;
 
-            _eventBus.Subscribe(this);
+            _mre = new ManualResetEvent(false);
 
-            InitCef();
+            _eventBus.Subscribe(this);
         }
 
         ~CefDownloader()
@@ -67,12 +70,23 @@ namespace D.Spider.Core
 
         public void Run()
         {
-            lock (this)
+            _downloadTask = new Task(() =>
             {
-                _running = true;
-            }
+                InitCef();
 
-            DownloaderPage();
+                lock (this)
+                {
+                    _running = true;
+                }
+
+                DownloaderPage();
+
+                _mre.WaitOne();
+
+                ShutdownCef();
+            });
+
+            _downloadTask.Start();
         }
         #endregion
 
@@ -84,7 +98,7 @@ namespace D.Spider.Core
                 _running = false;
             }
 
-            ShutdownCef();
+            _mre.Set();
         }
         #endregion
 
@@ -101,6 +115,8 @@ namespace D.Spider.Core
 
             _browser = new ChromiumWebBrowser();
             _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
+
+            _logger.LogDebug("cef 初始化完成");
         }
 
         /// <summary>
@@ -108,6 +124,7 @@ namespace D.Spider.Core
         /// </summary>
         private void ShutdownCef()
         {
+            _logger.LogDebug("cef 关闭");
             Cef.Shutdown();
         }
 
