@@ -59,62 +59,74 @@ namespace D.Util.Logger
         #region ILogger 实现
         public void LogCritical(string format, params object[] args)
         {
-            WriterLog(0, LogContextType.crit, string.Format(format, args));
+            WriterLog(0, LogContextType.crit
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogCritical(int eventID, string format, params object[] args)
         {
-            WriterLog(eventID, LogContextType.crit, string.Format(format, args));
+            WriterLog(eventID, LogContextType.crit
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogDebug(string format, params object[] args)
         {
-            WriterLog(0, LogContextType.dbug, string.Format(format, args));
+            WriterLog(0, LogContextType.dbug
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogDebug(int eventID, string format, params object[] args)
         {
-            WriterLog(eventID, LogContextType.dbug, string.Format(format, args));
+            WriterLog(eventID, LogContextType.dbug
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogError(string format, params object[] args)
         {
-            WriterLog(0, LogContextType.fail, string.Format(format, args));
+            WriterLog(0, LogContextType.fail
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogError(int eventID, string format, params object[] args)
         {
-            WriterLog(eventID, LogContextType.fail, string.Format(format, args));
+            WriterLog(eventID, LogContextType.fail
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogInformation(string format, params object[] args)
         {
-            WriterLog(0, LogContextType.info, string.Format(format, args));
+            WriterLog(0, LogContextType.info
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogInformation(int eventID, string format, params object[] args)
         {
-            WriterLog(eventID, LogContextType.info, string.Format(format, args));
+            WriterLog(eventID, LogContextType.info
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogTrace(string format, params object[] args)
         {
-            WriterLog(0, LogContextType.trce, string.Format(format, args));
+            WriterLog(0, LogContextType.trce
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogTrace(int eventID, string format, params object[] args)
         {
-            WriterLog(eventID, LogContextType.trce, string.Format(format, args));
+            WriterLog(eventID, LogContextType.trce
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogWarning(string format, params object[] args)
         {
-            WriterLog(0, LogContextType.warn, string.Format(format, args));
+            WriterLog(0, LogContextType.warn
+                , args.Length == 0 ? format : string.Format(format, args));
         }
 
         public void LogWarning(int eventID, string format, params object[] args)
         {
-            WriterLog(eventID, LogContextType.warn, string.Format(format, args));
+            WriterLog(eventID, LogContextType.warn
+                , args.Length == 0 ? format : string.Format(format, args));
         }
         #endregion
     }
