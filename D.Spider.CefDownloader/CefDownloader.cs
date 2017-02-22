@@ -39,9 +39,6 @@ namespace D.Spider.Core
         ChromiumWebBrowser _browser;
         IUrl _downloaderUrl;
 
-        Task _downloadTask;
-        ManualResetEvent _mre;
-
         public CefDownloader(
             IEventBus eventBus
             , ILoggerFactory loggerFactory
@@ -51,8 +48,6 @@ namespace D.Spider.Core
             _logger = loggerFactory.CreateLogger<CefDownloader>();
 
             _urlManager = urlManager;
-
-            _mre = new ManualResetEvent(false);
 
             _eventBus.Subscribe(this);
         }
@@ -70,23 +65,15 @@ namespace D.Spider.Core
 
         public void Run()
         {
-            _downloadTask = new Task(() =>
+            _browser = new ChromiumWebBrowser();
+            _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
+
+            lock (this)
             {
-                InitCef();
+                _running = true;
+            }
 
-                lock (this)
-                {
-                    _running = true;
-                }
-
-                DownloaderPage();
-
-                _mre.WaitOne();
-
-                ShutdownCef();
-            });
-
-            _downloadTask.Start();
+            DownloaderPage();
         }
         #endregion
 
@@ -97,8 +84,6 @@ namespace D.Spider.Core
             {
                 _running = false;
             }
-
-            _mre.Set();
         }
         #endregion
 
@@ -106,26 +91,44 @@ namespace D.Spider.Core
         /// <summary>
         /// 初始化 cef
         /// </summary>
-        private void InitCef()
+        public static void InitCef()
         {
             var set = new CefSettings();
             set.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
             Cef.Initialize(set, performDependencyCheck: true, browserProcessHandler: null);
-
-            _browser = new ChromiumWebBrowser();
-            _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
-
-            _logger.LogDebug("cef 初始化完成");
         }
 
         /// <summary>
         /// 关闭 Cef
         /// </summary>
-        private void ShutdownCef()
+        public static void ShutdownCef()
         {
-            _logger.LogDebug("cef 关闭");
             Cef.Shutdown();
+        }
+
+        /// <summary>
+        /// 获取需要下载的 url，并且调用 cef 下载
+        /// </summary>
+        private void DownloaderPage()
+        {
+            lock (this)
+            {
+                if (!_running)
+                    return;
+
+                if (_downloaderUrl != null)
+                    return;
+                else
+                {
+                    _downloaderUrl = _urlManager.NextCrawl();
+
+                    if (_downloaderUrl != null)
+                    {
+                        LoadPageAsync(_browser, _downloaderUrl.String);
+                    }
+                }
+            }
         }
 
         private async void CefBrowserLoadEnd(object sender, FrameLoadEndEventArgs e)
@@ -168,30 +171,6 @@ namespace D.Spider.Core
                 browser.Load(address);
             }
             return tcs.Task;
-        }
-
-        /// <summary>
-        /// 获取需要下载的 url，并且调用 cef 下载
-        /// </summary>
-        private void DownloaderPage()
-        {
-            lock (this)
-            {
-                if (!_running)
-                    return;
-
-                if (_downloaderUrl != null)
-                    return;
-                else
-                {
-                    _downloaderUrl = _urlManager.NextCrawl();
-
-                    if (_downloaderUrl != null)
-                    {
-                        LoadPageAsync(_browser, _downloaderUrl.String);
-                    }
-                }
-            }
         }
         #endregion
     }
