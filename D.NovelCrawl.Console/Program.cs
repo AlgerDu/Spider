@@ -9,6 +9,8 @@ namespace D.NovelCrawl.Console
     {
         static void Main(string[] args)
         {
+            CefDownloader.InitCef();
+
             var spider = new DSpider()
                 .UnityConfigerPath(AppDomain.CurrentDomain.BaseDirectory + @"Unity.config")
                 .Initialization()
@@ -21,6 +23,8 @@ namespace D.NovelCrawl.Console
                 .Run();
 
             System.Console.ReadKey();
+
+            CefDownloader.ShutdownCef();
         }
     }
 }
