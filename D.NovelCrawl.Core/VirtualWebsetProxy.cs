@@ -72,7 +72,7 @@ namespace D.NovelCrawl.Core
             {
                 return @"
                     var vs:array
-                    foreach $('div.volume-wrap div.volume')
+                    foreach $('div.catalog-content-wrap div.volume-wrap div.volume')
                         var v:object
                         v.Name = $('h3').text
                         var cs:array
