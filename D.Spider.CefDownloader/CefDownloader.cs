@@ -139,7 +139,11 @@ namespace D.Spider.Core
 
                 var html = await _browser.GetSourceAsync();
 
+                _logger.LogDebug(_downloaderUrl.String + "下载成功");
+
                 _eventBus.Publish(new UrlCrawledEvent(new Page(_downloaderUrl, html)));
+
+                _downloaderUrl = null;
 
                 DownloaderPage();
             }
