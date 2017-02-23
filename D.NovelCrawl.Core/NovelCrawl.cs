@@ -122,12 +122,12 @@ namespace D.NovelCrawl.Core
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
 
+                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
+
                 if (urlData.NovelInfo != null)
                 {
                     urlData.NovelInfo.CmpareOfficialCatalog(data.ToObject<CrawlVolumeModel[]>());
                 }
-
-                //_logger.LogInformation(data.ToString());
             }
             catch (Exception ex)
             {
@@ -138,12 +138,20 @@ namespace D.NovelCrawl.Core
 
         public void NovleChapterTxtPage(IPage page)
         {
+            var urlData = page.Url.CustomData as ChapterTxtUrlData;
             var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (page.Url.CustomData as UrlData).Type);
             try
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
 
-                _logger.LogInformation(data.ToString());
+                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
+
+                if (urlData.NovelInfo != null)
+                {
+                    var cm = data.ToObject<CrawlChapterModel>();
+
+                    urlData.NovelInfo.DealChapterCrwalData(urlData.ChapterInfo, cm);
+                }
             }
             catch (Exception ex)
             {

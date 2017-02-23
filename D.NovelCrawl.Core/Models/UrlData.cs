@@ -20,4 +20,9 @@ namespace D.NovelCrawl.Core.Models
         /// </summary>
         public bool Official { get; set; }
     }
+
+    internal class ChapterTxtUrlData : UrlData
+    {
+        public Chapter ChapterInfo { get; set; }
+    }
 }

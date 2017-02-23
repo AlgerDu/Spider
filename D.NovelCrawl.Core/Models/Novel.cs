@@ -206,6 +206,7 @@ namespace D.NovelCrawl.Core.Models
                     {
                         c = new Chapter();
 
+                        c.GUID = Guid.NewGuid();
                         c.Name = cc.Name;
                         c.Number = j + 1;
                         //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
@@ -228,10 +229,11 @@ namespace D.NovelCrawl.Core.Models
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
 
                         IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
-                        url.CustomData = new UrlData
+                        url.CustomData = new ChapterTxtUrlData
                         {
                             NovelInfo = this,
-                            Type = UrlTypes.NovleChapterTxt
+                            Type = UrlTypes.NovleChapterTxt,
+                            ChapterInfo = c
                         };
                         url.Interval = -1;
 
@@ -245,6 +247,19 @@ namespace D.NovelCrawl.Core.Models
             {
 
             }
+        }
+
+        /// <summary>
+        /// 处理从小说章节正文页面爬取到的章节正文信息
+        /// 并且对爬取到的小说内容进行一些处理
+        /// </summary>
+        /// <param name="chapter"></param>
+        public void DealChapterCrwalData(Chapter chapter, CrawlChapterModel crawlData)
+        {
+            //1.去掉 html 标签
+            //2.判断字数
+            //3.从章节名称中获取章节编号，可能不存在 eg: 第918章 我是不是药丸？ 918
+            //4.上传到个人网站
         }
     }
 }

@@ -12,6 +12,11 @@ namespace D.NovelCrawl.Core.Models
     public class Chapter
     {
         /// <summary>
+        /// 章节 GUID
+        /// </summary>
+        public Guid GUID { get; set; }
+
+        /// <summary>
         /// 所属的卷编号
         /// </summary>
         public int VolumeNumber { get; set; }
