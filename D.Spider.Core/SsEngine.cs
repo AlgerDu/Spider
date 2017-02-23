@@ -93,6 +93,11 @@ namespace D.Spider.Core
         {
             var lines = new SsCodeLines();
 
+            if (code == null)
+            {
+                throw new Exception("SsEngine 没有设置页面解析 Code");
+            }
+
             var slines = code
                 .Replace("\r\n", "\r")
                 .Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
