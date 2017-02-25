@@ -17,6 +17,11 @@ namespace D.NovelCrawl.Core.Models.DTO
         public Guid NovelGuid { get; set; }
 
         /// <summary>
+        /// 章节 Guid
+        /// </summary>
+        public Guid ChapterGuid { get; set; }
+
+        /// <summary>
         /// 所属卷编号
         /// </summary>
         public int VolumeNumber { get; set; }

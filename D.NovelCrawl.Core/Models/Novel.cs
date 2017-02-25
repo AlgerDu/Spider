@@ -1,4 +1,5 @@
-﻿using D.NovelCrawl.Core.Models;
+﻿using D.NovelCrawl.Core.Interface;
+using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Models.CrawlModel;
 using D.NovelCrawl.Core.Models.DTO;
 using D.Spider.Core;
@@ -7,6 +8,7 @@ using D.Util.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace D.NovelCrawl.Core.Models
 {
@@ -20,6 +22,7 @@ namespace D.NovelCrawl.Core.Models
         IUrlManager _urlManager;
 
         int _vipChapterNeedCrawlCount;
+        IWebsitProxy _web;
 
         /// <summary>
         /// 非官方的目录url
@@ -66,13 +69,16 @@ namespace D.NovelCrawl.Core.Models
 
         public Novel(
             ILoggerFactory loggerFactory,
-            IUrlManager urlManager)
+            IUrlManager urlManager
+            , IWebsitProxy web)
         {
             _logger = loggerFactory.CreateLogger<Novel>();
             _urlManager = urlManager;
 
             Volumes = new Dictionary<int, Volume>();
             _vipChapterNeedCrawlCount = 0;
+
+            _web = web;
         }
 
         /// <summary>
@@ -257,9 +263,37 @@ namespace D.NovelCrawl.Core.Models
         public void DealChapterCrwalData(Chapter chapter, CrawlChapterModel crawlData)
         {
             //1.去掉 html 标签
+            var txt = RemoveHtmlTag(crawlData.Text);
             //2.判断字数
-            //3.从章节名称中获取章节编号，可能不存在 eg: 第918章 我是不是药丸？ 918
-            //4.上传到个人网站
+            var detail = new NovelChapterDetailModel()
+            {
+                ChapterGuid = chapter.GUID,
+                ChapterName = chapter.Name,
+                ChapterNO = chapter.ChapterNO,
+                ChapterNumber = chapter.Number,
+                ChapterTxt = txt,
+                NovelGuid = this.Guid,
+                VolumeName = chapter.VolumeNumber.ToString(),
+                VolumeNumber = chapter.VolumeNumber
+            };
+            //3.上传到个人网站
+            _web.UploadNovelChapter(detail);
+        }
+
+        /// <summary>
+        /// 去除小说正文中的html标签
+        /// 将 <br/> 替换为 \r
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        private string RemoveHtmlTag(string txt)
+        {
+            var tmp = Regex.Replace(txt, @"<br[^>]*>", "\r", RegexOptions.IgnoreCase);
+            tmp = Regex.Replace(tmp, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase);
+            tmp = tmp
+                .Replace(' ', '\0')
+                .Replace('\t', '\0');
+            return tmp;
         }
     }
 }
