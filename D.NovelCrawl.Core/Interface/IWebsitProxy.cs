@@ -19,29 +19,38 @@ namespace D.NovelCrawl.Core.Interface
         /// </summary>
         /// <param name="page">页码信息</param>
         /// <returns></returns>
-        ListResult<NovelListModel> NovelList(PageModel page = null);
+        ListResult<NovelModel> NovelList(PageModel page = null);
 
         /// <summary>
         /// 获取个人网站上面保存的完整的小说目录信息
         /// 更新小说爬虫持有的小说目录信息
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="uuid"></param>
         /// <returns></returns>
-        IEnumerable<NovelVolumeModel> NovelCatalog(Guid guid);
+        NovelCatalogModel NovelCatalog(Guid uuid);
 
         /// <summary>
-        /// 获取爬取小说记录的目录信息
+        /// 获取小说对应的 url 信息
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="uuid"></param>
         /// <returns></returns>
-        IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid guid);
+        IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uuid);
+
+        /// <summary>
+        /// 上传爬取到的卷详细信息
+        /// </summary>
+        /// <param name="uuid">小说 uuid</param>
+        /// <param name="chapter"></param>
+        /// <returns></returns>
+        bool UploadNovelVolume(Guid uuid, VolumeModel chapter);
 
         /// <summary>
         /// 上传爬取到的章节详细信息
         /// </summary>
+        /// <param name="uuid">小说 uuid</param>
         /// <param name="chapter"></param>
         /// <returns></returns>
-        bool UploadNovelChapter(NovelChapterDetailModel chapter);
+        bool UploadNovelChapter(Guid uuid, ChapterModel chapter);
 
         /// <summary>
         /// 获取某个域名下某个类型的页面的 Spiderscript 处理代码

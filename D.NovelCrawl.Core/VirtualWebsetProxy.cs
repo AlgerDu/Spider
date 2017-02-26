@@ -15,6 +15,14 @@ namespace D.NovelCrawl.Core
     /// </summary>
     public class VirtualWebsetProxy : IWebsitProxy
     {
+        readonly NovelModel[] _novels = new NovelModel[]
+                {
+                    new NovelModel {
+                        Uuid = Guid.NewGuid(),
+                        Name = "修真聊天群"}
+                };
+
+
         ILogger _logger;
 
         public VirtualWebsetProxy(
@@ -24,12 +32,12 @@ namespace D.NovelCrawl.Core
             _logger = loggerFactory.CreateLogger<VirtualWebsetProxy>();
         }
 
-        public IEnumerable<NovelVolumeModel> NovelCatalog(Guid guid)
+        public NovelCatalogModel NovelCatalog(Guid uuid)
         {
-            return new NovelVolumeModel[0];
+            return new NovelCatalogModel();
         }
 
-        public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid guid)
+        public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uuid)
         {
             return new NovelCrawlUrlModel[]
             {
@@ -41,29 +49,15 @@ namespace D.NovelCrawl.Core
             };
         }
 
-        public ListResult<NovelListModel> NovelList(PageModel page = null)
+        public ListResult<NovelModel> NovelList(PageModel page = null)
         {
-            return new ListResult<NovelListModel>
+            return new ListResult<NovelModel>
             {
                 RecordCount = 1,
                 PageNumber = 1,
                 PageSize = -1,
-                CurrPageData = new NovelListModel[]
-                {
-                    new NovelListModel {
-                        Guid = Guid.NewGuid(),
-                        Name = "修真聊天群",
-                        ChapterCount = 0,
-                        LastChapterName = string.Empty,
-                        LastChapterNumber = 0 }
-                }
+                CurrPageData = _novels
             };
-        }
-
-        public bool UploadNovelChapter(NovelChapterDetailModel chapter)
-        {
-            _logger.LogInformation("上传爬取到的章节信息\r\n" + chapter.ToString());
-            return true;
         }
 
         public string UrlPageProcessSpiderscriptCode(string host, UrlTypes type)
@@ -97,8 +91,18 @@ namespace D.NovelCrawl.Core
             }
             else
             {
-                return null;
+                return string.Empty;
             }
+        }
+
+        public bool UploadNovelVolume(Guid uuid, VolumeModel chapter)
+        {
+            return false;
+        }
+
+        public bool UploadNovelChapter(Guid uuid, ChapterModel chapter)
+        {
+            return false;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace D.NovelCrawl.Core
         /// </summary>
         /// <param name="page"></param>
         /// <returns></returns>
-        public ListResult<NovelListModel> NovelList(PageModel page = null)
+        public ListResult<NovelModel> NovelList(PageModel page = null)
         {
             var url = _host + "/Novel/List";
 
@@ -40,13 +40,13 @@ namespace D.NovelCrawl.Core
                 page = new PageModel() { Number = 1, Size = -1 };
             }
 
-            var result = new ListResult<NovelListModel>();
+            var result = new ListResult<NovelModel>();
 
             var task = _jQuery.Ajax(
                 AjaxRequestTypes.POST,
                 url,
                 page,
-                (object sender, jQuerySuccessEventArgs<ListResult<NovelListModel>> sea) =>
+                (object sender, jQuerySuccessEventArgs<ListResult<NovelModel>> sea) =>
                 {
                     result = sea.Data;
                     _logger.LogInformation("获取到需要爬取的小说 " + result.RecordCount);
@@ -97,9 +97,9 @@ namespace D.NovelCrawl.Core
         /// </summary>
         /// <param name="guid"></param>
         /// <returns></returns>
-        public IEnumerable<Volume> NovelVCInfo(Guid guid)
+        public IEnumerable<VolumeModel> NovelVCInfo(Guid guid)
         {
-            return new Volume[]
+            return new VolumeModel[]
             {
 
             };

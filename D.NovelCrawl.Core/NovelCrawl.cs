@@ -13,6 +13,8 @@ using D.NovelCrawl.Core.Models.DTO;
 using Newtonsoft.Json;
 using Microsoft.Practices.Unity;
 using D.NovelCrawl.Core.Models.CrawlModel;
+using System.Timers;
+using D.NovelCrawl.Core.Models.Domain;
 
 namespace D.NovelCrawl.Core
 {
@@ -32,14 +34,20 @@ namespace D.NovelCrawl.Core
         IWebsitProxy _web;
 
         /// <summary>
+        /// 定时从官网获取小说以及对应的 url 信息，查看是否需要更新
+        /// </summary>
+        Timer _checkTimer;
+
+        /// <summary>
+        /// 定时器时间间隔
+        /// 单位 秒
+        /// </summary>
+        const int _checkInterval = 3600;
+
+        /// <summary>
         /// 所有的小说信息
         /// </summary>
         Dictionary<Guid, Novel> _novels = new Dictionary<Guid, Novel>();
-
-        /// <summary>
-        /// url 与 Novel 的对应关系
-        /// </summary>
-        Dictionary<IUrl, Novel> _url2novel = new Dictionary<IUrl, Novel>();
 
         public NovelCrawl(
             ILoggerFactory loggerFactory
@@ -64,38 +72,49 @@ namespace D.NovelCrawl.Core
 
         public INvoelCrawl Run()
         {
-            //从网站上面获取需要爬取的小说
-            var novels = _web.NovelList();
+            CheckNovel();
 
-            if (novels.RecordCount <= 0)
+            _checkTimer = new Timer(_checkInterval * 1000);
+            _checkTimer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) =>
             {
-                _logger.LogWarning("没有需要爬取的小说");
-            }
-            else
-            {
-                foreach (var n in novels.CurrPageData)
-                {
-                    Novel dealNovel = null;
+                CheckNovel();
+            });
 
-                    if (_novels.ContainsKey(n.Guid))
-                    {
-                        dealNovel = _novels[n.Guid];
-                        dealNovel.Update(n);
-                    }
-                    else
-                    {
-                        dealNovel = _container.Resolve<Novel>();
-                        dealNovel.Update(n);
-
-                        _logger.LogInformation("添加需要爬取的小说：" + n.Name);
-                        _novels.Add(dealNovel.Guid, dealNovel);
-                    }
-
-                    DealNovel(dealNovel);
-                }
-            }
+            _checkTimer.Start();
 
             return this;
+        }
+
+        private void CheckNovel()
+        {
+            var result = _web.NovelList();
+
+            foreach (var n in result.CurrPageData)
+            {
+                Novel novel;
+
+                if (_novels.ContainsKey(n.Uuid))
+                {
+                    novel = _novels[n.Uuid];
+                }
+                else
+                {
+                    _logger.LogInformation("添加新的需要爬取的小说：" + n.Name);
+
+                    novel = _container.Resolve<Novel>();
+                }
+
+                //更新小说基本信息
+                novel.Update(n);
+
+                //获取已经爬取到的小说目录信息，与爬虫本地持有的信息进行对比
+                var catalog = _web.NovelCatalog(n.Uuid);
+                novel.UpdateCatalog(catalog);
+
+                //更新小说对应的小说爬取目录
+                var urls = _web.NovelCrawlUrls(novel.Uuid);
+                novel.SetRelatedUrls(urls);
+            }
         }
         #endregion
 
@@ -115,7 +134,7 @@ namespace D.NovelCrawl.Core
         /// <param name="page"></param>
         public void NovleCatalogPage(IPage page)
         {
-            var urlData = page.Url.CustomData as UrlData;
+            var urlData = page.Url.CustomData as CatalogUrlData;
             var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, urlData.Type);
 
             try
@@ -160,46 +179,5 @@ namespace D.NovelCrawl.Core
             }
         }
         #endregion
-
-        /// <summary>
-        /// 处理小说
-        /// 是否需要重新获取信息，判断小说官网目录是否在 UrlManager 列表中
-        /// </summary>
-        /// <param name="deal"></param>
-        private void DealNovel(Novel deal)
-        {
-            var urls = _web.NovelCrawlUrls(deal.Guid);
-            if (urls != null && urls.Count() > 0)
-            {
-                var official = urls.Where(uu => uu.Official).FirstOrDefault();
-
-                if (official == null)
-                {
-                    _logger.LogWarning(deal.Name + " 没有记录官网目录 url");
-                }
-                else
-                {
-                    if (deal.OfficialUrl == null || deal.OfficialUrl.String != official.Url)
-                    {
-                        deal.OfficialUrl = new Url(official.Url);
-
-                        deal.OfficialUrl.Interval = 1800;
-                        deal.OfficialUrl.CustomData = new UrlData
-                        {
-                            NovelInfo = deal,
-                            Type = UrlTypes.NovleCatalog
-                        };
-
-                        _url2novel.Add(deal.OfficialUrl, deal);
-
-                        _urlManager.AddUrl(deal.OfficialUrl);
-                    }
-                }
-            }
-            else
-            {
-                _logger.LogWarning(deal.Name + " 没有记录需要爬取的 Urls");
-            }
-        }
     }
 }

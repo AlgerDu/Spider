@@ -1,5 +1,4 @@
 ﻿using D.NovelCrawl.Core.Interface;
-using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Models.CrawlModel;
 using D.NovelCrawl.Core.Models.DTO;
 using D.Spider.Core;
@@ -8,9 +7,11 @@ using D.Util.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.Models
+namespace D.NovelCrawl.Core.Models.Domain
 {
     /// <summary>
     /// 小说爬虫需要的所有信息
@@ -33,7 +34,7 @@ namespace D.NovelCrawl.Core.Models
         /// <summary>
         /// 小说 GUID
         /// </summary>
-        public Guid Guid { get; private set; }
+        public Guid Uuid { get; private set; }
 
         /// <summary>
         /// 小说名称
@@ -44,27 +45,17 @@ namespace D.NovelCrawl.Core.Models
         /// <summary>
         /// 卷信息
         /// </summary>
-        public Dictionary<int, Volume> Volumes { get; private set; }
+        public Dictionary<int, VolumeModel> Volumes { get; private set; }
+
+        /// <summary>
+        /// 章节信息
+        /// </summary>
+        public Dictionary<Guid, ChapterModel> Chapters { get; private set; }
 
         /// <summary>
         /// 官网目录 Url
         /// </summary>
-        public IUrl OfficialUrl { get; set; }
-
-        public int VipChapterNeedCrawlCount
-        {
-            get
-            {
-                return _vipChapterNeedCrawlCount;
-            }
-            set
-            {
-                lock (this)
-                {
-                    _vipChapterNeedCrawlCount = value;
-                }
-            }
-        }
+        public IUrl OfficialUrl { get; private set; }
         #endregion
 
         public Novel(
@@ -75,10 +66,74 @@ namespace D.NovelCrawl.Core.Models
             _logger = loggerFactory.CreateLogger<Novel>();
             _urlManager = urlManager;
 
-            Volumes = new Dictionary<int, Volume>();
+            Volumes = new Dictionary<int, VolumeModel>();
+            Chapters = new Dictionary<Guid, ChapterModel>();
             _vipChapterNeedCrawlCount = 0;
 
             _web = web;
+        }
+
+        /// <summary>
+        /// 根据从个人网站上获取的小说信息更新爬虫持有的小说信息
+        /// </summary>
+        /// <param name="model"></param>
+        public void Update(NovelModel model)
+        {
+            Uuid = model.Uuid;
+            Name = model.Name;
+        }
+
+        /// <summary>
+        /// 根据个人网站上记录的目录信息与爬虫持有的目录信息进行对比，判断哪些内容章节需要重新爬取
+        /// 爬虫记录的小说目录信息需要与个人网站记录的目录信息同步
+        /// 防止爬取到的章节上传失败或者某个章节报错需要重新爬取
+        /// 在爬虫初始化之后，爬虫运行一段时间之后才需要调用这个函数
+        /// </summary>
+        /// <param name="catalog"></param>
+        public void UpdateCatalog(NovelCatalogModel catalog)
+        {
+            lock (this)
+            {
+                //将本地 卷 信息设置为未上传
+                foreach (var v in Volumes.Values)
+                {
+                    v.Uploaded = false;
+                }
+
+                foreach (var v in catalog.Vs)
+                {
+                    if (!Volumes.ContainsKey(v.No))
+                    {
+                        //远程已经存在的 卷 信息，不需要在上传
+                        Volumes.Add(v.No, v);
+
+                        v.Uploaded = true;
+                    }
+                    else
+                    {
+                        Volumes[v.No].Uploaded = true;
+                    }
+                }
+
+                foreach (var c in Chapters.Values)
+                {
+                    c.Recrawl = true;
+                }
+
+                foreach (var c in catalog.Cs)
+                {
+                    if (!Chapters.ContainsKey(c.Uuid))
+                    {
+                        Chapters.Add(c.Uuid, c);
+
+                        c.Recrawl = false;
+                    }
+                    else
+                    {
+                        Chapters[c.Uuid].Recrawl = c.Recrawl;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -87,7 +142,9 @@ namespace D.NovelCrawl.Core.Models
         /// <param name="urls"></param>
         public void SetRelatedUrls(IEnumerable<NovelCrawlUrlModel> urls)
         {
-            var official = urls.Where(uu => uu.Official).FirstOrDefault();
+            var official = urls
+                .Where(uu => uu.Official)
+                .FirstOrDefault();
 
             if (official == null)
             {
@@ -95,12 +152,14 @@ namespace D.NovelCrawl.Core.Models
                 return;
             }
 
-            if (OfficialUrl.String != official.Url)
+            if (OfficialUrl == null ||
+                OfficialUrl.String != official.Url)
             {
-                OfficialUrl.Interval = -1;
+                if (OfficialUrl != null)
+                    OfficialUrl.Interval = -1;
 
                 OfficialUrl = new Url(official.Url);
-                OfficialUrl.CustomData = new UrlData
+                OfficialUrl.CustomData = new CatalogUrlData
                 {
                     NovelInfo = this,
                     Official = true,
@@ -113,63 +172,6 @@ namespace D.NovelCrawl.Core.Models
             else
             {
                 OfficialUrl.Recrwal();
-            }
-
-
-        }
-
-        /// <summary>
-        /// 根据从个人网站上获取的小说信息更新爬虫持有的小说信息
-        /// </summary>
-        /// <param name="model"></param>
-        public void Update(NovelListModel model)
-        {
-            Guid = model.Guid;
-            Name = model.Name;
-        }
-
-        /// <summary>
-        /// 根据个人网站上记录的目录信息与爬虫持有的目录信息进行对比，判断哪些内容章节需要重新爬取
-        /// 爬虫记录的小说目录信息需要与个人网站记录的目录信息同步
-        /// 防止爬取到的章节上传失败或者某个章节报错需要重新爬取
-        /// 在爬虫初始化之后，爬虫运行一段时间之后才需要调用这个函数
-        /// </summary>
-        /// <param name="volumes"></param>
-        public void UpdateCatalog(NovelVolumeModel[] volumes)
-        {
-            lock (this)
-            {
-                Volumes.Clear();
-
-                foreach (var v in volumes)
-                {
-                    var tv = new Volume()
-                    {
-                        Number = v.Number,
-                        Name = v.Name
-                    };
-
-                    foreach (var c in v.Chapters)
-                    {
-                        var tc = new Chapter
-                        {
-                            ChapterNO = c.ChapterNO,
-                            Name = c.Name,
-                            Number = c.Number,
-                            PublicTime = c.PublicTime,
-                            ReCrawl = c.ReCrawl,
-                            VipChapter = c.VipChapter,
-                            WordCount = c.WordCount,
-                            SourceUrl = c.SourceUrl,
-
-                            VolumeNumber = tv.Number
-                        };
-
-                        tv.Chapters.Add(tc.Number, tc);
-                    }
-
-                    Volumes.Add(tv.Number, tv);
-                }
             }
         }
 
@@ -184,19 +186,21 @@ namespace D.NovelCrawl.Core.Models
             for (var i = 0; i < crawledVolumes.Length; i++)
             {
                 var cv = crawledVolumes[i];
-                Volume v;
+                VolumeModel v;
 
                 if (!Volumes.ContainsKey(i + 1))
                 {
-                    v = new Volume
+                    v = new VolumeModel()
                     {
-                        Number = i + 1,
+                        No = i + 1,
                         Name = cv.Name
                     };
 
-                    Volumes.Add(v.Number, v);
+                    Volumes.Add(v.No, v);
 
-                    _logger.LogInformation("未收录的卷：" + v.Name);
+                    _web.UploadNovelVolume(Uuid, v);
+
+                    _logger.LogInformation("上传小说《{0}》未收录的卷：{1}", Name, v.Name);
                 }
                 else
                 {
@@ -206,31 +210,32 @@ namespace D.NovelCrawl.Core.Models
                 for (var j = 0; j < cv.Chapters.Length; j++)
                 {
                     var cc = cv.Chapters[j];
-                    Chapter c;
+                    int index = j + 1;
+                    ChapterModel c;
 
-                    if (!v.Chapters.ContainsKey(j + 1))
+                    c = Chapters.Values
+                        .Where(ccc => ccc.VolumeNo == v.No && ccc.VolumeIndex == index)
+                        .FirstOrDefault();
+
+                    if (c == null)
                     {
-                        c = new Chapter();
+                        c = new ChapterModel();
 
-                        c.GUID = Guid.NewGuid();
+                        c.Uuid = Guid.NewGuid();
                         c.Name = cc.Name;
-                        c.Number = j + 1;
+                        c.VolumeNo = v.No;
+                        c.VolumeIndex = index;
                         //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
-                        c.ReCrawl = true;
-                        c.VipChapter = string.IsNullOrEmpty(cc.Vip) ? false : true;
-                        c.VolumeNumber = i + 1;
+                        c.Recrawl = true;
+                        c.Vip = string.IsNullOrEmpty(cc.Vip) ? false : true;
                         //c.WordCount = Convert.ToInt32(cc.WordCount);
 
-                        v.Chapters.Add(c.Number, c);
+                        Chapters.Add(c.Uuid, c);
 
-                        if (c.VipChapter) VipChapterNeedCrawlCount++;
-                    }
-                    else
-                    {
-                        c = v.Chapters[j + 1];
+                        if (c.Vip) _vipChapterNeedCrawlCount++;
                     }
 
-                    if (c.ReCrawl && !c.VipChapter)
+                    if (c.Recrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
 
@@ -249,7 +254,7 @@ namespace D.NovelCrawl.Core.Models
                 }
             }
 
-            if (VipChapterNeedCrawlCount > 0)
+            if (_vipChapterNeedCrawlCount > 0)
             {
 
             }
@@ -260,24 +265,17 @@ namespace D.NovelCrawl.Core.Models
         /// 并且对爬取到的小说内容进行一些处理
         /// </summary>
         /// <param name="chapter"></param>
-        public void DealChapterCrwalData(Chapter chapter, CrawlChapterModel crawlData)
+        public void DealChapterCrwalData(ChapterModel chapter, CrawlChapterModel crawlData)
         {
             //1.去掉 html 标签
             var txt = RemoveHtmlTag(crawlData.Text);
             //2.判断字数
-            var detail = new NovelChapterDetailModel()
-            {
-                ChapterGuid = chapter.GUID,
-                ChapterName = chapter.Name,
-                ChapterNO = chapter.ChapterNO,
-                ChapterNumber = chapter.Number,
-                ChapterTxt = txt,
-                NovelGuid = this.Guid,
-                VolumeName = chapter.VolumeNumber.ToString(),
-                VolumeNumber = chapter.VolumeNumber
-            };
+
+            chapter.Text = txt;
+            chapter.Recrawl = false;
+
             //3.上传到个人网站
-            _web.UploadNovelChapter(detail);
+            _web.UploadNovelChapter(Uuid, chapter);
         }
 
         /// <summary>

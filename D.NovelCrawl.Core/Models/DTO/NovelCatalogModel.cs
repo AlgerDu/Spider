@@ -7,69 +7,24 @@ using System.Threading.Tasks;
 namespace D.NovelCrawl.Core.Models.DTO
 {
     /// <summary>
-    /// 小说章节信息
+    /// 小说目录结构信息 DTO
     /// </summary>
-    public class NovelChapterModel
+    public class NovelCatalogModel
     {
         /// <summary>
-        /// 在卷内的编号
+        /// 所有卷信息
         /// </summary>
-        public int Number { get; set; }
+        public VolumeModel[] Vs { get; set; }
 
         /// <summary>
-        /// 章节号（可能为空）
+        /// 所有章节信息
         /// </summary>
-        public int? ChapterNO { get; set; }
+        public ChapterModel[] Cs { get; set; }
 
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 发布时间
-        /// </summary>
-        public DateTime PublicTime { get; set; }
-
-        /// <summary>
-        /// 字数
-        /// </summary>
-        public int WordCount { get; set; }
-
-        /// <summary>
-        /// 需要重新爬取
-        /// </summary>
-        public bool ReCrawl { get; set; }
-
-        /// <summary>
-        /// 是否vip章节
-        /// </summary>
-        public bool VipChapter { get; set; }
-
-        /// <summary>
-        /// 来源 Url
-        /// </summary>
-        public string SourceUrl { get; set; }
-    }
-
-    /// <summary>
-    /// 小说卷信息
-    /// </summary>
-    public class NovelVolumeModel
-    {
-        /// <summary>
-        /// 编号
-        /// </summary>
-        public int Number { get; set; }
-
-        /// <summary>
-        /// 卷名称
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 章节信息
-        /// </summary>
-        public NovelChapterModel[] Chapters { get; set; }
+        public NovelCatalogModel()
+        {
+            Vs = new VolumeModel[0];
+            Cs = new ChapterModel[0];
+        }
     }
 }

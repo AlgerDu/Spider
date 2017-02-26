@@ -93,7 +93,7 @@ namespace D.Spider.Core
         {
             var lines = new SsCodeLines();
 
-            if (code == null)
+            if (string.IsNullOrEmpty(code))
             {
                 throw new Exception("SsEngine 没有设置页面解析 Code");
             }

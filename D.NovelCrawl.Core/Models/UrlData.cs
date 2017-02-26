@@ -1,4 +1,6 @@
-﻿using System;
+﻿using D.NovelCrawl.Core.Models.Domain;
+using D.NovelCrawl.Core.Models.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +16,10 @@ namespace D.NovelCrawl.Core.Models
         public Novel NovelInfo { get; set; }
 
         public UrlTypes Type { get; set; }
+    }
 
+    internal class CatalogUrlData : UrlData
+    {
         /// <summary>
         /// 是否官网
         /// </summary>
@@ -23,6 +28,6 @@ namespace D.NovelCrawl.Core.Models
 
     internal class ChapterTxtUrlData : UrlData
     {
-        public Chapter ChapterInfo { get; set; }
+        public ChapterModel ChapterInfo { get; set; }
     }
 }
