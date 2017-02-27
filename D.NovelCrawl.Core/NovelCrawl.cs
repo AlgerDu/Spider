@@ -145,7 +145,12 @@ namespace D.NovelCrawl.Core
 
                 if (urlData.NovelInfo != null)
                 {
-                    urlData.NovelInfo.CmpareOfficialCatalog(data.ToObject<CrawlVolumeModel[]>());
+                    var cd = data.ToObject<CrawlVolumeModel[]>();
+
+                    if (urlData.Official)
+                        urlData.NovelInfo.CmpareOfficialCatalog(cd);
+                    else
+                        urlData.NovelInfo.CmpareUnofficialCatalog(page.Url, cd);
                 }
             }
             catch (Exception ex)
@@ -158,7 +163,7 @@ namespace D.NovelCrawl.Core
         public void NovleChapterTxtPage(IPage page)
         {
             var urlData = page.Url.CustomData as ChapterTxtUrlData;
-            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (page.Url.CustomData as UrlData).Type);
+            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, urlData.Type);
             try
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);

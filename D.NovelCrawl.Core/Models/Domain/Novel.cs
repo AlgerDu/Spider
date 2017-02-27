@@ -218,6 +218,8 @@ namespace D.NovelCrawl.Core.Models.Domain
                 };
                 url.Interval = 300;
                 url.NeedCrawl = false;
+
+                _unofficialUrls.Add(url);
             }
         }
 
@@ -286,17 +288,50 @@ namespace D.NovelCrawl.Core.Models.Domain
                     else if (c.Recrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
-                        IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
-                        url.CustomData = new ChapterTxtUrlData
-                        {
-                            NovelInfo = this,
-                            Type = UrlTypes.NovleChapterTxt,
-                            ChapterInfo = c
-                        };
-                        url.Interval = -1;
+                        //IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
+                        //url.CustomData = new ChapterTxtUrlData
+                        //{
+                        //    NovelInfo = this,
+                        //    Type = UrlTypes.NovleChapterTxt,
+                        //    ChapterInfo = c
+                        //};
+                        //url.Interval = -1;
 
-                        var inManager = _urlManager.AddUrl(url);
-                        inManager.NeedCrawl = true;
+                        //var inManager = _urlManager.AddUrl(url);
+                        //inManager.NeedCrawl = true;
+                    }
+                }
+            }
+        }
+
+        public void CmpareUnofficialCatalog(IUrl unoff, CrawlVolumeModel[] crawledVolumes)
+        {
+            foreach (var v in crawledVolumes)
+            {
+                foreach (var c in v.Chapters)
+                {
+                    var r = Chapters.Values.Where(cc => cc.Name == c.Name).FirstOrDefault();
+
+                    if (r == null)
+                    {
+                        _logger.LogWarning("《{0}》官网中没有记录对应的章节：{1}", Name, c.Name);
+                    }
+                    else
+                    {
+                        if (r.Vip && r.Recrawl)
+                        {
+                            IUrl url = unoff.CreateCompleteUrl(c.Href);
+                            url.CustomData = new ChapterTxtUrlData
+                            {
+                                NovelInfo = this,
+                                Type = UrlTypes.NovleChapterTxt,
+                                ChapterInfo = r
+                            };
+                            url.Interval = -1;
+                            url.NeedCrawl = true;
+
+                            _urlManager.AddUrl(url);
+                        }
                     }
                 }
             }

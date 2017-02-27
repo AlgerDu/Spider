@@ -45,6 +45,11 @@ namespace D.NovelCrawl.Core
                 {
                     Url = "http://book.qidian.com/info/3602691#Catalog",
                     Official = true
+                },
+                new NovelCrawlUrlModel
+                {
+                    Url = "http://www.biquge.tw/36_36007/",
+                    Official = false
                 }
             };
         }
@@ -87,6 +92,31 @@ namespace D.NovelCrawl.Core
                     var c:object
                     c.Name = $('div.main-text-wrap h3.j_chapterName').text
                     c.Text = $('div.main-text-wrap div.read-content').html
+                    return c";
+            }
+            else if (host == "http://www.biquge.tw" && type == UrlTypes.NovleCatalog)
+            {
+                return @"
+                    var vs:array
+                    foreach $('div.list')
+                        var v:object
+                        v.Name = $('dt').text
+                        var cs:array
+                        foreach $('dd')
+                            var c:object
+                            c.Name = $('a').text
+                            c.Href = $('a').attr('href')
+                            cs[] = c
+                        v.Chapters = cs
+                        vs[] = v
+                    return vs";
+            }
+            else if (host == "http://www.biquge.tw" && type == UrlTypes.NovleChapterTxt)
+            {
+                return @"
+                    var c:object
+                    c.Name = $('div.bookname h1').text
+                    c.Text = $('#content').html
                     return c";
             }
             else
