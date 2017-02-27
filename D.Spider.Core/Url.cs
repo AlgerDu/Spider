@@ -135,7 +135,8 @@ namespace D.Spider.Core
         {
             get
             {
-                return _needCrawl;
+                return _needCrawl &&
+                    (LastCrawledTime == null || DateTime.Now - LastCrawledTime > new TimeSpan(0, 0, Interval));
             }
             set
             {
