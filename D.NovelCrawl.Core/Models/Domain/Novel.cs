@@ -187,6 +187,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                     Type = UrlTypes.NovleCatalog
                 };
                 OfficialUrl.Interval = 1800;
+                OfficialUrl.NeedCrawl = true;
 
                 OfficialUrl = _urlManager.AddUrl(OfficialUrl);
             }
