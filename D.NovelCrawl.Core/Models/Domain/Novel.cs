@@ -30,6 +30,27 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// </summary>
         List<IUrl> _unofficialUrls = new List<IUrl>();
 
+        int VipChaperNeedCrawlCount
+        {
+            get
+            {
+                return _vipChapterNeedCrawlCount;
+            }
+            set
+            {
+                if (_vipChapterNeedCrawlCount <= 0 && value > 0)
+                {
+                    //TODO 设置开始爬取所有的非官方目录 url
+                }
+                else if (_vipChapterNeedCrawlCount > 0 && value <= 0)
+                {
+                    //TODO 设置停止爬取所有的非官方目录 url
+                }
+
+                _vipChapterNeedCrawlCount = value;
+            }
+        }
+
         #region 对外属性
         /// <summary>
         /// 小说 GUID
@@ -173,6 +194,8 @@ namespace D.NovelCrawl.Core.Models.Domain
             {
                 OfficialUrl.Recrwal();
             }
+
+            var nf = urls.Where(u => u.Official == false);
         }
 
         /// <summary>
@@ -231,14 +254,15 @@ namespace D.NovelCrawl.Core.Models.Domain
                         //c.WordCount = Convert.ToInt32(cc.WordCount);
 
                         Chapters.Add(c.Uuid, c);
-
-                        if (c.Vip) _vipChapterNeedCrawlCount++;
                     }
 
-                    if (c.Recrawl && !c.Vip)
+                    if (c.Recrawl && c.Vip)
+                    {
+                        VipChaperNeedCrawlCount++;
+                    }
+                    else if (c.Recrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
-
                         IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
                         url.CustomData = new ChapterTxtUrlData
                         {
@@ -253,11 +277,6 @@ namespace D.NovelCrawl.Core.Models.Domain
                     }
                 }
             }
-
-            if (_vipChapterNeedCrawlCount > 0)
-            {
-
-            }
         }
 
         /// <summary>
@@ -265,14 +284,27 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// 并且对爬取到的小说内容进行一些处理
         /// </summary>
         /// <param name="chapter"></param>
-        public void DealChapterCrwalData(ChapterModel chapter, CrawlChapterModel crawlData)
+        public void DealChapterCrwalData(ChapterModel chapter, CrawlChapterModel crawlData, string url)
         {
+            lock (this)
+            {
+                //章节已经不需要在爬取
+                if (!chapter.Recrawl) return;
+            }
+
             //1.去掉 html 标签
             var txt = RemoveHtmlTag(crawlData.Text);
             //2.判断字数
 
             chapter.Text = txt;
-            chapter.Recrawl = false;
+
+            lock (this)
+            {
+                chapter.Recrawl = false;
+                chapter.SourceUrl = url;
+
+                if (chapter.Vip) _vipChapterNeedCrawlCount--;
+            }
 
             //3.上传到个人网站
             _web.UploadNovelChapter(Uuid, chapter);

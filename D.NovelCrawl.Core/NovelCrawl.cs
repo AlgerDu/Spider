@@ -169,7 +169,7 @@ namespace D.NovelCrawl.Core
                 {
                     var cm = data.ToObject<CrawlChapterModel>();
 
-                    urlData.NovelInfo.DealChapterCrwalData(urlData.ChapterInfo, cm);
+                    urlData.NovelInfo.DealChapterCrwalData(urlData.ChapterInfo, cm, page.Url.String);
                 }
             }
             catch (Exception ex)
