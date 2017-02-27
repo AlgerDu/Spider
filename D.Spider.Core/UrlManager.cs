@@ -76,7 +76,7 @@ namespace D.Spider.Core
                 find.CustomData = url.CustomData;
             }
 
-            if (url.NeedCrawl() && !IsWaitingCrawl(url))
+            if (url.NeedCrawl && !IsWaitingCrawl(url))
             {
                 _waitingCrawlUrl.Add(find);
 
@@ -162,7 +162,7 @@ namespace D.Spider.Core
 
             foreach (var url in _allUrl)
             {
-                if (url.NeedCrawl() && !IsWaitingCrawl(url))
+                if (url.NeedCrawl && !IsWaitingCrawl(url))
                 {
                     _waitingCrawlUrl.Add(url);
 

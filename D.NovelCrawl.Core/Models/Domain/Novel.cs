@@ -192,7 +192,7 @@ namespace D.NovelCrawl.Core.Models.Domain
             }
             else
             {
-                OfficialUrl.Recrwal();
+                OfficialUrl.NeedCrawl = true;
             }
 
             var nf = urls.Where(u => u.Official == false);
@@ -273,7 +273,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                         url.Interval = -1;
 
                         var inManager = _urlManager.AddUrl(url);
-                        inManager.Recrwal();
+                        inManager.NeedCrawl = true;
                     }
                 }
             }
