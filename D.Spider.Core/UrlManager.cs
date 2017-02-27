@@ -127,9 +127,13 @@ namespace D.Spider.Core
                 {
                     _waitingCrawlUrl.RemoveAt(0);
                     _crawlingUrl.Add(nextUrl);
-                }
 
-                return nextUrl;
+                    return nextUrl.NeedCrawl ? nextUrl : NextCrawl();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
