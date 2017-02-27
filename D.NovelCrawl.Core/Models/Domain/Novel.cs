@@ -40,11 +40,17 @@ namespace D.NovelCrawl.Core.Models.Domain
             {
                 if (_vipChapterNeedCrawlCount <= 0 && value > 0)
                 {
-                    //TODO 设置开始爬取所有的非官方目录 url
+                    foreach (var nu in _unofficialUrls)
+                    {
+                        nu.NeedCrawl = true;
+                    }
                 }
                 else if (_vipChapterNeedCrawlCount > 0 && value <= 0)
                 {
-                    //TODO 设置停止爬取所有的非官方目录 url
+                    foreach (var nu in _unofficialUrls)
+                    {
+                        nu.NeedCrawl = false;
+                    }
                 }
 
                 _vipChapterNeedCrawlCount = value;
@@ -197,6 +203,22 @@ namespace D.NovelCrawl.Core.Models.Domain
             }
 
             var nf = urls.Where(u => u.Official == false);
+
+            _unofficialUrls.Clear();
+
+            foreach (var n in nf)
+            {
+                var url = _urlManager.AddUrl(new Url(n.Url));
+
+                url.CustomData = new CatalogUrlData
+                {
+                    NovelInfo = this,
+                    Official = false,
+                    Type = UrlTypes.NovleCatalog
+                };
+                url.Interval = 300;
+                url.NeedCrawl = false;
+            }
         }
 
         /// <summary>
