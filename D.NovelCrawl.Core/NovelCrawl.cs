@@ -141,7 +141,7 @@ namespace D.NovelCrawl.Core
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
 
-                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
+                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
 
                 if (urlData.NovelInfo != null)
                 {
@@ -168,7 +168,7 @@ namespace D.NovelCrawl.Core
             {
                 var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
 
-                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
+                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
 
                 if (urlData.NovelInfo != null)
                 {

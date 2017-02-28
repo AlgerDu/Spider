@@ -132,7 +132,9 @@ namespace D.NovelCrawl.Core
 
         public bool UploadNovelChapter(Guid uuid, ChapterModel chapter)
         {
-            return false;
+            _logger.LogDebug("{0}:\r\n{1}", chapter.Name, chapter.Text);
+
+            return true;
         }
     }
 }

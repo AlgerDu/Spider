@@ -310,14 +310,21 @@ namespace D.NovelCrawl.Core.Models.Domain
             {
                 foreach (var c in v.Chapters)
                 {
-                    var r = Chapters.Values.Where(cc => cc.Name == c.Name).FirstOrDefault();
+                    var rs = Chapters.Values
+                        .Where(cc => cc.Vip && IsNameEaual(cc.Name, c.Name));
 
-                    if (r == null)
+                    if (rs.Count() == 0)
                     {
                         _logger.LogWarning("《{0}》官网中没有记录对应的章节：{1}", Name, c.Name);
                     }
+                    else if (rs.Count() > 1)
+                    {
+                        _logger.LogWarning("《{0}》官网中有 {1} 记录对应的章节：{2}", Name, rs.Count(), c.Name);
+                    }
                     else
                     {
+                        var r = rs.FirstOrDefault();
+
                         if (r.Vip && r.Recrawl)
                         {
                             IUrl url = unoff.CreateCompleteUrl(c.Href);
@@ -385,6 +392,32 @@ namespace D.NovelCrawl.Core.Models.Domain
                 .Replace("&nbsp;", "");
 
             return tmp;
+        }
+
+        /// <summary>
+        /// 判断章节名是否相等
+        /// </summary>
+        /// <param name="n1"></param>
+        /// <param name="n2"></param>
+        /// <returns></returns>
+        private bool IsNameEaual(string n1, string n2)
+        {
+            //_logger.LogDebug("{0} 与 {1} 进行比较", n1, n2);
+            return PreprocessName(n1) == PreprocessName(n2);
+        }
+
+        /// <summary>
+        /// 对小说名进行预处理
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private string PreprocessName(string name)
+        {
+            var array = name.Split(' ');
+            name = array[array.Length - 1];
+            name = Regex.Replace(name, @"[^\u4e00-\u9fa5,a-z,A-Z]", "");
+
+            return name;
         }
     }
 }
