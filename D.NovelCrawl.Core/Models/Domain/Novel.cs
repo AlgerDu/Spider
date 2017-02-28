@@ -377,10 +377,13 @@ namespace D.NovelCrawl.Core.Models.Domain
         private string RemoveHtmlTag(string txt)
         {
             var tmp = Regex.Replace(txt, @"<br[^>]*>", "\r", RegexOptions.IgnoreCase);
+            tmp = Regex.Replace(tmp, @"<script[^>]*?>.*?</script>", string.Empty, RegexOptions.IgnoreCase);
             tmp = Regex.Replace(tmp, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase);
             tmp = tmp
                 .Replace(' ', '\0')
-                .Replace('\t', '\0');
+                .Replace('\t', '\0')
+                .Replace("&nbsp;", "");
+
             return tmp;
         }
     }
