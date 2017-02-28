@@ -116,7 +116,7 @@ namespace D.NovelCrawl.Core
                 return @"
                     var c:object
                     c.Name = $('div.bookname h1').text
-                    c.Text = $('#content').html
+                    c.Text = $('#content').html.remove('<script[^>]*?>.*?</script>|<div align=[^>]*?>.*</div>')
                     return c";
             }
             else
