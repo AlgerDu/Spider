@@ -121,6 +121,12 @@ namespace D.NovelCrawl.Core
         #region IPageProcess 实现
         public void Process(IUrl url)
         {
+            if (!UrlDataDownloadComplete(url))
+            {
+                //数据下载不完整的时候重新下载
+                return;
+            }
+
             switch ((url.CustomData as UrlData).Type)
             {
                 case UrlTypes.NovleCatalog: NovleCatalogPage(url); break;
@@ -182,6 +188,17 @@ namespace D.NovelCrawl.Core
                 _logger.LogWarning(url.String + " 页面解析出现错误：" + ex.ToString());
                 return;
             }
+        }
+
+        /// <summary>
+        /// 判断一个 url 的数据是否下载完整
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private bool UrlDataDownloadComplete(IUrl url)
+        {
+            //TODO 对一个 url 下载是否完整做真正的判断
+            return true;
         }
         #endregion
     }
