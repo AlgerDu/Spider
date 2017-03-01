@@ -142,9 +142,9 @@ namespace D.Spider.Core
         {
             lock (this)
             {
-                e.Page.Url.LastCrawledTime = DateTime.Now;
+                e.Url.LastCrawledTime = DateTime.Now;
 
-                var findIndex = _crawlingUrl.FindIndex(u => u.Equal(e.Page.Url));
+                var findIndex = _crawlingUrl.FindIndex(u => u.Equal(e.Url));
                 if (findIndex > -1)
                 {
                     _crawlingUrl.RemoveAt(findIndex);

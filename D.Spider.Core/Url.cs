@@ -143,6 +143,8 @@ namespace D.Spider.Core
                 _needCrawl = value;
             }
         }
+
+        public IPage Page { get; set; }
         #endregion
 
         #region IUrl 方法

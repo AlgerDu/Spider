@@ -66,5 +66,10 @@ namespace D.Spider.Core.Interface
         /// <param name="href"></param>
         /// <returns></returns>
         IUrl CreateCompleteUrl(string href);
+
+        /// <summary>
+        /// 下载下来的 url 页面
+        /// </summary>
+        IPage Page { get; set; }
     }
 }

@@ -141,7 +141,8 @@ namespace D.Spider.Core
 
                 _logger.LogDebug(_downloaderUrl.String + "下载成功");
 
-                _eventBus.Publish(new UrlCrawledEvent(new Page(_downloaderUrl, html)));
+                _downloaderUrl.Page = new Page(html);
+                _eventBus.Publish(new UrlCrawledEvent(_downloaderUrl));
 
                 _downloaderUrl = null;
 

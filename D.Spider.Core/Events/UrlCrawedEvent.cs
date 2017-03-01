@@ -15,18 +15,18 @@ namespace D.Spider.Core.Events
     /// </summary>
     public class UrlCrawledEvent : BaseEvent, IEvent
     {
-        IPage _page;
+        IUrl _url;
 
-        public UrlCrawledEvent(IPage page)
+        public UrlCrawledEvent(IUrl url)
         {
-            _page = page;
+            _url = url;
         }
 
-        public IPage Page
+        public IUrl Url
         {
             get
             {
-                return _page;
+                return _url;
             }
         }
     }

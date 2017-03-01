@@ -15,7 +15,7 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 处理爬取好的页面
         /// </summary>
-        /// <param name="page"></param>
-        void Process(IPage page);
+        /// <param name="url"></param>
+        void Process(IUrl url);
     }
 }

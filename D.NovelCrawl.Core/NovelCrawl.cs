@@ -119,12 +119,12 @@ namespace D.NovelCrawl.Core
         #endregion
 
         #region IPageProcess 实现
-        public void Process(IPage page)
+        public void Process(IUrl url)
         {
-            switch ((page.Url.CustomData as UrlData).Type)
+            switch ((url.CustomData as UrlData).Type)
             {
-                case UrlTypes.NovleCatalog: NovleCatalogPage(page); break;
-                case UrlTypes.NovleChapterTxt: NovleChapterTxtPage(page); break;
+                case UrlTypes.NovleCatalog: NovleCatalogPage(url); break;
+                case UrlTypes.NovleChapterTxt: NovleChapterTxtPage(url); break;
             }
         }
 
@@ -132,14 +132,14 @@ namespace D.NovelCrawl.Core
         /// 处理小说目录页面
         /// </summary>
         /// <param name="page"></param>
-        public void NovleCatalogPage(IPage page)
+        public void NovleCatalogPage(IUrl url)
         {
-            var urlData = page.Url.CustomData as CatalogUrlData;
-            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, urlData.Type);
+            var urlData = url.CustomData as CatalogUrlData;
+            var code = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
 
             try
             {
-                var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, code);
 
                 //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
 
@@ -150,23 +150,23 @@ namespace D.NovelCrawl.Core
                     if (urlData.Official)
                         urlData.NovelInfo.CmpareOfficialCatalog(cd);
                     else
-                        urlData.NovelInfo.CmpareUnofficialCatalog(page.Url, cd);
+                        urlData.NovelInfo.CmpareUnofficialCatalog(url, cd);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
+                _logger.LogWarning(url.String + " 页面解析出现错误：" + ex.ToString());
                 return;
             }
         }
 
-        public void NovleChapterTxtPage(IPage page)
+        public void NovleChapterTxtPage(IUrl url)
         {
-            var urlData = page.Url.CustomData as ChapterTxtUrlData;
-            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, urlData.Type);
+            var urlData = url.CustomData as ChapterTxtUrlData;
+            var code = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
             try
             {
-                var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, code);
 
                 //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
 
@@ -174,12 +174,12 @@ namespace D.NovelCrawl.Core
                 {
                     var cm = data.ToObject<CrawlChapterModel>();
 
-                    urlData.NovelInfo.DealChapterCrwalData(urlData.ChapterInfo, cm, page.Url.String);
+                    urlData.NovelInfo.DealChapterCrwalData(urlData.ChapterInfo, cm, url.String);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
+                _logger.LogWarning(url.String + " 页面解析出现错误：" + ex.ToString());
                 return;
             }
         }
