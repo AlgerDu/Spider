@@ -142,12 +142,25 @@ namespace D.Spider.Core
         {
             lock (this)
             {
-                e.Url.LastCrawledTime = DateTime.Now;
+                if (!IsWaitingCrawl(e.Url))
+                    e.Url.LastCrawledTime = DateTime.Now;
 
                 var findIndex = _crawlingUrl.FindIndex(u => u.Equal(e.Url));
                 if (findIndex > -1)
                 {
                     _crawlingUrl.RemoveAt(findIndex);
+                }
+            }
+        }
+
+        public void RecrawlUrl(IUrl url)
+        {
+            lock (this)
+            {
+                if (!IsWaitingCrawl(url))
+                {
+                    _waitingCrawlUrl.Add(url);
+                    url.LastCrawledTime = null;
                 }
             }
         }

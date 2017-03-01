@@ -55,6 +55,12 @@ namespace D.Spider.Core.Interface
         bool IsWaitingCrawl(IUrl url);
 
         /// <summary>
+        /// 立即重新爬取一个 url
+        /// </summary>
+        /// <param name="url"></param>
+        void RecrawlUrl(IUrl url);
+
+        /// <summary>
         /// 从待爬取的 URL 队列中获取下一个需要爬取的 RUL
         /// 同时会将 这个 URL 从待爬取的队列中放到正在爬取的 RUl 队列中
         /// 当带爬取的队列为空时返回 null

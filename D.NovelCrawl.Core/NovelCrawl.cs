@@ -123,7 +123,6 @@ namespace D.NovelCrawl.Core
         {
             if (!UrlDataDownloadComplete(url))
             {
-                //数据下载不完整的时候重新下载
                 return;
             }
 
