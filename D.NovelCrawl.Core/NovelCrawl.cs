@@ -123,6 +123,7 @@ namespace D.NovelCrawl.Core
         {
             if (!UrlDataDownloadComplete(url))
             {
+                _urlManager.RecrawlUrl(url);
                 return;
             }
 
