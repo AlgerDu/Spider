@@ -190,6 +190,8 @@ namespace D.Spider.Core
         {
             if (e.Url != _downloaderUrl.String)
             {
+                _logger.LogWarning("页面发生自动跳转 {0} => {1}", _downloaderUrl.String, e.Url);
+
                 e.Browser.StopLoad();
             }
         }
