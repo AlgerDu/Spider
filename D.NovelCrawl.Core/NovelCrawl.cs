@@ -197,6 +197,13 @@ namespace D.NovelCrawl.Core
         /// <returns></returns>
         private bool UrlDataDownloadComplete(IUrl url)
         {
+            if (url.String == "http://book.qidian.com/info/3602691#Catalog"
+                && url.Page.HtmlTxt.Length < 400000)
+            {
+                _logger.LogWarning("{0} html 数据长度 {1}，不足 {2}", url.String, url.Page.HtmlTxt.Length, 40000);
+                return false;
+            }
+
             //TODO 对一个 url 下载是否完整做真正的判断
             return true;
         }

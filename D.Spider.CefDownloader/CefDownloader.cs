@@ -147,7 +147,7 @@ namespace D.Spider.Core
 
                 var html = await _browser.GetSourceAsync();
 
-                _logger.LogDebug(_downloaderUrl.String + "下载成功");
+                _logger.LogDebug("{0} 下载完成，获取 html 数据长度：{1}", _downloaderUrl.String, html.Length);
 
                 _downloaderUrl.Page = new Page(html);
                 _eventBus.Publish(new UrlCrawledEvent(_downloaderUrl));
@@ -188,11 +188,11 @@ namespace D.Spider.Core
 
         private void FrameLoadStart(object sender, FrameLoadStartEventArgs e)
         {
-            if (e.Url != _downloaderUrl.String)
+            if (e.Frame.IsMain && e.Url != _downloaderUrl.String)
             {
                 _logger.LogWarning("页面发生自动跳转 {0} => {1}", _downloaderUrl.String, e.Url);
 
-                e.Browser.StopLoad();
+                //e.Browser.StopLoad();
             }
         }
         #endregion
