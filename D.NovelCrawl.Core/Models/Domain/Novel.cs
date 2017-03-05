@@ -400,9 +400,8 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// <param name="n1"></param>
         /// <param name="n2"></param>
         /// <returns></returns>
-        private bool IsNameEaual(string n1, string n2)
+        public static bool IsNameEaual(string n1, string n2)
         {
-            //_logger.LogDebug("{0} 与 {1} 进行比较", n1, n2);
             return PreprocessName(n1) == PreprocessName(n2);
         }
 
@@ -411,7 +410,7 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private string PreprocessName(string name)
+        private static string PreprocessName(string name)
         {
             var array = name.Split(' ');
             name = array[array.Length - 1];
