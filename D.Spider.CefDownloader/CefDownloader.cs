@@ -192,7 +192,7 @@ namespace D.Spider.Core
             {
                 _logger.LogWarning("页面发生自动跳转 {0} => {1}", _downloaderUrl.String, e.Url);
 
-                //e.Browser.StopLoad();
+                e.Browser.StopLoad();
             }
         }
         #endregion
