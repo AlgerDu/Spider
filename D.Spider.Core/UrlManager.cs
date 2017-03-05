@@ -159,6 +159,8 @@ namespace D.Spider.Core
             {
                 if (!IsWaitingCrawl(url))
                 {
+                    _logger.LogDebug("重新爬取 url：{0}", url.String);
+
                     _waitingCrawlUrl.Add(url);
                     url.LastCrawledTime = null;
                 }
@@ -193,6 +195,14 @@ namespace D.Spider.Core
             if (urlNeedCrawlCount > 0)
             {
                 _logger.LogDebug("发布事件 UrlWaitingEvent");
+                _eventBus.Publish(new UrlWaitingEvent());
+            }
+
+            var count = _waitingCrawlUrl.Count;
+            _logger.LogDebug("等待爬取的 url 数量：" + _waitingCrawlUrl.Count);
+
+            if (count > 0)
+            {
                 _eventBus.Publish(new UrlWaitingEvent());
             }
         }
