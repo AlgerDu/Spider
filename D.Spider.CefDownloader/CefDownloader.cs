@@ -10,6 +10,7 @@ using CefSharp.OffScreen;
 using CefSharp;
 using System.Threading;
 using CefSharp.Internals;
+using D.Spider.Core.Hnadler;
 
 namespace D.Spider.Core
 {
@@ -65,8 +66,15 @@ namespace D.Spider.Core
 
         public void Run()
         {
-            _browser = new ChromiumWebBrowser();
+            var setting = new BrowserSettings();
+            setting.ImageLoading = CefState.Disabled;
+
+            _browser = new ChromiumWebBrowser("", setting);
+
+            _browser.LifeSpanHandler = new LifeSpanHandler();
+
             _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
+            _browser.FrameLoadStart += new EventHandler<FrameLoadStartEventArgs>(FrameLoadStart);
 
             lock (this)
             {
@@ -176,6 +184,14 @@ namespace D.Spider.Core
                 browser.Load(address);
             }
             return tcs.Task;
+        }
+
+        private void FrameLoadStart(object sender, FrameLoadStartEventArgs e)
+        {
+            if (e.Url != _downloaderUrl.String)
+            {
+                e.Browser.StopLoad();
+            }
         }
         #endregion
     }
