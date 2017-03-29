@@ -99,8 +99,8 @@ namespace D.Spider.Core
             }
 
             var slines = code
-                .Replace("\r\n", "\r")
-                .Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                .Replace("\r\n", "\n")
+                .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             var handlers = _keywordHandlers.Values.OrderBy(h => h.Type);
 
