@@ -14,7 +14,7 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// <summary>
         /// 唯一标识
         /// </summary>
-        public Guid Uuid { get; set; }
+        public Guid Uid { get; set; }
 
         /// <summary>
         /// 所属卷编号
@@ -39,12 +39,7 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// <summary>
         /// 发布时间
         /// </summary>
-        public DateTime PublishCount { get; set; }
-
-        /// <summary>
-        /// 章节文本
-        /// </summary>
-        public string Text { get; set; }
+        public DateTime PublishTime { get; set; }
 
         /// <summary>
         /// 是否 vip 章节
