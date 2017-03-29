@@ -38,9 +38,18 @@ namespace D.Util.Web
                 {
                     if (type == AjaxRequestTypes.POST && data != null)
                     {
-                        var json = JsonConvert.SerializeObject(data);
+                        var json = "";
 
-                        request.ContentType = "application/json";
+                        if (data.GetType() == typeof(string))
+                        {
+                            json = data as string;
+                            request.ContentType = "application/x-www-form-urlencoded";
+                        }
+                        else
+                        {
+                            json = JsonConvert.SerializeObject(data);
+                            request.ContentType = "application/json";
+                        }
 
                         using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                         {
