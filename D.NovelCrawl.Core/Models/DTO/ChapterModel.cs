@@ -11,6 +11,8 @@ namespace D.NovelCrawl.Core.Models.DTO
     /// </summary>
     public class ChapterModel
     {
+        public Guid BookUid { get; set; }
+
         /// <summary>
         /// 唯一标识
         /// </summary>

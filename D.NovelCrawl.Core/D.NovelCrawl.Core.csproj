@@ -62,6 +62,7 @@
     <Compile Include="Models\DTO\PageModel.cs" />
     <Compile Include="Interface\INvoelCrawl.cs" />
     <Compile Include="Interface\IWebsitProxy.cs" />
+    <Compile Include="Models\DTO\PageParse.cs" />
     <Compile Include="Models\DTO\Result.cs" />
     <Compile Include="Models\DTO\VolumeModel.cs" />
     <Compile Include="Models\UrlData.cs" />

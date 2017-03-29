@@ -129,8 +129,8 @@ namespace D.NovelCrawl.Core
 
             switch ((url.CustomData as UrlData).Type)
             {
-                case UrlTypes.NovleCatalog: NovleCatalogPage(url); break;
-                case UrlTypes.NovleChapterTxt: NovleChapterTxtPage(url); break;
+                case PageType.NovelCatalog: NovleCatalogPage(url); break;
+                case PageType.NovelChatperContext: NovleChapterTxtPage(url); break;
             }
         }
 
@@ -141,11 +141,13 @@ namespace D.NovelCrawl.Core
         public void NovleCatalogPage(IUrl url)
         {
             var urlData = url.CustomData as CatalogUrlData;
-            var code = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
+            var parse = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
 
             try
             {
-                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, code);
+                urlData.MinLength = parse.MinLength;
+
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, parse.SSCriptCode);
 
                 //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
 
@@ -169,10 +171,12 @@ namespace D.NovelCrawl.Core
         public void NovleChapterTxtPage(IUrl url)
         {
             var urlData = url.CustomData as ChapterTxtUrlData;
-            var code = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
+            var parse = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
             try
             {
-                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, code);
+                urlData.MinLength = parse.MinLength;
+
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, parse.SSCriptCode);
 
                 //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
 

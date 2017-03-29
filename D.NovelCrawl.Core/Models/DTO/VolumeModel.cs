@@ -12,6 +12,11 @@ namespace D.NovelCrawl.Core.Models.DTO
     public class VolumeModel
     {
         /// <summary>
+        /// 
+        /// </summary>
+        public Guid BookUid { get; set; }
+
+        /// <summary>
         /// 顺序号
         /// </summary>
         public int No { get; set; }

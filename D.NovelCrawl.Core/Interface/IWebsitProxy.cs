@@ -42,7 +42,7 @@ namespace D.NovelCrawl.Core.Interface
         /// <param name="uuid">小说 uuid</param>
         /// <param name="chapter"></param>
         /// <returns></returns>
-        bool UploadNovelVolume(Guid uuid, VolumeModel chapter);
+        bool UploadNovelVolume(Guid uuid, VolumeModel volume);
 
         /// <summary>
         /// 上传爬取到的章节详细信息
@@ -58,6 +58,6 @@ namespace D.NovelCrawl.Core.Interface
         /// <param name="host"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        string UrlPageProcessSpiderscriptCode(string host, UrlTypes type);
+        PageParse UrlPageProcessSpiderscriptCode(string host, PageType type);
     }
 }

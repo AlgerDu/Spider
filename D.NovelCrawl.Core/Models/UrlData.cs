@@ -15,7 +15,9 @@ namespace D.NovelCrawl.Core.Models
     {
         public Novel NovelInfo { get; set; }
 
-        public UrlTypes Type { get; set; }
+        public PageType Type { get; set; }
+
+        public long MinLength { get; set; }
     }
 
     internal class CatalogUrlData : UrlData

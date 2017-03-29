@@ -47,7 +47,19 @@ namespace D.NovelCrawl.Core
 
         public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uid)
         {
-            throw new NotImplementedException();
+            var result = new NovelCrawlUrlModel[0];
+
+            var task = _jQuery.Post(
+                _host + "/NovelCrawl/BookCrawlUrl",
+                "uid=" + uid.ToString(),
+                (object sender, jQuerySuccessEventArgs<Result<NovelCrawlUrlModel[]>> sea) =>
+                {
+                    result = sea.Data.Data;
+                });
+
+            Task.WaitAll(task);
+
+            return result;
         }
 
         public ListResult<NovelModel> NovelList(PageModel page = null)
@@ -71,17 +83,69 @@ namespace D.NovelCrawl.Core
 
         public bool UploadNovelChapter(Guid uid, ChapterModel chapter)
         {
-            throw new NotImplementedException();
+            var result = false;
+
+            chapter.BookUid = uid;
+
+            var task = _jQuery.Post(
+                _host + "/NovelCrawl/UploadChapter",
+                chapter,
+                (object sender, jQuerySuccessEventArgs<Result<NovelCrawlUrlModel[]>> sea) =>
+                {
+                    if (sea.Data.Code == 0)
+                    {
+                        result = true;
+                    }
+                });
+
+            Task.WaitAll(task);
+
+            return result;
         }
 
-        public bool UploadNovelVolume(Guid uid, VolumeModel chapter)
+        public bool UploadNovelVolume(Guid uid, VolumeModel volume)
         {
-            throw new NotImplementedException();
+            var result = false;
+
+            volume.BookUid = uid;
+
+            var task = _jQuery.Post(
+                _host + "/NovelCrawl/UploadVolume",
+                volume,
+                (object sender, jQuerySuccessEventArgs<Result<NovelCrawlUrlModel[]>> sea) =>
+                {
+                    if (sea.Data.Code == 0)
+                    {
+                        result = true;
+                    }
+                });
+
+            Task.WaitAll(task);
+
+            return result;
         }
 
-        public string UrlPageProcessSpiderscriptCode(string host, UrlTypes type)
+        public PageParse UrlPageProcessSpiderscriptCode(string host, PageType type)
         {
-            throw new NotImplementedException();
+            var result = new PageParse();
+
+            var pc = new PageParse
+            {
+                Url = host,
+                Type = type
+            };
+
+            var task = _jQuery.Post(
+                _host + "/Crawl/PageParseCode",
+                pc,
+                (object sender, jQuerySuccessEventArgs<Result<PageParse>> sea) =>
+                {
+                    result = sea.Data.Data;
+                });
+
+            Task.WaitAll(task);
+
+            return result;
         }
 
         ///// <summary>

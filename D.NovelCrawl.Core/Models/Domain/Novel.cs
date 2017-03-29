@@ -149,15 +149,15 @@ namespace D.NovelCrawl.Core.Models.Domain
 
                 foreach (var c in catalog.Cs)
                 {
-                    if (!Chapters.ContainsKey(c.Uuid))
+                    if (!Chapters.ContainsKey(c.Uid))
                     {
-                        Chapters.Add(c.Uuid, c);
+                        Chapters.Add(c.Uid, c);
 
                         c.Recrawl = false;
                     }
                     else
                     {
-                        Chapters[c.Uuid].Recrawl = c.Recrawl;
+                        Chapters[c.Uid].Recrawl = c.Recrawl;
                     }
                 }
             }
@@ -190,7 +190,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                 {
                     NovelInfo = this,
                     Official = true,
-                    Type = UrlTypes.NovleCatalog
+                    Type = PageType.NovelCatalog
                 };
                 OfficialUrl.Interval = 1800;
                 OfficialUrl.NeedCrawl = true;
@@ -214,7 +214,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                 {
                     NovelInfo = this,
                     Official = false,
-                    Type = UrlTypes.NovleCatalog
+                    Type = PageType.NovelCatalog
                 };
                 url.Interval = 300;
                 url.NeedCrawl = false;
@@ -269,7 +269,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                     {
                         c = new ChapterModel();
 
-                        c.Uuid = Guid.NewGuid();
+                        c.Uid = Guid.NewGuid();
                         c.Name = cc.Name;
                         c.VolumeNo = v.No;
                         c.VolumeIndex = index;
@@ -278,7 +278,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                         c.Vip = string.IsNullOrEmpty(cc.Vip) ? false : true;
                         //c.WordCount = Convert.ToInt32(cc.WordCount);
 
-                        Chapters.Add(c.Uuid, c);
+                        Chapters.Add(c.Uid, c);
                     }
 
                     if (c.Recrawl && c.Vip)
@@ -288,17 +288,17 @@ namespace D.NovelCrawl.Core.Models.Domain
                     else if (c.Recrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
-                        //IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
-                        //url.CustomData = new ChapterTxtUrlData
-                        //{
-                        //    NovelInfo = this,
-                        //    Type = UrlTypes.NovleChapterTxt,
-                        //    ChapterInfo = c
-                        //};
-                        //url.Interval = -1;
+                        IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
+                        url.CustomData = new ChapterTxtUrlData
+                        {
+                            NovelInfo = this,
+                            Type = PageType.NovelChatperContext,
+                            ChapterInfo = c
+                        };
+                        url.Interval = -1;
 
-                        //var inManager = _urlManager.AddUrl(url);
-                        //inManager.NeedCrawl = true;
+                        var inManager = _urlManager.AddUrl(url);
+                        inManager.NeedCrawl = true;
                     }
                 }
             }
@@ -331,7 +331,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                             url.CustomData = new ChapterTxtUrlData
                             {
                                 NovelInfo = this,
-                                Type = UrlTypes.NovleChapterTxt,
+                                Type = PageType.NovelChatperContext,
                                 ChapterInfo = r
                             };
                             url.Interval = -1;
@@ -361,7 +361,7 @@ namespace D.NovelCrawl.Core.Models.Domain
             var txt = RemoveHtmlTag(crawlData.Text);
             //2.判断字数
 
-            chapter.Text = txt;
+            //chapter.Text = txt;
 
             lock (this)
             {
