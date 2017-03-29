@@ -40,6 +40,8 @@ namespace D.Spider.Core
         {
             Document doc = NSoup.NSoupClient.Parse(html);
 
+            _logger.LogDebug("SScode：" + spiderscriptCode);
+
             var context = AnalysisCodeString(spiderscriptCode);
 
             while (!context.CodeExecuteFinish)
