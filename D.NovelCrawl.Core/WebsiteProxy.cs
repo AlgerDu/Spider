@@ -27,13 +27,13 @@ namespace D.NovelCrawl.Core
             _jQuery = jQuery;
         }
 
-        public NovelCatalogModel NovelCatalog(Guid uuid)
+        public NovelCatalogModel NovelCatalog(Guid uid)
         {
             var result = new NovelCatalogModel();
 
             var task = _jQuery.Post(
                 _host + "/NovelCrawl/NovelCatalog",
-                "uid=" + uuid.ToString(),
+                "uid=" + uid.ToString(),
                 (object sender, jQuerySuccessEventArgs<Result<NovelCatalogModel>> sea) =>
                 {
                     result = sea.Data.Data;
@@ -45,7 +45,7 @@ namespace D.NovelCrawl.Core
             return result;
         }
 
-        public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uuid)
+        public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uid)
         {
             throw new NotImplementedException();
         }
@@ -69,12 +69,12 @@ namespace D.NovelCrawl.Core
             };
         }
 
-        public bool UploadNovelChapter(Guid uuid, ChapterModel chapter)
+        public bool UploadNovelChapter(Guid uid, ChapterModel chapter)
         {
             throw new NotImplementedException();
         }
 
-        public bool UploadNovelVolume(Guid uuid, VolumeModel chapter)
+        public bool UploadNovelVolume(Guid uid, VolumeModel chapter)
         {
             throw new NotImplementedException();
         }

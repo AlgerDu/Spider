@@ -25,16 +25,16 @@ namespace D.NovelCrawl.Core.Interface
         /// 获取个人网站上面保存的完整的小说目录信息
         /// 更新小说爬虫持有的小说目录信息
         /// </summary>
-        /// <param name="uuid"></param>
+        /// <param name="uid"></param>
         /// <returns></returns>
-        NovelCatalogModel NovelCatalog(Guid uuid);
+        NovelCatalogModel NovelCatalog(Guid uid);
 
         /// <summary>
         /// 获取小说对应的 url 信息
         /// </summary>
-        /// <param name="uuid"></param>
+        /// <param name="uid"></param>
         /// <returns></returns>
-        IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uuid);
+        IEnumerable<NovelCrawlUrlModel> NovelCrawlUrls(Guid uid);
 
         /// <summary>
         /// 上传爬取到的卷详细信息
