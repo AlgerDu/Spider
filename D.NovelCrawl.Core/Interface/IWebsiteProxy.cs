@@ -11,7 +11,7 @@ namespace D.NovelCrawl.Core.Interface
     /// <summary>
     /// 与远程个人网站的代理
     /// </summary>
-    public interface IWebsitProxy
+    public interface IWebsiteProxy
     {
         /// <summary>
         /// 获取远程个人网站上面需要爬取的小说列表

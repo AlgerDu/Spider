@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="Models\CrawlModel\CrawlCatalogModel.cs" />
     <Compile Include="Models\Domain\Novel.cs" />
+    <Compile Include="Models\Domain\Url\NovelCrawlUrl.cs" />
+    <Compile Include="Models\Domain\Url\PagePase.cs" />
     <Compile Include="Models\DTO\ChapterModel.cs" />
     <Compile Include="Models\DTO\CrawlUrlModel.cs" />
     <Compile Include="Models\DTO\ListResult.cs" />
@@ -61,7 +63,7 @@
     <Compile Include="Models\DTO\NovelModel.cs" />
     <Compile Include="Models\DTO\PageModel.cs" />
     <Compile Include="Interface\INvoelCrawl.cs" />
-    <Compile Include="Interface\IWebsitProxy.cs" />
+    <Compile Include="Interface\IWebsiteProxy.cs" />
     <Compile Include="Models\DTO\PageParse.cs" />
     <Compile Include="Models\DTO\Result.cs" />
     <Compile Include="Models\DTO\VolumeModel.cs" />

@@ -31,7 +31,7 @@ namespace D.NovelCrawl.Core
 
         IUrlManager _urlManager;
 
-        IWebsitProxy _web;
+        IWebsiteProxy _web;
 
         /// <summary>
         /// 定时从官网获取小说以及对应的 url 信息，查看是否需要更新
@@ -52,7 +52,7 @@ namespace D.NovelCrawl.Core
         public NovelCrawl(
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
-            , IWebsitProxy webProxy
+            , IWebsiteProxy webProxy
             , ISpiderscriptEngine spiderscriptEngine)
         {
             _logger = loggerFactory.CreateLogger<NovelCrawl>();

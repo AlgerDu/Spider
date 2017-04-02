@@ -12,7 +12,7 @@ namespace D.NovelCrawl.Core
     /// <summary>
     /// 与个人网站交互，获取小说爬取的信息，以及上传整理好的小说章节
     /// </summary>
-    public class WebsiteProxy : IWebsitProxy
+    public class WebsiteProxy : IWebsiteProxy
     {
         const string _host = "http://localhost:8091";
 

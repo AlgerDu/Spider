@@ -23,7 +23,7 @@ namespace D.NovelCrawl.Core.Models.Domain
         IUrlManager _urlManager;
 
         int _vipChapterNeedCrawlCount;
-        IWebsitProxy _web;
+        IWebsiteProxy _web;
 
         /// <summary>
         /// 非官方的目录url
@@ -88,7 +88,7 @@ namespace D.NovelCrawl.Core.Models.Domain
         public Novel(
             ILoggerFactory loggerFactory,
             IUrlManager urlManager
-            , IWebsitProxy web)
+            , IWebsiteProxy web)
         {
             _logger = loggerFactory.CreateLogger<Novel>();
             _urlManager = urlManager;
