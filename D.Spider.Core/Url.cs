@@ -50,12 +50,8 @@ namespace D.Spider.Core
             }
         }
 
-        public Url(string host, string relativePath)
+        public Url(string host, string relativePath) : this(host + relativePath)
         {
-            _host = host;
-            _relativePath = relativePath;
-
-            _urlString = _host + _relativePath;
         }
 
         #region IRul 属性

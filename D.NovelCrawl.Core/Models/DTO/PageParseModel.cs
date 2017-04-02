@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace D.NovelCrawl.Core.Models.DTO
 {
-    public class PageParse
+    public class PageParseModel
     {
         public string Url { get; set; }
 
