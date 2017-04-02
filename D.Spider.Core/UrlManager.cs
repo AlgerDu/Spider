@@ -67,14 +67,13 @@ namespace D.Spider.Core
             if (find == null)
             {
                 _allUrl.Add(url);
-
-                find = url;
             }
             else
             {
-                find.Interval = url.Interval;
-                find.CustomData = url.CustomData;
-                find.NeedCrawl = url.NeedCrawl;
+                url.LastCrawledTime = find.LastCrawledTime;
+
+                _allUrl.Remove(find);
+                _allUrl.Add(url);
             }
 
             if (url.NeedCrawl && !IsWaitingCrawl(url))
@@ -83,6 +82,8 @@ namespace D.Spider.Core
 
                 _eventBus.Publish(new UrlWaitingEvent());
             }
+
+            find = url;
 
             return find;
         }
