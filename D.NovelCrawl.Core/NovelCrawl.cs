@@ -1,20 +1,12 @@
 ﻿using D.Spider.Core.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using D.Util.Interface;
-using D.Spider.Core;
-using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
-using NSoup.Nodes;
 using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Interface;
-using D.NovelCrawl.Core.Models.DTO;
-using Newtonsoft.Json;
 using Microsoft.Practices.Unity;
 using D.NovelCrawl.Core.Models.CrawlModel;
 using System.Timers;
-using D.NovelCrawl.Core.Models.Domain;
 using D.NovelCrawl.Core.Models.Domain.Novel;
 using D.NovelCrawl.Core.Models.Domain.CrawlUrl;
 
