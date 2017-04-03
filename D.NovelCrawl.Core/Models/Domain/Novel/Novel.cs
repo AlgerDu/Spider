@@ -270,10 +270,10 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         c.Name = cc.Name;
                         c.VolumeNo = v.No;
                         c.VolumeIndex = index;
-                        //PublicTime = DateTime.ParseExact(cc.PublicTime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture),
+                        c.PublishTime = StringToDateTime(cc.PublicTime);
                         c.Recrawl = true;
                         c.Vip = string.IsNullOrEmpty(cc.Vip) ? false : true;
-                        //c.WordCount = Convert.ToInt32(cc.WordCount);
+                        c.WordCount = StringToInt(cc.WordCount);
 
                         Chapters.Add(c.Uid, c);
 
@@ -381,7 +381,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                 .Replace(' ', '\0')
                 .Replace('\t', '\0')
                 .Replace("&nbsp;", "");
-                //.Replace("\r\n", "\n");
+            //.Replace("\r\n", "\n");
 
             return tmp;
         }
@@ -450,6 +450,28 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                 NeedCrawl = true,
                 ChapterInfo = chapter
             };
+        }
+
+        private int StringToInt(string v)
+        {
+            try
+            {
+                return Convert.ToInt32(v);
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// 将字符串转换成 DateTime
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        private DateTime StringToDateTime(string v)
+        {
+            return DateTime.Now;
         }
     }
 }
