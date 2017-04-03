@@ -237,7 +237,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     v = new Volume()
                     {
                         No = i + 1,
-                        Name = cv.Name,
+                        Name = cv.Name.Replace(' ', '\0'),
                         Uploaded = false
                     };
 

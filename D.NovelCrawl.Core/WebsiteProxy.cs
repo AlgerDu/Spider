@@ -151,7 +151,7 @@ namespace D.NovelCrawl.Core
                     var vs:array
                     foreach $('div.catalog-content-wrap div.volume-wrap div.volume')
                         var v:object
-                        v.Name = $('h3').text
+                        v = $('h3').html.regex('</a>(?<Name>[\s\S]*?)<i>')
                         var cs:array
                         foreach $('li')
                             var c:object
