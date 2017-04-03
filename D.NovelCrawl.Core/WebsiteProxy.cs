@@ -122,20 +122,75 @@ namespace D.NovelCrawl.Core
 
         public Task UploadChapter(Guid bookUid, Chapter chapter)
         {
-            _logger.LogInformation("上传章节信息：第 {0} 卷 第 {1} 章 {2}", chapter.VolumeNo, chapter.VolumeIndex, chapter.Name);
 
-            chapter.Uploaded = true;
+            var data = new ChapterUploadModel
+            {
+                BookUid = bookUid,
+                Name = chapter.Name,
+                PublishTime = chapter.PublishTime,
+                Uid = chapter.Uid,
+                Vip = chapter.Vip,
+                VolumeIndex = chapter.VolumeIndex,
+                VolumeNo = chapter.VolumeNo,
+                WordCount = chapter.WordCount
+            };
 
-            return null;
+            return _jQuery.Ajax(
+                AjaxRequestTypes.POST,
+                _host + "/NovelCrawl/UploadChapter",
+                data,
+                AjaxContenTypes.JSON,
+                (object sender, jQuerySuccessEventArgs<Result> sea) =>
+                {
+                    if (sea.Data.Code == 0)
+                    {
+                        chapter.Uploaded = true;
+
+                        _logger.LogInformation("上传章节信息：第 {0} 卷 第 {1} 章 {2}", chapter.VolumeNo, chapter.VolumeIndex, chapter.Name);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("上传章节信息 失败 code = " + sea.Data.Code);
+                    }
+                },
+                (object sender, jQueryErrorEventArgs eea) =>
+                {
+                    _logger.LogWarning("上传章节信息  请求失败 StatusCode = " + eea.StatusCode);
+                });
         }
 
         public Task UploadVolume(Guid bookUid, Volume volume)
         {
             _logger.LogInformation("上传卷信息：第 " + volume.No + " 卷 " + volume.Name);
 
-            volume.Uploaded = true;
+            var data = new VolumeModel
+            {
+                BookUid = bookUid,
+                Name = volume.Name,
+                No = volume.No
+            };
 
-            return null;
+            return _jQuery.Ajax(
+                AjaxRequestTypes.POST,
+                _host + "/NovelCrawl/UploadVolume",
+                data,
+                AjaxContenTypes.JSON,
+                (object sender, jQuerySuccessEventArgs<Result> sea) =>
+                {
+                    if (sea.Data.Code == 0)
+                    {
+                        volume.Uploaded = true;
+                        _logger.LogInformation("上传卷信息：第 " + volume.No + " 卷 " + volume.Name);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("上传卷信息 失败 code = " + sea.Data.Code);
+                    }
+                },
+                (object sender, jQueryErrorEventArgs eea) =>
+                {
+                    _logger.LogWarning("上传卷信息  请求失败 StatusCode = " + eea.StatusCode);
+                });
         }
 
         public PageParse UrlPageParseCode(string url, PageType type)
@@ -215,151 +270,5 @@ namespace D.NovelCrawl.Core
                 return null;
             }
         }
-
-        //public bool UploadNovelChapter(Guid uid, ChapterModel chapter)
-        //{
-        //    var result = false;
-
-        //    chapter.BookUid = uid;
-
-        //    var task = _jQuery.Post(
-        //        _host + "/NovelCrawl/UploadChapter",
-        //        chapter,
-        //        (object sender, jQuerySuccessEventArgs<Result<NovelCrawlUrlModel[]>> sea) =>
-        //        {
-        //            if (sea.Data.Code == 0)
-        //            {
-        //                result = true;
-        //            }
-        //        });
-
-        //    Task.WaitAll(task);
-
-        //    return result;
-        //}
-
-        //public bool UploadNovelVolume(Guid uid, VolumeModel volume)
-        //{
-        //    var result = false;
-
-        //    volume.BookUid = uid;
-
-        //    var task = _jQuery.Post(
-        //        _host + "/NovelCrawl/UploadVolume",
-        //        volume,
-        //        (object sender, jQuerySuccessEventArgs<Result<NovelCrawlUrlModel[]>> sea) =>
-        //        {
-        //            if (sea.Data.Code == 0)
-        //            {
-        //                result = true;
-        //            }
-        //        });
-
-        //    Task.WaitAll(task);
-
-        //    return result;
-        //}
-
-        //public PageParse UrlPageProcessSpiderscriptCode(string host, PageType type)
-        //{
-        //    var result = new PageParse();
-
-        //    var pc = new PageParse
-        //    {
-        //        Url = host,
-        //        Type = type
-        //    };
-
-        //    var task = _jQuery.Post(
-        //        _host + "/Crawl/PageParseCode",
-        //        pc,
-        //        (object sender, jQuerySuccessEventArgs<Result<PageParse>> sea) =>
-        //        {
-        //            result = sea.Data.Data;
-        //        });
-
-        //    Task.WaitAll(task);
-
-        //    return result;
-        //}
-
-        ///// <summary>
-        ///// 获取所有需要爬取的小说
-        ///// </summary>
-        ///// <param name="page"></param>
-        ///// <returns></returns>
-        //public ListResult<NovelModel> NovelList(PageModel page = null)
-        //{
-        //    var url = _host + "/Novel/List";
-
-        //    if (page == null)
-        //    {
-        //        page = new PageModel() { Number = 1, Size = -1 };
-        //    }
-
-        //    var result = new ListResult<NovelModel>();
-
-        //    var task = _jQuery.Ajax(
-        //        AjaxRequestTypes.POST,
-        //        url,
-        //        page,
-        //        (object sender, jQuerySuccessEventArgs<ListResult<NovelModel>> sea) =>
-        //        {
-        //            result = sea.Data;
-        //            _logger.LogInformation("获取到需要爬取的小说 " + result.RecordCount);
-        //        },
-        //        (object sender, jQueryErrorEventArgs eea) =>
-        //        {
-        //            _logger.LogWarning("请求 Url：" + url + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
-        //            result = null;
-        //        });
-
-        //    Task.WaitAll(task);
-
-        //    return result;
-        //}
-
-        ///// <summary>
-        ///// 获取爬取某个小说需要的所有的 Url 列表
-        ///// </summary>
-        ///// <param name="guid"></param>
-        ///// <returns></returns>
-        //public IEnumerable<NovelCrawlUrlModel> NovelCrawlUrlList(Guid guid)
-        //{
-        //    var url = _host + "/NovelCrawl/UrlList";
-
-        //    var result = new NovelCrawlUrlModel[0];
-        //    var task = _jQuery.Ajax(
-        //       AjaxRequestTypes.POST,
-        //       url,
-        //       guid,
-        //       (object sender, jQuerySuccessEventArgs<NovelCrawlUrlModel[]> sea) =>
-        //       {
-        //           result = sea.Data;
-        //           _logger.LogInformation("爬取小说需要的 Url 数量 " + result.Length);
-        //       },
-        //       (object sender, jQueryErrorEventArgs eea) =>
-        //       {
-        //           _logger.LogWarning("请求 Url：" + url + " 失败，状态码：" + (int)eea.StatusCode + "(" + eea.StatusCode + ")");
-        //           result = null;
-        //       });
-
-        //    Task.WaitAll(task);
-
-        //    return result;
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="guid"></param>
-        ///// <returns></returns>
-        //public IEnumerable<VolumeModel> NovelVCInfo(Guid guid)
-        //{
-        //    return new VolumeModel[]
-        //    {
-
-        //    };
-        //}
     }
 }
