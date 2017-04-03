@@ -16,6 +16,24 @@ namespace D.Util.Interface
         POST
     }
 
+    public enum AjaxContenTypes
+    {
+        /// <summary>
+        /// application/json
+        /// </summary>
+        JSON,
+
+        /// <summary>
+        /// text/plain
+        /// </summary>
+        Text,
+
+        /// <summary>
+        /// application/x-www-form-urlencoded
+        /// </summary>
+        x_www_form_urlencoded
+    }
+
     /// <summary>
     /// C# 版的 JQuery
     /// 主要实现 ajax 功能
@@ -36,6 +54,7 @@ namespace D.Util.Interface
             AjaxRequestTypes type,
             string url,
             object data,
+            AjaxContenTypes contentType,
             EventHandler<jQuerySuccessEventArgs<T>> success,
             EventHandler<jQueryErrorEventArgs> error = null,
             int timeout = -1)

@@ -25,7 +25,15 @@ namespace D.Util.Web
             _logger = loggerFactory.CreateLogger<jQuery>();
         }
 
-        public Task Ajax<T>(AjaxRequestTypes type, string url, object data, EventHandler<jQuerySuccessEventArgs<T>> success, EventHandler<jQueryErrorEventArgs> error = null, int timeout = -1) where T : class
+        public Task Ajax<T>(
+            AjaxRequestTypes type
+            , string url
+            , object data
+            , AjaxContenTypes contentType
+            , EventHandler<jQuerySuccessEventArgs<T>> success
+            , EventHandler<jQueryErrorEventArgs> error = null
+            , int timeout = -1)
+            where T : class
         {
             return Task.Run(() =>
             {
@@ -40,16 +48,9 @@ namespace D.Util.Web
                     {
                         var json = "";
 
-                        if (data.GetType() == typeof(string))
-                        {
-                            json = data as string;
-                            request.ContentType = "application/x-www-form-urlencoded";
-                        }
-                        else
-                        {
-                            json = JsonConvert.SerializeObject(data);
-                            request.ContentType = "application/json";
-                        }
+                        request.ContentType = ContentTypeToString(contentType);
+                        json = data.GetType() == typeof(string)
+                            ? data as string : JsonConvert.SerializeObject(data);
 
                         using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                         {
@@ -104,12 +105,12 @@ namespace D.Util.Web
 
         public Task Get<T>(string url, EventHandler<jQuerySuccessEventArgs<T>> success) where T : class
         {
-            return Ajax(AjaxRequestTypes.GET, url, null, success);
+            return Ajax(AjaxRequestTypes.GET, url, null, AjaxContenTypes.x_www_form_urlencoded, success);
         }
 
         public Task Post<T>(string url, object data, EventHandler<jQuerySuccessEventArgs<T>> success) where T : class
         {
-            return Ajax(AjaxRequestTypes.POST, url, data, success);
+            return Ajax(AjaxRequestTypes.POST, url, data, AjaxContenTypes.JSON, success);
         }
 
         private object TxtToObject<T>(string txt) where T : class
@@ -121,6 +122,18 @@ namespace D.Util.Web
             else
             {
                 return JsonConvert.DeserializeObject<T>(txt);
+            }
+        }
+
+        private string ContentTypeToString(AjaxContenTypes type)
+        {
+            switch (type)
+            {
+                case AjaxContenTypes.JSON: return "application/json";
+                case AjaxContenTypes.Text: return "text/plain";
+                case AjaxContenTypes.x_www_form_urlencoded: return "application/x-www-form-urlencoded";
+
+                default: return "application/x-www-form-urlencoded";
             }
         }
     }
