@@ -12,7 +12,7 @@ namespace D.NovelCrawl.Core.Models.Domain.CrawlUrl
     /// <summary>
     /// 爬取小说使用的 url
     /// </summary>
-    public class NovelCrawlUrl : Spider.Core.Url, IUrl
+    internal class NovelCrawlUrl : Spider.Core.Url, IUrl
     {
         IWebsiteProxy _website;
         PageType _type;
@@ -59,7 +59,7 @@ namespace D.NovelCrawl.Core.Models.Domain.CrawlUrl
     /// <summary>
     /// 目录页面
     /// </summary>
-    public class CatalogUrl : NovelCrawlUrl
+    internal class CatalogUrl : NovelCrawlUrl
     {
         public CatalogUrl(
             string url
@@ -77,7 +77,7 @@ namespace D.NovelCrawl.Core.Models.Domain.CrawlUrl
     /// <summary>
     /// 目录页面
     /// </summary>
-    public class ChapterTxtUrl : NovelCrawlUrl
+    internal class ChapterTxtUrl : NovelCrawlUrl
     {
         public ChapterTxtUrl(
             string url

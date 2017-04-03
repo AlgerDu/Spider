@@ -15,6 +15,8 @@ using Microsoft.Practices.Unity;
 using D.NovelCrawl.Core.Models.CrawlModel;
 using System.Timers;
 using D.NovelCrawl.Core.Models.Domain;
+using D.NovelCrawl.Core.Models.Domain.Novel;
+using D.NovelCrawl.Core.Models.Domain.CrawlUrl;
 
 namespace D.NovelCrawl.Core
 {
@@ -93,9 +95,9 @@ namespace D.NovelCrawl.Core
             {
                 Novel novel;
 
-                if (_novels.ContainsKey(n.Uuid))
+                if (_novels.ContainsKey(n.Uid))
                 {
-                    novel = _novels[n.Uuid];
+                    novel = _novels[n.Uid];
                 }
                 else
                 {
@@ -108,11 +110,11 @@ namespace D.NovelCrawl.Core
                 novel.Update(n);
 
                 //获取已经爬取到的小说目录信息，与爬虫本地持有的信息进行对比
-                var catalog = _web.NovelCatalog(n.Uuid);
+                var catalog = _web.NovelCatalog(n.Uid);
                 novel.UpdateCatalog(catalog);
 
                 //更新小说对应的小说爬取目录
-                var urls = _web.NovelCrawlUrls(novel.Uuid);
+                var urls = _web.NovelCrawlUrls(novel.Uid);
                 novel.SetRelatedUrls(urls);
             }
         }
@@ -121,16 +123,25 @@ namespace D.NovelCrawl.Core
         #region IPageProcess 实现
         public void Process(IUrl url)
         {
-            if (!UrlDataDownloadComplete(url))
+            var crawlUrl = url as NovelCrawlUrl;
+
+            if (crawlUrl.PaseCode == null)
+            {
+                _logger.LogWarning("{0} 没有对应的处理代码", url.String);
+                return;
+            }
+
+
+            if (!UrlDataDownloadComplete(crawlUrl))
             {
                 _urlManager.RecrawlUrl(url);
                 return;
             }
 
-            switch ((url.CustomData as UrlData).Type)
+            switch (crawlUrl.PageType)
             {
-                case PageType.NovelCatalog: NovleCatalogPage(url); break;
-                case PageType.NovelChatperContext: NovleChapterTxtPage(url); break;
+                case PageType.NovelCatalog: NovleCatalogPage(url as CatalogUrl); break;
+                case PageType.NovelChatperContext: NovleChapterTxtPage(url as ChapterTxtUrl); break;
             }
         }
 
@@ -138,27 +149,22 @@ namespace D.NovelCrawl.Core
         /// 处理小说目录页面
         /// </summary>
         /// <param name="page"></param>
-        public void NovleCatalogPage(IUrl url)
+        private void NovleCatalogPage(CatalogUrl url)
         {
-            var urlData = url.CustomData as CatalogUrlData;
-            var parse = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
-
             try
             {
-                urlData.MinLength = parse.MinLength;
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, url.PaseCode.SSCriptCode);
 
-                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, parse.SSCriptCode);
+                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
 
-                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
-
-                if (urlData.NovelInfo != null)
+                if (url.NovelInfo != null)
                 {
                     var cd = data.ToObject<CrawlVolumeModel[]>();
 
-                    if (urlData.Official)
-                        urlData.NovelInfo.CmpareOfficialCatalog(cd);
+                    if (url.Official)
+                        url.NovelInfo.CmpareOfficialCatalog(cd);
                     else
-                        urlData.NovelInfo.CmpareUnofficialCatalog(url, cd);
+                        url.NovelInfo.CmpareUnofficialCatalog(url, cd);
                 }
             }
             catch (Exception ex)
@@ -168,23 +174,19 @@ namespace D.NovelCrawl.Core
             }
         }
 
-        public void NovleChapterTxtPage(IUrl url)
+        private void NovleChapterTxtPage(ChapterTxtUrl url)
         {
-            var urlData = url.CustomData as ChapterTxtUrlData;
-            var parse = _web.UrlPageProcessSpiderscriptCode(url.Host, urlData.Type);
             try
             {
-                urlData.MinLength = parse.MinLength;
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, url.PaseCode.SSCriptCode);
 
-                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, parse.SSCriptCode);
+                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
 
-                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", page.Url.String, data.ToString());
-
-                if (urlData.NovelInfo != null)
+                if (url.NovelInfo != null)
                 {
                     var cm = data.ToObject<CrawlChapterModel>();
 
-                    urlData.NovelInfo.DealChapterCrwalData(urlData.ChapterInfo, cm, url.String);
+                    url.NovelInfo.DealChapterCrwalData(url, cm);
                 }
             }
             catch (Exception ex)
@@ -199,17 +201,18 @@ namespace D.NovelCrawl.Core
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        private bool UrlDataDownloadComplete(IUrl url)
+        private bool UrlDataDownloadComplete(NovelCrawlUrl url)
         {
-            if (url.String == "http://book.qidian.com/info/3602691#Catalog"
-                && url.Page.HtmlTxt.Length < 400000)
+            if (url.PaseCode != null && url.PaseCode.MinLength > 0
+                 && url.PaseCode.MinLength > url.Page.HtmlTxt.Length)
             {
-                _logger.LogWarning("{0} html 数据长度 {1}，不足 {2}", url.String, url.Page.HtmlTxt.Length, 40000);
+                _logger.LogWarning("{0} 页面下载的 html 数据长度 {1}，不足 {2}", url.String, url.Page.HtmlTxt.Length, 40000);
                 return false;
             }
-
-            //TODO 对一个 url 下载是否完整做真正的判断
-            return true;
+            else
+            {
+                return true;
+            }
         }
         #endregion
     }
