@@ -1,7 +1,7 @@
 ﻿using D.NovelCrawl.Core.Interface;
 using D.NovelCrawl.Core.Models.CrawlModel;
+using D.NovelCrawl.Core.Models.Domain.CrawlUrl;
 using D.NovelCrawl.Core.Models.DTO;
-using D.Spider.Core;
 using D.Spider.Core.Interface;
 using D.Util.Interface;
 using System;
@@ -11,10 +11,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.Models.Domain
+namespace D.NovelCrawl.Core.Models.Domain.Novel
 {
     /// <summary>
-    /// 小说爬虫需要的所有信息
+    /// 小说领域模型
     /// </summary>
     internal class Novel
     {
@@ -23,12 +23,12 @@ namespace D.NovelCrawl.Core.Models.Domain
         IUrlManager _urlManager;
 
         int _vipChapterNeedCrawlCount;
-        IWebsiteProxy _web;
+        IWebsiteProxy _website;
 
         /// <summary>
         /// 非官方的目录url
         /// </summary>
-        List<IUrl> _unofficialUrls = new List<IUrl>();
+        List<CatalogUrl> _unofficialUrls = new List<CatalogUrl>();
 
         int VipChaperNeedCrawlCount
         {
@@ -61,7 +61,7 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// <summary>
         /// 小说 GUID
         /// </summary>
-        public Guid Uuid { get; private set; }
+        public Guid Uid { get; private set; }
 
         /// <summary>
         /// 小说名称
@@ -72,32 +72,32 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// <summary>
         /// 卷信息
         /// </summary>
-        public Dictionary<int, VolumeModel> Volumes { get; private set; }
+        public Dictionary<int, Volume> Volumes { get; private set; }
 
         /// <summary>
         /// 章节信息
         /// </summary>
-        public Dictionary<Guid, ChapterModel> Chapters { get; private set; }
+        public Dictionary<Guid, Chapter> Chapters { get; private set; }
 
         /// <summary>
         /// 官网目录 Url
         /// </summary>
-        public IUrl OfficialUrl { get; private set; }
+        public CatalogUrl OfficialUrl { get; private set; }
         #endregion
 
         public Novel(
-            ILoggerFactory loggerFactory,
-            IUrlManager urlManager
-            , IWebsiteProxy web)
+            ILoggerFactory loggerFactory
+            , IUrlManager urlManager
+            , IWebsiteProxy website)
         {
             _logger = loggerFactory.CreateLogger<Novel>();
             _urlManager = urlManager;
 
-            Volumes = new Dictionary<int, VolumeModel>();
-            Chapters = new Dictionary<Guid, ChapterModel>();
+            Volumes = new Dictionary<int, Volume>();
+            Chapters = new Dictionary<Guid, Chapter>();
             _vipChapterNeedCrawlCount = 0;
 
-            _web = web;
+            _website = website;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// <param name="model"></param>
         public void Update(NovelModel model)
         {
-            Uuid = model.Uuid;
+            Uid = model.Uid;
             Name = model.Name;
         }
 
@@ -131,10 +131,13 @@ namespace D.NovelCrawl.Core.Models.Domain
                 {
                     if (!Volumes.ContainsKey(v.No))
                     {
-                        //远程已经存在的 卷 信息，不需要在上传
-                        Volumes.Add(v.No, v);
+                        var volume = new Volume();
+                        volume.No = v.No;
+                        volume.Name = v.Name;
+                        volume.Uploaded = true;
 
-                        v.Uploaded = true;
+                        //远程已经存在的 卷 信息，不需要在上传
+                        Volumes.Add(v.No, volume);
                     }
                     else
                     {
@@ -151,9 +154,18 @@ namespace D.NovelCrawl.Core.Models.Domain
                 {
                     if (!Chapters.ContainsKey(c.Uid))
                     {
-                        Chapters.Add(c.Uid, c);
+                        var chapter = new Chapter();
+                        chapter.Uid = c.Uid;
+                        chapter.Name = c.Name;
+                        chapter.PublishTime = c.PublishTime;
+                        chapter.Recrawl = c.Recrawl;
+                        chapter.SourceUrl = "";
+                        chapter.Uploaded = true;
+                        chapter.Vip = c.Vip;
+                        chapter.VolumeIndex = c.VolumeIndex;
+                        chapter.VolumeNo = c.WordCount;
 
-                        c.Recrawl = false;
+                        Chapters.Add(c.Uid, chapter);
                     }
                     else
                     {
@@ -185,17 +197,9 @@ namespace D.NovelCrawl.Core.Models.Domain
                 if (OfficialUrl != null)
                     OfficialUrl.Interval = -1;
 
-                OfficialUrl = new Url(official.Url);
-                OfficialUrl.CustomData = new CatalogUrlData
-                {
-                    NovelInfo = this,
-                    Official = true,
-                    Type = PageType.NovelCatalog
-                };
-                OfficialUrl.Interval = 1800;
-                OfficialUrl.NeedCrawl = true;
+                OfficialUrl = CreateCatalogUrl(official.Url, true);
 
-                OfficialUrl = _urlManager.AddUrl(OfficialUrl);
+                _urlManager.AddUrl(OfficialUrl);
             }
             else
             {
@@ -208,17 +212,9 @@ namespace D.NovelCrawl.Core.Models.Domain
 
             foreach (var n in nf)
             {
-                var url = _urlManager.AddUrl(new Url(n.Url));
+                var url = CreateCatalogUrl(n.Url, false);
 
-                url.CustomData = new CatalogUrlData
-                {
-                    NovelInfo = this,
-                    Official = false,
-                    Type = PageType.NovelCatalog
-                };
-                url.Interval = 300;
-                url.NeedCrawl = false;
-
+                _urlManager.AddUrl(url);
                 _unofficialUrls.Add(url);
             }
         }
@@ -234,19 +230,20 @@ namespace D.NovelCrawl.Core.Models.Domain
             for (var i = 0; i < crawledVolumes.Length; i++)
             {
                 var cv = crawledVolumes[i];
-                VolumeModel v;
+                Volume v;
 
                 if (!Volumes.ContainsKey(i + 1))
                 {
-                    v = new VolumeModel()
+                    v = new Volume()
                     {
                         No = i + 1,
-                        Name = cv.Name
+                        Name = cv.Name,
+                        Uploaded = false
                     };
 
                     Volumes.Add(v.No, v);
 
-                    _web.UploadNovelVolume(Uuid, v);
+                    _website.UploadVolume(Uid, v);
 
                     _logger.LogInformation("上传小说《{0}》未收录的卷：{1}", Name, v.Name);
                 }
@@ -259,7 +256,7 @@ namespace D.NovelCrawl.Core.Models.Domain
                 {
                     var cc = cv.Chapters[j];
                     int index = j + 1;
-                    ChapterModel c;
+                    Chapter c;
 
                     c = Chapters.Values
                         .Where(ccc => ccc.VolumeNo == v.No && ccc.VolumeIndex == index)
@@ -267,7 +264,7 @@ namespace D.NovelCrawl.Core.Models.Domain
 
                     if (c == null)
                     {
-                        c = new ChapterModel();
+                        c = new Chapter();
 
                         c.Uid = Guid.NewGuid();
                         c.Name = cc.Name;
@@ -279,6 +276,8 @@ namespace D.NovelCrawl.Core.Models.Domain
                         //c.WordCount = Convert.ToInt32(cc.WordCount);
 
                         Chapters.Add(c.Uid, c);
+
+                        _website.UploadNovelChapter(Uid, c);
                     }
 
                     if (c.Recrawl && c.Vip)
@@ -288,22 +287,19 @@ namespace D.NovelCrawl.Core.Models.Domain
                     else if (c.Recrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
-                        IUrl url = OfficialUrl.CreateCompleteUrl(cc.Href);
-                        url.CustomData = new ChapterTxtUrlData
-                        {
-                            NovelInfo = this,
-                            Type = PageType.NovelChatperContext,
-                            ChapterInfo = c
-                        };
-                        url.Interval = -1;
-
+                        var urlStr = OfficialUrl.CreateCompleteUrl(cc.Href).String;
+                        var url = CreateChapterTxtUrl(urlStr, c);
                         var inManager = _urlManager.AddUrl(url);
-                        inManager.NeedCrawl = true;
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// 从非官网获取的目录信息与持有的信息对比
+        /// </summary>
+        /// <param name="unoff"></param>
+        /// <param name="crawledVolumes"></param>
         public void CmpareUnofficialCatalog(IUrl unoff, CrawlVolumeModel[] crawledVolumes)
         {
             foreach (var v in crawledVolumes)
@@ -327,17 +323,10 @@ namespace D.NovelCrawl.Core.Models.Domain
 
                         if (r.Vip && r.Recrawl)
                         {
-                            IUrl url = unoff.CreateCompleteUrl(c.Href);
-                            url.CustomData = new ChapterTxtUrlData
-                            {
-                                NovelInfo = this,
-                                Type = PageType.NovelChatperContext,
-                                ChapterInfo = r
-                            };
-                            url.Interval = -1;
-                            url.NeedCrawl = true;
-
-                            _urlManager.AddUrl(url);
+                            //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
+                            var urlStr = OfficialUrl.CreateCompleteUrl(c.Href).String;
+                            var url = CreateChapterTxtUrl(urlStr, r);
+                            var inManager = _urlManager.AddUrl(url);
                         }
                     }
                 }
@@ -349,8 +338,10 @@ namespace D.NovelCrawl.Core.Models.Domain
         /// 并且对爬取到的小说内容进行一些处理
         /// </summary>
         /// <param name="chapter"></param>
-        public void DealChapterCrwalData(ChapterModel chapter, CrawlChapterModel crawlData, string url)
+        public void DealChapterCrwalData(ChapterTxtUrl url, CrawlChapterModel crawlData)
         {
+            var chapter = url.ChapterInfo;
+
             lock (this)
             {
                 //章节已经不需要在爬取
@@ -361,18 +352,18 @@ namespace D.NovelCrawl.Core.Models.Domain
             var txt = RemoveHtmlTag(crawlData.Text);
             //2.判断字数
 
-            //chapter.Text = txt;
+            chapter.Text = txt;
 
             lock (this)
             {
                 chapter.Recrawl = false;
-                chapter.SourceUrl = url;
+                chapter.SourceUrl = url.String;
 
                 if (chapter.Vip) _vipChapterNeedCrawlCount--;
             }
 
             //3.上传到个人网站
-            _web.UploadNovelChapter(Uuid, chapter);
+            _website.UploadChapterText(chapter);
         }
 
         /// <summary>
@@ -417,6 +408,47 @@ namespace D.NovelCrawl.Core.Models.Domain
             name = Regex.Replace(name, @"[^\u4e00-\u9fa5,a-z,A-Z]", "");
 
             return name;
+        }
+
+        /// <summary>
+        /// 创建一个新的小说目录 url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private CatalogUrl CreateCatalogUrl(string url, bool official)
+        {
+            if (official)
+                return new CatalogUrl(url, _website, PageType.NovelCatalog)
+                {
+                    NovelInfo = this,
+                    Official = true,
+                    Interval = 1800,
+                    NeedCrawl = true
+                };
+            else
+                return new CatalogUrl(url, _website, PageType.NovelCatalog)
+                {
+                    NovelInfo = this,
+                    Official = true,
+                    Interval = 300,
+                    NeedCrawl = false
+                };
+        }
+
+        /// <summary>
+        /// 创建一个新的小说章节正文 url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private ChapterTxtUrl CreateChapterTxtUrl(string url, Chapter chapter)
+        {
+            return new ChapterTxtUrl(url, _website, PageType.NovelChatperContext)
+            {
+                NovelInfo = this,
+                Interval = -1,
+                NeedCrawl = true,
+                ChapterInfo = chapter
+            };
         }
     }
 }
