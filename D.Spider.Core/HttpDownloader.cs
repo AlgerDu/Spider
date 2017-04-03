@@ -130,6 +130,7 @@ namespace D.Spider.Core
                                     AjaxRequestTypes.GET,
                                     nextCrawlUrl.String,
                                     null,
+                                    AjaxContenTypes.Text,
                                     (object sender, jQuerySuccessEventArgs<string> sea) =>
                                     {
                                         nextCrawlUrl.Page = new Page(sea.Data);
