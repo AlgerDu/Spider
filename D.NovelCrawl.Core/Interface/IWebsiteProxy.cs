@@ -51,7 +51,7 @@ namespace D.NovelCrawl.Core.Interface
         /// <param name="uuid">小说 uuid</param>
         /// <param name="chapter"></param>
         /// <returns></returns>
-        Task UploadNovelChapter(Guid bookUid, Chapter chapter);
+        Task UploadChapter(Guid bookUid, Chapter chapter);
 
         /// <summary>
         /// 上传小说正文信息

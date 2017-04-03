@@ -277,7 +277,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
 
                         Chapters.Add(c.Uid, c);
 
-                        _website.UploadNovelChapter(Uid, c);
+                        _website.UploadChapter(Uid, c);
                     }
 
                     if (c.Recrawl && c.Vip)
@@ -368,19 +368,20 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
 
         /// <summary>
         /// 去除小说正文中的html标签
-        /// 将 <br/> 替换为 \r
+        /// 将 <br/> 替换为 \n
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
         private string RemoveHtmlTag(string txt)
         {
-            var tmp = Regex.Replace(txt, @"<br[^>]*>", "\r", RegexOptions.IgnoreCase);
+            var tmp = Regex.Replace(txt, @"<br[^>]*>", "\n", RegexOptions.IgnoreCase);
             tmp = Regex.Replace(tmp, @"<script[^>]*?>.*?</script>", string.Empty, RegexOptions.IgnoreCase);
             tmp = Regex.Replace(tmp, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase);
             tmp = tmp
                 .Replace(' ', '\0')
                 .Replace('\t', '\0')
-                .Replace("&nbsp;", "");
+                .Replace("&nbsp;", "")
+                .Replace('\r', '\0');
 
             return tmp;
         }
