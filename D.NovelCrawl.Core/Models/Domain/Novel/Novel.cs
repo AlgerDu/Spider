@@ -380,8 +380,8 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
             tmp = tmp
                 .Replace(' ', '\0')
                 .Replace('\t', '\0')
-                .Replace("&nbsp;", "")
-                .Replace('\r', '\0');
+                .Replace("&nbsp;", "");
+                //.Replace("\r\n", "\n");
 
             return tmp;
         }
