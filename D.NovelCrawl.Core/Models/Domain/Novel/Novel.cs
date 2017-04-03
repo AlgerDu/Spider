@@ -6,6 +6,7 @@ using D.Spider.Core.Interface;
 using D.Util.Interface;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -148,6 +149,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                 foreach (var c in Chapters.Values)
                 {
                     c.Recrawl = true;
+                    c.Uploaded = false;
                 }
 
                 foreach (var c in catalog.Cs)
@@ -170,6 +172,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     else
                     {
                         Chapters[c.Uid].Recrawl = c.Recrawl;
+                        Chapters[c.Uid].Uploaded = true;
                     }
                 }
             }
@@ -237,7 +240,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     v = new Volume()
                     {
                         No = i + 1,
-                        Name = cv.Name.Replace(' ', '\0'),
+                        Name = cv.Name.Replace(" ", ""),
                         Uploaded = false
                     };
 
@@ -378,8 +381,8 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
             tmp = Regex.Replace(tmp, @"<script[^>]*?>.*?</script>", string.Empty, RegexOptions.IgnoreCase);
             tmp = Regex.Replace(tmp, @"<[^>]*>", string.Empty, RegexOptions.IgnoreCase);
             tmp = tmp
-                .Replace(' ', '\0')
-                .Replace('\t', '\0')
+                .Replace(" ", "")
+                .Replace("\t", "")
                 .Replace("&nbsp;", "");
             //.Replace("\r\n", "\n");
 
@@ -466,12 +469,34 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
 
         /// <summary>
         /// 将字符串转换成 DateTime
+        /// 用于对爬取到的小说章节发布时间做处理
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
         private DateTime StringToDateTime(string v)
         {
-            return DateTime.Now;
+            var str = Regex.Replace(v, @"[^\d]", "");
+
+            if (str.Length == 14)//20150911191411
+            {
+                DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
+
+                dtFormat.ShortDatePattern = "yyyyMMddHHmmss";
+
+                try
+                {
+                    return Convert.ToDateTime(str, dtFormat);
+                }
+                catch
+                {
+                    return DateTime.Now;
+                }
+            }
+            else
+            {
+                return DateTime.Now;
+            }
+
         }
     }
 }
