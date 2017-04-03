@@ -131,7 +131,7 @@ namespace D.NovelCrawl.Core
 
         public Task UploadVolume(Guid bookUid, Volume volume)
         {
-            _logger.LogInformation("上传卷信息：第 {0} 卷 {2}", volume.No, volume.Name);
+            _logger.LogInformation("上传卷信息：第 " + volume.No + " 卷 " + volume.Name);
 
             volume.Uploaded = true;
 

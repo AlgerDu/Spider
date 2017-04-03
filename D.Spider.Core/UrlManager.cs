@@ -78,7 +78,7 @@ namespace D.Spider.Core
 
             if (url.NeedCrawl && !IsWaitingCrawl(url))
             {
-                _waitingCrawlUrl.Add(find);
+                _waitingCrawlUrl.Add(url);
 
                 _eventBus.Publish(new UrlWaitingEvent());
             }
