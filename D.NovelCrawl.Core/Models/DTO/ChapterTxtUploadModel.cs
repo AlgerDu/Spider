@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 namespace D.NovelCrawl.Core.Models.DTO
 {
     /// <summary>
-    /// 卷信息 DTO
+    /// 上传章节正文信息
     /// </summary>
-    public class VolumeModel
+    public class ChapterTxtUploadModel
     {
-        public Guid BookUid { get; set; }
+        /// <summary>
+        /// 章节编号
+        /// </summary>
+        public Guid CUid { get; set; }
 
         /// <summary>
-        /// 顺序号
+        /// 内容
         /// </summary>
-        public int No { get; set; }
-
-        /// <summary>
-        /// 卷名
-        /// </summary>
-        public string Name { get; set; }
+        public string Text { get; set; }
     }
 }

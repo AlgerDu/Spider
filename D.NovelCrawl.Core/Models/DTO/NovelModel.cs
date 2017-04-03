@@ -10,7 +10,7 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// <summary>
         /// 小说 GUID
         /// </summary>
-        public Guid Uuid { get; set; }
+        public Guid Uid { get; set; }
 
         /// <summary>
         /// 小说名称

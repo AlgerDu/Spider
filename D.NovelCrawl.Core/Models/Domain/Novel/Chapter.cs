@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.Models.DTO
+namespace D.NovelCrawl.Core.Models.Domain.Novel
 {
     /// <summary>
-    /// 章节信息 DTO
+    /// 小说领域内章节值对象
     /// </summary>
-    public class ChapterModel
+    public class Chapter
     {
         public Guid Uid { get; set; }
 
@@ -47,5 +47,20 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// 是否需要重新爬取
         /// </summary>
         public bool Recrawl { get; set; }
+
+        /// <summary>
+        /// 来源网页地址 上传时需要
+        /// </summary>
+        public string SourceUrl { get; set; }
+
+        /// <summary>
+        /// 已上传
+        /// </summary>
+        public bool Uploaded { get; set; }
+
+        /// <summary>
+        /// 用来在上传完成之前保存文本数据，上传完成之后需要清空
+        /// </summary>
+        public string Text { get; set; }
     }
 }

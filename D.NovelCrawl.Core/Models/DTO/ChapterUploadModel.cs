@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace D.NovelCrawl.Core.Models.DTO
 {
-    /// <summary>
-    /// 章节信息 DTO
-    /// </summary>
-    public class ChapterModel
+    public class ChapterUploadModel
     {
+        public Guid BookUid { get; set; }
+
         public Guid Uid { get; set; }
 
         /// <summary>
@@ -42,10 +41,5 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// 是否 vip 章节
         /// </summary>
         public bool Vip { get; set; }
-
-        /// <summary>
-        /// 是否需要重新爬取
-        /// </summary>
-        public bool Recrawl { get; set; }
     }
 }

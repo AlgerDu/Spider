@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.NovelCrawl.Core.Models.DTO
+namespace D.NovelCrawl.Core.Models.Domain.Novel
 {
-    /// <summary>
-    /// 卷信息 DTO
-    /// </summary>
-    public class VolumeModel
+    public class Volume
     {
-        public Guid BookUid { get; set; }
-
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -22,5 +17,10 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// 卷名
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 已上传
+        /// </summary>
+        public bool Uploaded { get; set; }
     }
 }

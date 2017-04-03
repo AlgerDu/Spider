@@ -1,4 +1,6 @@
 ﻿using D.NovelCrawl.Core.Models;
+using D.NovelCrawl.Core.Models.Domain.CrawlUrl;
+using D.NovelCrawl.Core.Models.Domain.Novel;
 using D.NovelCrawl.Core.Models.DTO;
 using System;
 using System.Collections.Generic;
@@ -39,10 +41,9 @@ namespace D.NovelCrawl.Core.Interface
         /// <summary>
         /// 上传爬取到的卷详细信息
         /// </summary>
-        /// <param name="uuid">小说 uuid</param>
-        /// <param name="chapter"></param>
+        /// <param name="volume"></param>
         /// <returns></returns>
-        bool UploadNovelVolume(Guid uuid, VolumeModel volume);
+        Task UploadVolume(Guid bookUid, Volume volume);
 
         /// <summary>
         /// 上传爬取到的章节详细信息
@@ -50,14 +51,21 @@ namespace D.NovelCrawl.Core.Interface
         /// <param name="uuid">小说 uuid</param>
         /// <param name="chapter"></param>
         /// <returns></returns>
-        bool UploadNovelChapter(Guid uuid, ChapterModel chapter);
+        Task UploadNovelChapter(Guid bookUid, Chapter chapter);
+
+        /// <summary>
+        /// 上传小说正文信息
+        /// </summary>
+        /// <param name="chapter"></param>
+        /// <returns></returns>
+        Task UploadChapterText(Chapter chapter);
 
         /// <summary>
         /// 获取某个域名下某个类型的页面的 Spiderscript 处理代码
         /// </summary>
-        /// <param name="host"></param>
+        /// <param name="url"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        PageParse UrlPageProcessSpiderscriptCode(string host, PageType type);
+        PageParse UrlPageParseCode(string url, PageType type);
     }
 }
