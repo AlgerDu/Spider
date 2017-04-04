@@ -165,7 +165,8 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         chapter.Uploaded = true;
                         chapter.Vip = c.Vip;
                         chapter.VolumeIndex = c.VolumeIndex;
-                        chapter.VolumeNo = c.WordCount;
+                        chapter.VolumeNo = c.VolumeNo;
+                        chapter.WordCount = c.WordCount;
 
                         Chapters.Add(c.Uid, chapter);
                     }
@@ -247,8 +248,6 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     Volumes.Add(v.No, v);
 
                     _website.UploadVolume(Uid, v);
-
-                    _logger.LogInformation("上传小说《{0}》未收录的卷：{1}", Name, v.Name);
                 }
                 else
                 {
@@ -481,7 +480,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
             {
                 try
                 {
-                    return  DateTime.ParseExact(str, "yyyyMMddHHmmss", null);
+                    return DateTime.ParseExact(str, "yyyyMMddHHmmss", null);
                 }
                 catch
                 {
