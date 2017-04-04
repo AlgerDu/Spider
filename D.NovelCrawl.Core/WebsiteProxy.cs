@@ -129,7 +129,7 @@ namespace D.NovelCrawl.Core
                     if (sea.Data.Code == 0)
                     {
                         _logger.LogInformation("上传章节内容 {0} \n {1}", chapter.Name, chapter.Text);
-                        chapter.NeedRecrawl = false;
+                        chapter.NeedCrawl = false;
                         chapter.Text = string.Empty;
                     }
                     else

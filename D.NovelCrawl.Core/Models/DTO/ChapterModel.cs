@@ -46,6 +46,6 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// <summary>
         /// 是否需要重新爬取
         /// </summary>
-        public bool NeedRecrawl { get; set; }
+        public bool NeedCrawl { get; set; }
     }
 }

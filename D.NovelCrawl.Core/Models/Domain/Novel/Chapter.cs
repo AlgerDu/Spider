@@ -46,7 +46,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
         /// <summary>
         /// 是否需要重新爬取
         /// </summary>
-        public bool NeedRecrawl { get; set; }
+        public bool NeedCrawl { get; set; }
 
         /// <summary>
         /// 来源网页地址 上传时需要
