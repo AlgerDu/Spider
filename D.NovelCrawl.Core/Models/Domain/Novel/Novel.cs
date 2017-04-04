@@ -479,13 +479,9 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
 
             if (str.Length == 14)//20150911191411
             {
-                DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
-
-                dtFormat.ShortDatePattern = "yyyyMMddHHmmss";
-
                 try
                 {
-                    return Convert.ToDateTime(str, dtFormat);
+                    return  DateTime.ParseExact(str, "yyyyMMddHHmmss", null);
                 }
                 catch
                 {
