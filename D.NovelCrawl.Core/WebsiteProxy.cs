@@ -113,16 +113,38 @@ namespace D.NovelCrawl.Core
 
         public Task UploadChapterText(Chapter chapter)
         {
-            _logger.LogInformation("{0} \n {1}", chapter.Name, chapter.Text);
+            var data = new ChapterTxtUploadModel
+            {
+                CUid = chapter.Uid,
+                Text = chapter.Text
+            };
 
-            chapter.Text = string.Empty;
-
-            return null;
+            return _jQuery.Ajax(
+                AjaxRequestTypes.POST,
+                _host + "/NovelCrawl/UploadChapterText",
+                data,
+                AjaxContenTypes.JSON,
+                (object sender, jQuerySuccessEventArgs<Result> sea) =>
+                {
+                    if (sea.Data.Code == 0)
+                    {
+                        _logger.LogInformation("上传章节内容 {0} \n {1}", chapter.Name, chapter.Text);
+                        chapter.Recrawl = false;
+                        chapter.Text = string.Empty;
+                    }
+                    else
+                    {
+                        _logger.LogWarning("上传章节内容 失败 code = " + sea.Data.Code + " \r\n Message = " + sea.Data.Message);
+                    }
+                },
+                (object sender, jQueryErrorEventArgs eea) =>
+                {
+                    _logger.LogWarning("上传章节内容  请求失败 StatusCode = " + eea.StatusCode);
+                });
         }
 
         public Task UploadChapter(Guid bookUid, Chapter chapter)
         {
-
             var data = new ChapterUploadModel
             {
                 BookUid = bookUid,

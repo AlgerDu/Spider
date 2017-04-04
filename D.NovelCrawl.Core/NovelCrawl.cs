@@ -172,7 +172,7 @@ namespace D.NovelCrawl.Core
             {
                 var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, url.PaseCode.SSCriptCode);
 
-                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
+                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
 
                 if (url.NovelInfo != null)
                 {
