@@ -41,6 +41,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
             {
                 if (_vipChapterNeedCrawlCount <= 0 && value > 0)
                 {
+                    _logger.LogInformation("将所有非官方目录页面设置爬取");
                     foreach (var nu in _unofficialUrls)
                     {
                         nu.NeedCrawl = true;
@@ -148,7 +149,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
 
                 foreach (var c in Chapters.Values)
                 {
-                    c.Recrawl = true;
+                    c.NeedRecrawl = true;
                     c.Uploaded = false;
                 }
 
@@ -160,7 +161,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         chapter.Uid = c.Uid;
                         chapter.Name = c.Name;
                         chapter.PublishTime = c.PublishTime;
-                        chapter.Recrawl = c.Recrawl;
+                        chapter.NeedRecrawl = c.NeedRecrawl;
                         chapter.SourceUrl = "";
                         chapter.Uploaded = true;
                         chapter.Vip = c.Vip;
@@ -172,7 +173,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     }
                     else
                     {
-                        Chapters[c.Uid].Recrawl = c.Recrawl;
+                        Chapters[c.Uid].NeedRecrawl = c.NeedRecrawl;
                         Chapters[c.Uid].Uploaded = true;
                     }
                 }
@@ -273,7 +274,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         c.VolumeNo = v.No;
                         c.VolumeIndex = index;
                         c.PublishTime = StringToDateTime(cc.PublicTime);
-                        c.Recrawl = true;
+                        c.NeedRecrawl = true;
                         c.Vip = string.IsNullOrEmpty(cc.Vip) ? false : true;
                         c.WordCount = StringToInt(cc.WordCount);
 
@@ -282,11 +283,12 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         _website.UploadChapter(Uid, c);
                     }
 
-                    if (c.Recrawl && c.Vip)
+                    if (c.NeedRecrawl && c.Vip)
                     {
+                        _logger.LogDebug("需要爬取的 vip 章节 +1");
                         VipChaperNeedCrawlCount++;
                     }
-                    else if (c.Recrawl && !c.Vip)
+                    else if (c.NeedRecrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
                         var urlStr = OfficialUrl.CreateCompleteUrl(cc.Href).String;
@@ -323,7 +325,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     {
                         var r = rs.FirstOrDefault();
 
-                        if (r.Vip && r.Recrawl)
+                        if (r.Vip && r.NeedRecrawl)
                         {
                             //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
                             var urlStr = OfficialUrl.CreateCompleteUrl(c.Href).String;
@@ -347,7 +349,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
             lock (this)
             {
                 //章节已经不需要在爬取
-                if (!chapter.Recrawl) return;
+                if (!chapter.NeedRecrawl) return;
             }
 
             //1.去掉 html 标签
@@ -358,7 +360,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
 
             lock (this)
             {
-                chapter.Recrawl = false;
+                chapter.NeedRecrawl = false;
                 chapter.SourceUrl = url.String;
 
                 if (chapter.Vip) _vipChapterNeedCrawlCount--;
