@@ -176,7 +176,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         Chapters[c.Uid].NeedCrawl = c.NeedCrawl;
                         Chapters[c.Uid].Uploaded = true;
                     }
-                    
+
                     if (c.NeedCrawl && c.Vip)
                     {
                         VipChaperNeedCrawlCount++;
@@ -438,7 +438,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                 return new CatalogUrl(url, _website, PageType.NovelCatalog)
                 {
                     NovelInfo = this,
-                    Official = true,
+                    Official = false,
                     Interval = 300,
                     NeedCrawl = false
                 };

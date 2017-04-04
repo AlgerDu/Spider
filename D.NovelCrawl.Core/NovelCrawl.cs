@@ -101,13 +101,13 @@ namespace D.NovelCrawl.Core
                 //更新小说基本信息
                 novel.Update(n);
 
-                //获取已经爬取到的小说目录信息，与爬虫本地持有的信息进行对比
-                var catalog = _web.NovelCatalog(n.Uid);
-                novel.UpdateCatalog(catalog);
-
                 //更新小说对应的小说爬取目录
                 var urls = _web.NovelCrawlUrls(novel.Uid);
                 novel.SetRelatedUrls(urls);
+
+                //获取已经爬取到的小说目录信息，与爬虫本地持有的信息进行对比
+                var catalog = _web.NovelCatalog(n.Uid);
+                novel.UpdateCatalog(catalog);
             }
         }
         #endregion
@@ -147,7 +147,7 @@ namespace D.NovelCrawl.Core
             {
                 var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, url.PaseCode.SSCriptCode);
 
-                _logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
+                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
 
                 if (url.NovelInfo != null)
                 {
