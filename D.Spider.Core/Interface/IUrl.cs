@@ -37,6 +37,11 @@ namespace D.Spider.Core.Interface
         DateTime? LastCrawledTime { get; set; }
 
         /// <summary>
+        /// 需要爬取
+        /// </summary>
+        bool NeedCrawl { get; set; }
+
+        /// <summary>
         /// Url 爬取的时间间隔
         /// 时间单位 秒
         /// 为 -1 时只爬取一次
@@ -63,14 +68,8 @@ namespace D.Spider.Core.Interface
         IUrl CreateCompleteUrl(string href);
 
         /// <summary>
-        /// URL 是否需要爬取
+        /// 下载下来的 url 页面
         /// </summary>
-        /// <returns></returns>
-        bool NeedCrawl();
-
-        /// <summary>
-        /// 设置 Url 需要重新爬取
-        /// </summary>
-        void Recrwal();
+        IPage Page { get; set; }
     }
 }

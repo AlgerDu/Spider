@@ -19,11 +19,13 @@ namespace D.Spider.Core
 
         DateTime? _lastCrawledTime;
         int _interval;
+        bool _needCrawl;
 
         private Url()
         {
             _lastCrawledTime = null;
             _interval = -1;
+            _needCrawl = false;
         }
 
         public Url(string url) : this()
@@ -48,12 +50,8 @@ namespace D.Spider.Core
             }
         }
 
-        public Url(string host, string relativePath)
+        public Url(string host, string relativePath) : this(host + relativePath)
         {
-            _host = host;
-            _relativePath = relativePath;
-
-            _urlString = _host + _relativePath;
         }
 
         #region IRul 属性
@@ -83,6 +81,14 @@ namespace D.Spider.Core
             }
             set
             {
+                lock (this)
+                {
+                    if (_interval == -1)
+                    {
+                        _needCrawl = false;
+                    }
+                }
+
                 _lastCrawledTime = value;
             }
         }
@@ -95,11 +101,13 @@ namespace D.Spider.Core
         {
             get
             {
-                return _interval;
+                lock (this)
+                    return _interval;
             }
             set
             {
-                _interval = value;
+                lock (this)
+                    _interval = value;
             }
         }
 
@@ -118,6 +126,21 @@ namespace D.Spider.Core
                 return _urlString;
             }
         }
+
+        public bool NeedCrawl
+        {
+            get
+            {
+                return _needCrawl &&
+                    (LastCrawledTime == null || DateTime.Now - LastCrawledTime > new TimeSpan(0, 0, Interval));
+            }
+            set
+            {
+                _needCrawl = value;
+            }
+        }
+
+        public IPage Page { get; set; }
         #endregion
 
         #region IUrl 方法
@@ -156,19 +179,6 @@ namespace D.Spider.Core
                 return new Url(String + href);
             }
         }
-
-        public bool NeedCrawl()
-        {
-            if (LastCrawledTime == null
-                || (Interval > 0 && DateTime.Now - LastCrawledTime > new TimeSpan(0, 0, Interval)))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion
 
         /// <summary>
@@ -187,11 +197,6 @@ namespace D.Spider.Core
             {
                 return false;
             }
-        }
-
-        public void Recrwal()
-        {
-            LastCrawledTime = null;
         }
     }
 }

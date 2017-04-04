@@ -130,11 +130,13 @@ namespace D.Spider.Core
                                     AjaxRequestTypes.GET,
                                     nextCrawlUrl.String,
                                     null,
+                                    AjaxContenTypes.Text,
                                     (object sender, jQuerySuccessEventArgs<string> sea) =>
                                     {
+                                        nextCrawlUrl.Page = new Page(sea.Data);
                                         DownloadingNumber--;
 
-                                        _eventBus.Publish(new UrlCrawledEvent(new Page(nextCrawlUrl, sea.Data)));
+                                        _eventBus.Publish(new UrlCrawledEvent(nextCrawlUrl));
                                     },
                                     (object sender, jQueryErrorEventArgs eea) =>
                                     {

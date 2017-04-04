@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\IjQuery.cs" />
+    <Compile Include="Interface\IResult.cs" />
     <Compile Include="Models\jQueryErrorEventArgs.cs" />
     <Compile Include="Models\jQuerySuccessEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

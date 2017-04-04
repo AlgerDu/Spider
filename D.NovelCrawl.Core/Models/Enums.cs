@@ -7,27 +7,39 @@ using System.Threading.Tasks;
 namespace D.NovelCrawl.Core.Models
 {
     /// <summary>
-    /// 爬取小说，处理小说页面的步骤类型
-    /// 指示这一步应该用什么方式获取数据
+    /// 爬取小说的 URL 类型
     /// </summary>
-    public enum PageProcessStepTypes
+    public enum NovelCrawlUrlType
     {
-        ///以 html 节点的方式获取数据
-        Html,
+        /// <summary>
+        /// 官网目录
+        /// </summary>
+        Official = 51,
 
-        ///以正则表达式的方式获取数据
-        RegExp
+        /// <summary>
+        /// 第三方目录
+        /// </summary>
+        Third
     }
 
     /// <summary>
-    /// Url 的类型
+    /// 页面类型
     /// </summary>
-    public enum UrlTypes
+    public enum PageType
     {
-        ///小说目录
-        NovleCatalog,
+        /// <summary>
+        /// 未知类型
+        /// </summary>
+        Unknown = 41,
 
-        ///小说正文
-        NovleChapterTxt
+        /// <summary>
+        /// 小说目录
+        /// </summary>
+        NovelCatalog,
+
+        /// <summary>
+        /// 小说章节正文
+        /// </summary>
+        NovelChatperContext
     }
 }

@@ -21,6 +21,17 @@ namespace D.NovelCrawl.Core.Models.DTO
         /// 是否是官网
         /// </summary>
         /// <returns></returns>
-        public bool Official { get; set; }
+        public bool Official
+        {
+            get
+            {
+                return NCType == NovelCrawlUrlType.Official ? true : false;
+            }
+        }
+
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public NovelCrawlUrlType NCType { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace D.Spider.Console
             _logger = loggerFactory.CreateLogger<ConsolePageProcess>();
         }
 
-        public void Process(IPage page)
+        public void Process(IUrl url)
         {
             _logger.LogInformation("解析 html");
             //_logger.LogInformation(page.HtmlTxt);

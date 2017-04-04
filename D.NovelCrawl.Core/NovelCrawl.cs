@@ -1,18 +1,14 @@
 ﻿using D.Spider.Core.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using D.Util.Interface;
-using D.Spider.Core;
-using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
-using NSoup.Nodes;
 using D.NovelCrawl.Core.Models;
 using D.NovelCrawl.Core.Interface;
-using D.NovelCrawl.Core.Models.DTO;
-using Newtonsoft.Json;
 using Microsoft.Practices.Unity;
 using D.NovelCrawl.Core.Models.CrawlModel;
+using System.Timers;
+using D.NovelCrawl.Core.Models.Domain.Novel;
+using D.NovelCrawl.Core.Models.Domain.CrawlUrl;
 
 namespace D.NovelCrawl.Core
 {
@@ -29,22 +25,28 @@ namespace D.NovelCrawl.Core
 
         IUrlManager _urlManager;
 
-        IWebsitProxy _web;
+        IWebsiteProxy _web;
+
+        /// <summary>
+        /// 定时从官网获取小说以及对应的 url 信息，查看是否需要更新
+        /// </summary>
+        Timer _checkTimer;
+
+        /// <summary>
+        /// 定时器时间间隔
+        /// 单位 秒
+        /// </summary>
+        const int _checkInterval = 3600;
 
         /// <summary>
         /// 所有的小说信息
         /// </summary>
         Dictionary<Guid, Novel> _novels = new Dictionary<Guid, Novel>();
 
-        /// <summary>
-        /// url 与 Novel 的对应关系
-        /// </summary>
-        Dictionary<IUrl, Novel> _url2novel = new Dictionary<IUrl, Novel>();
-
         public NovelCrawl(
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
-            , IWebsitProxy webProxy
+            , IWebsiteProxy webProxy
             , ISpiderscriptEngine spiderscriptEngine)
         {
             _logger = loggerFactory.CreateLogger<NovelCrawl>();
@@ -64,48 +66,74 @@ namespace D.NovelCrawl.Core
 
         public INvoelCrawl Run()
         {
-            //从网站上面获取需要爬取的小说
-            var novels = _web.NovelList();
+            CheckNovel();
 
-            if (novels.RecordCount <= 0)
+            _checkTimer = new Timer(_checkInterval * 1000);
+            _checkTimer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) =>
             {
-                _logger.LogWarning("没有需要爬取的小说");
-            }
-            else
-            {
-                foreach (var n in novels.CurrPageData)
-                {
-                    Novel dealNovel = null;
+                CheckNovel();
+            });
 
-                    if (_novels.ContainsKey(n.Guid))
-                    {
-                        dealNovel = _novels[n.Guid];
-                        dealNovel.Update(n);
-                    }
-                    else
-                    {
-                        dealNovel = _container.Resolve<Novel>();
-                        dealNovel.Update(n);
-
-                        _logger.LogInformation("添加需要爬取的小说：" + n.Name);
-                        _novels.Add(dealNovel.Guid, dealNovel);
-                    }
-
-                    DealNovel(dealNovel);
-                }
-            }
+            _checkTimer.Start();
 
             return this;
+        }
+
+        private void CheckNovel()
+        {
+            var result = _web.NovelList();
+
+            foreach (var n in result.CurrPageData)
+            {
+                Novel novel;
+
+                if (_novels.ContainsKey(n.Uid))
+                {
+                    novel = _novels[n.Uid];
+                }
+                else
+                {
+                    _logger.LogInformation("添加新的需要爬取的小说：" + n.Name);
+
+                    novel = _container.Resolve<Novel>();
+                }
+
+                //更新小说基本信息
+                novel.Update(n);
+
+                //更新小说对应的小说爬取目录
+                var urls = _web.NovelCrawlUrls(novel.Uid);
+                novel.SetRelatedUrls(urls);
+
+                //获取已经爬取到的小说目录信息，与爬虫本地持有的信息进行对比
+                var catalog = _web.NovelCatalog(n.Uid);
+                novel.UpdateCatalog(catalog);
+            }
         }
         #endregion
 
         #region IPageProcess 实现
-        public void Process(IPage page)
+        public void Process(IUrl url)
         {
-            switch ((page.Url.CustomData as UrlData).Type)
+            var crawlUrl = url as NovelCrawlUrl;
+
+            if (crawlUrl.PaseCode == null)
             {
-                case UrlTypes.NovleCatalog: NovleCatalogPage(page); break;
-                case UrlTypes.NovleChapterTxt: NovleChapterTxtPage(page); break;
+                _logger.LogWarning("{0} 没有对应的处理代码", url.String);
+                return;
+            }
+
+
+            if (!UrlDataDownloadComplete(crawlUrl))
+            {
+                _urlManager.RecrawlUrl(url);
+                return;
+            }
+
+            switch (crawlUrl.PageType)
+            {
+                case PageType.NovelCatalog: NovleCatalogPage(url as CatalogUrl); break;
+                case PageType.NovelChatperContext: NovleChapterTxtPage(url as ChapterTxtUrl); break;
             }
         }
 
@@ -113,85 +141,71 @@ namespace D.NovelCrawl.Core
         /// 处理小说目录页面
         /// </summary>
         /// <param name="page"></param>
-        public void NovleCatalogPage(IPage page)
+        private void NovleCatalogPage(CatalogUrl url)
         {
-            var urlData = page.Url.CustomData as UrlData;
-            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, urlData.Type);
-
             try
             {
-                var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, url.PaseCode.SSCriptCode);
 
-                if (urlData.NovelInfo != null)
+                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
+
+                if (url.NovelInfo != null)
                 {
-                    urlData.NovelInfo.CmpareOfficialCatalog(data.ToObject<CrawlVolumeModel[]>());
-                }
+                    var cd = data.ToObject<CrawlVolumeModel[]>();
 
-                //_logger.LogInformation(data.ToString());
+                    if (url.Official)
+                        url.NovelInfo.CmpareOfficialCatalog(cd);
+                    else
+                        url.NovelInfo.CmpareUnofficialCatalog(url, cd);
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
+                _logger.LogWarning(url.String + " 页面解析出现错误：" + ex.ToString());
                 return;
             }
         }
 
-        public void NovleChapterTxtPage(IPage page)
+        private void NovleChapterTxtPage(ChapterTxtUrl url)
         {
-            var code = _web.UrlPageProcessSpiderscriptCode(page.Url.Host, (page.Url.CustomData as UrlData).Type);
             try
             {
-                var data = _spiderscriptEngine.Run(page.HtmlTxt, code);
+                var data = _spiderscriptEngine.Run(url.Page.HtmlTxt, url.PaseCode.SSCriptCode);
 
-                _logger.LogInformation(data.ToString());
+                //_logger.LogDebug("{0} 分析到的数据：\r\n{1}", url.String, data.ToString());
+
+                if (url.NovelInfo != null)
+                {
+                    var cm = data.ToObject<CrawlChapterModel>();
+
+                    url.NovelInfo.DealChapterCrwalData(url, cm);
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(page.Url.String + " 页面解析出现错误：" + ex.ToString());
+                _logger.LogWarning(url.String + " 页面解析出现错误：" + ex.ToString());
                 return;
             }
         }
-        #endregion
 
         /// <summary>
-        /// 处理小说
-        /// 是否需要重新获取信息，判断小说官网目录是否在 UrlManager 列表中
+        /// 判断一个 url 的数据是否下载完整
         /// </summary>
-        /// <param name="deal"></param>
-        private void DealNovel(Novel deal)
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private bool UrlDataDownloadComplete(NovelCrawlUrl url)
         {
-            var urls = _web.NovelCrawlUrls(deal.Guid);
-            if (urls != null && urls.Count() > 0)
+            if (url.PaseCode != null && url.PaseCode.MinLength > 0
+                 && url.PaseCode.MinLength > url.Page.HtmlTxt.Length)
             {
-                var official = urls.Where(uu => uu.Official).FirstOrDefault();
-
-                if (official == null)
-                {
-                    _logger.LogWarning(deal.Name + " 没有记录官网目录 url");
-                }
-                else
-                {
-                    if (deal.OfficialUrl == null || deal.OfficialUrl.String != official.Url)
-                    {
-                        deal.OfficialUrl = new Url(official.Url);
-
-                        deal.OfficialUrl.Interval = 1800;
-                        deal.OfficialUrl.CustomData = new UrlData
-                        {
-                            NovelInfo = deal,
-                            Type = UrlTypes.NovleCatalog
-                        };
-
-                        _url2novel.Add(deal.OfficialUrl, deal);
-
-                        _urlManager.AddUrl(deal.OfficialUrl);
-                    }
-                }
+                _logger.LogWarning("{0} 页面下载的 html 数据长度 {1}，不足 {2}", url.String, url.Page.HtmlTxt.Length, 40000);
+                return false;
             }
             else
             {
-                _logger.LogWarning(deal.Name + " 没有记录需要爬取的 Urls");
+                return true;
             }
         }
+        #endregion
     }
 }

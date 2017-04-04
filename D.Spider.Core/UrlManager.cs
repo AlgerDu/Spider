@@ -67,21 +67,23 @@ namespace D.Spider.Core
             if (find == null)
             {
                 _allUrl.Add(url);
-
-                find = url;
             }
             else
             {
-                find.Interval = url.Interval;
-                find.CustomData = url.CustomData;
+                url.LastCrawledTime = find.LastCrawledTime;
+
+                _allUrl.Remove(find);
+                _allUrl.Add(url);
             }
 
-            if (url.NeedCrawl() && !IsWaitingCrawl(url))
+            if (url.NeedCrawl && !IsWaitingCrawl(url))
             {
-                _waitingCrawlUrl.Add(find);
+                _waitingCrawlUrl.Add(url);
 
                 _eventBus.Publish(new UrlWaitingEvent());
             }
+
+            find = url;
 
             return find;
         }
@@ -127,9 +129,13 @@ namespace D.Spider.Core
                 {
                     _waitingCrawlUrl.RemoveAt(0);
                     _crawlingUrl.Add(nextUrl);
-                }
 
-                return nextUrl;
+                    return nextUrl.NeedCrawl ? nextUrl : NextCrawl();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -137,12 +143,27 @@ namespace D.Spider.Core
         {
             lock (this)
             {
-                e.Page.Url.LastCrawledTime = DateTime.Now;
+                if (!IsWaitingCrawl(e.Url))
+                    e.Url.LastCrawledTime = DateTime.Now;
 
-                var findIndex = _crawlingUrl.FindIndex(u => u.Equal(e.Page.Url));
+                var findIndex = _crawlingUrl.FindIndex(u => u.Equal(e.Url));
                 if (findIndex > -1)
                 {
                     _crawlingUrl.RemoveAt(findIndex);
+                }
+            }
+        }
+
+        public void RecrawlUrl(IUrl url)
+        {
+            lock (this)
+            {
+                if (!IsWaitingCrawl(url))
+                {
+                    _logger.LogDebug("重新爬取 url：{0}", url.String);
+
+                    _waitingCrawlUrl.Add(url);
+                    url.LastCrawledTime = null;
                 }
             }
         }
@@ -162,7 +183,7 @@ namespace D.Spider.Core
 
             foreach (var url in _allUrl)
             {
-                if (url.NeedCrawl() && !IsWaitingCrawl(url))
+                if (url.NeedCrawl && !IsWaitingCrawl(url))
                 {
                     _waitingCrawlUrl.Add(url);
 
@@ -175,6 +196,14 @@ namespace D.Spider.Core
             if (urlNeedCrawlCount > 0)
             {
                 _logger.LogDebug("发布事件 UrlWaitingEvent");
+                _eventBus.Publish(new UrlWaitingEvent());
+            }
+
+            var count = _waitingCrawlUrl.Count;
+            _logger.LogDebug("等待爬取的 url 数量：" + _waitingCrawlUrl.Count);
+
+            if (count > 0)
+            {
                 _eventBus.Publish(new UrlWaitingEvent());
             }
         }

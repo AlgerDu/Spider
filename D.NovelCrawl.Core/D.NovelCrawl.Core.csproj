@@ -53,19 +53,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\CrawlModel\CrawlCatalogModel.cs" />
+    <Compile Include="Models\Domain\CrawlUrl\NovelCrawlUrl.cs" />
+    <Compile Include="Models\Domain\CrawlUrl\PagePase.cs" />
+    <Compile Include="Models\Domain\Novel\Chapter.cs" />
+    <Compile Include="Models\Domain\Novel\Novel.cs" />
+    <Compile Include="Models\Domain\Novel\Volume.cs" />
+    <Compile Include="Models\DTO\ChapterModel.cs" />
+    <Compile Include="Models\DTO\ChapterTxtUploadModel.cs" />
+    <Compile Include="Models\DTO\ChapterUploadModel.cs" />
     <Compile Include="Models\DTO\CrawlUrlModel.cs" />
     <Compile Include="Models\DTO\ListResult.cs" />
     <Compile Include="Models\DTO\NovelCatalogModel.cs" />
-    <Compile Include="Models\DTO\NovelChapterDetailModel.cs" />
-    <Compile Include="Models\DTO\NovelListModel.cs" />
+    <Compile Include="Models\DTO\NovelModel.cs" />
     <Compile Include="Models\DTO\PageModel.cs" />
     <Compile Include="Interface\INvoelCrawl.cs" />
-    <Compile Include="Interface\IWebsitProxy.cs" />
-    <Compile Include="Models\Chapter.cs" />
-    <Compile Include="Models\UrlData.cs" />
-    <Compile Include="Models\Volume.cs" />
+    <Compile Include="Interface\IWebsiteProxy.cs" />
+    <Compile Include="Models\DTO\PageParseModel.cs" />
+    <Compile Include="Models\DTO\Result.cs" />
+    <Compile Include="Models\DTO\VolumeModel.cs" />
     <Compile Include="Models\Enums.cs" />
-    <Compile Include="Models\Novel.cs" />
     <Compile Include="NovelCrawl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualWebsetProxy.cs" />
@@ -88,6 +94,7 @@
       <Name>D.Util</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

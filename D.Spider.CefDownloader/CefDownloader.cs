@@ -10,6 +10,7 @@ using CefSharp.OffScreen;
 using CefSharp;
 using System.Threading;
 using CefSharp.Internals;
+using D.Spider.Core.Hnadler;
 
 namespace D.Spider.Core
 {
@@ -65,8 +66,15 @@ namespace D.Spider.Core
 
         public void Run()
         {
-            _browser = new ChromiumWebBrowser();
+            var setting = new BrowserSettings();
+            setting.ImageLoading = CefState.Disabled;
+
+            _browser = new ChromiumWebBrowser("", setting);
+
+            _browser.LifeSpanHandler = new LifeSpanHandler();
+
             _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
+            _browser.FrameLoadStart += new EventHandler<FrameLoadStartEventArgs>(FrameLoadStart);
 
             lock (this)
             {
@@ -139,7 +147,12 @@ namespace D.Spider.Core
 
                 var html = await _browser.GetSourceAsync();
 
-                _eventBus.Publish(new UrlCrawledEvent(new Page(_downloaderUrl, html)));
+                _logger.LogDebug("{0} 下载完成，获取 html 数据长度：{1}", _downloaderUrl.String, html.Length);
+
+                _downloaderUrl.Page = new Page(html);
+                _eventBus.Publish(new UrlCrawledEvent(_downloaderUrl));
+
+                _downloaderUrl = null;
 
                 DownloaderPage();
             }
@@ -171,6 +184,16 @@ namespace D.Spider.Core
                 browser.Load(address);
             }
             return tcs.Task;
+        }
+
+        private void FrameLoadStart(object sender, FrameLoadStartEventArgs e)
+        {
+            if (e.Frame.IsMain && e.Url != _downloaderUrl.String)
+            {
+                _logger.LogWarning("页面发生自动跳转 {0} => {1}", _downloaderUrl.String, e.Url);
+
+                e.Browser.StopLoad();
+            }
         }
         #endregion
     }

@@ -95,7 +95,7 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                 else if (rcodes[1] == "html")
                 {
                     val = e.Html();
-                    index = 3;
+                    index = 2;
                 }
 
                 if (rcodes.Length <= index)
@@ -112,6 +112,11 @@ namespace D.Spider.Core.SpiderscriptEngine.KeywordHandlers
                     {
                         (toSet.Data as JObject)[names[i]] = m.Groups[names[i]].Value;
                     }
+                }
+                else if (rcodes[index] == "remove")
+                {
+                    var r = new Regex(rcodes[index + 1], RegexOptions.Singleline);
+                    (toSet.Data as JObject)[lcodes[1]] = r.Replace(val, "");
                 }
                 else
                 {

@@ -40,6 +40,8 @@ namespace D.Spider.Core
         {
             Document doc = NSoup.NSoupClient.Parse(html);
 
+            _logger.LogDebug("SScode：" + spiderscriptCode);
+
             var context = AnalysisCodeString(spiderscriptCode);
 
             while (!context.CodeExecuteFinish)
@@ -93,9 +95,14 @@ namespace D.Spider.Core
         {
             var lines = new SsCodeLines();
 
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new Exception("SsEngine 没有设置页面解析 Code");
+            }
+
             var slines = code
-                .Replace("\r\n", "\r")
-                .Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                .Replace("\r\n", "\n")
+                .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             var handlers = _keywordHandlers.Values.OrderBy(h => h.Type);
 

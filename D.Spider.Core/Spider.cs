@@ -75,7 +75,7 @@ namespace D.Spider.Core
 
         public void Handle(UrlCrawledEvent e)
         {
-            _pageProcess.Process(e.Page);
+            _pageProcess.Process(e.Url);
         }
         #endregion
     }
