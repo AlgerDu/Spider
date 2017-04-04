@@ -176,6 +176,11 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         Chapters[c.Uid].NeedCrawl = c.NeedCrawl;
                         Chapters[c.Uid].Uploaded = true;
                     }
+                    
+                    if (c.NeedCrawl && c.Vip)
+                    {
+                        VipChaperNeedCrawlCount++;
+                    }
                 }
             }
         }
@@ -281,13 +286,13 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                         Chapters.Add(c.Uid, c);
 
                         _website.UploadChapter(Uid, c);
-                    }
 
-                    if (c.NeedCrawl && c.Vip)
-                    {
-                        VipChaperNeedCrawlCount++;
+                        if (c.NeedCrawl && c.Vip)
+                        {
+                            VipChaperNeedCrawlCount++;
+                        }
                     }
-                    else if (c.NeedCrawl && !c.Vip)
+                    if (c.NeedCrawl && !c.Vip)
                     {
                         //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
                         var urlStr = OfficialUrl.CreateCompleteUrl(cc.Href).String;
