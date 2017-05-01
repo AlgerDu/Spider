@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="Event\BaseEvent.cs" />
     <Compile Include="Event\EventBus.cs" />
+    <Compile Include="Interface\IConfig.cs" />
+    <Compile Include="Interface\IConfigItem.cs" />
     <Compile Include="Interface\IEvent.cs" />
     <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="Interface\IEventHandler.cs" />
