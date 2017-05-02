@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="JsonConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WritablePropertiesOnlyResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D.Util\D.Util.csproj">

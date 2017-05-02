@@ -199,7 +199,10 @@ namespace D.Util.Config
             }
             else
             {
-                content[name] = JObject.FromObject(value);
+                var js = new JsonSerializer();
+                js.ContractResolver = new WritablePropertiesOnlyResolver();
+
+                content[name] = JObject.FromObject(value, js);
             }
         }
 
