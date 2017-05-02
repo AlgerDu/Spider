@@ -118,6 +118,7 @@ namespace D.Util.Config
             if (!File.Exists(path))
             {
                 _fileContent = new JObject();
+                return;
                 //throw new Exception(path + " 配置文件不存在");
             }
 
@@ -136,6 +137,11 @@ namespace D.Util.Config
             }
         }
         #endregion
+
+        public JsonConfig()
+        {
+            _items = new Dictionary<string, IConfigItem>();
+        }
 
         /// <summary>
         /// 获取 file content 中值
@@ -186,7 +192,16 @@ namespace D.Util.Config
                 name = nameArray[i + 1];
             }
 
-            content[name] = JObject.FromObject(value);
+            if (value.GetType() == typeof(string))
+            {
+                content.Remove(name);
+                content.Add(name, value as string);
+            }
+            else
+            {
+                content[name] = JObject.FromObject(value);
+            }
+
         }
 
         /// <summary>
