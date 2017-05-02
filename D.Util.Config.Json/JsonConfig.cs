@@ -174,6 +174,11 @@ namespace D.Util.Config
         /// <param name="value"></param>
         private void JsonValue(string path, object value)
         {
+            if (value == null)
+            {
+                return;
+            }
+
             JObject content = _fileContent;
 
             var nameArray = path.Split(_splitChar);
