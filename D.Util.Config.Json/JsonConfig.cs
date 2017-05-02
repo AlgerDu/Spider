@@ -1,7 +1,9 @@
 ﻿using D.Util.Interface;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,8 @@ namespace D.Util.Config
     /// </summary>
     public class JsonConfig : IConfig
     {
+        #region const 变量
+
         /// <summary>
         /// path 的分隔字符串
         /// </summary>
@@ -20,7 +24,9 @@ namespace D.Util.Config
 
         const string _version = "version";
         const string _describe = "describe";
+        #endregion
 
+        #region 字段
         /// <summary>
         /// json 文件中读取到的内容对象
         /// </summary>
@@ -32,8 +38,13 @@ namespace D.Util.Config
         /// </summary>
         Dictionary<string, IConfigItem> _items;
 
+        /// <summary>
+        /// json 文件的路径
+        /// </summary>
         string _filePath;
+        #endregion
 
+        #region IConfig 属性
         public string Version
         {
             get
@@ -53,14 +64,16 @@ namespace D.Util.Config
         /// <summary>
         /// 配置文件的路径
         /// </summary>
-        string Path
+        public string Path
         {
             get
             {
                 return _filePath;
             }
         }
+        #endregion
 
+        #region IConfig 方法
         public T GetItem<T>(string name = null) where T : class, IConfigItem, new()
         {
             var item = new T();
@@ -101,7 +114,27 @@ namespace D.Util.Config
         public void LoadFile(string path)
         {
             _filePath = path;
+
+            if (!File.Exists(path))
+            {
+                throw new Exception(path + " 配置文件不存在");
+            }
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                try
+                {
+                    JsonReader jr = new JsonTextReader(sr);
+
+                    _fileContent = JObject.Load(jr);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("读取配置文件 " + path + " 失败：" + ex.ToString());
+                }
+            }
         }
+        #endregion
 
         /// <summary>
         /// 获取 file content 中值
@@ -117,6 +150,11 @@ namespace D.Util.Config
             foreach (var name in nameArray)
             {
                 value = value[name];
+
+                if (value == null)
+                {
+                    return value;
+                }
             }
 
             return value;
@@ -137,7 +175,21 @@ namespace D.Util.Config
         /// </summary>
         private void SaveJsonToFile()
         {
+            using (StreamWriter wr = new StreamWriter(_filePath))
+            {
+                try
+                {
+                    JsonWriter jr = new JsonTextWriter(wr);
+                    _fileContent.WriteTo(jr);
 
+                    jr.Close();
+                    wr.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("保存配置到 json 文件失败：" + ex.ToString());
+                }
+            }
         }
     }
 }
