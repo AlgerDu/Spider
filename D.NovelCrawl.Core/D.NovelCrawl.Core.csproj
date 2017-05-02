@@ -73,6 +73,7 @@
     <Compile Include="Models\DTO\VolumeModel.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="NovelCrawl.cs" />
+    <Compile Include="NovelCrawlConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualWebsetProxy.cs" />
     <Compile Include="WebsiteProxy.cs" />
