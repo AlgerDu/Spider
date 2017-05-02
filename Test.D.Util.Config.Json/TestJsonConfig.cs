@@ -30,5 +30,21 @@ namespace Test.D.Util.Config.Json
 
             Assert.IsTrue(File.Exists(filePath));
         }
+
+        /// <summary>
+        /// 测试读取配置文件
+        /// </summary>
+        [TestMethod]
+        public void TestLoadConfigFile()
+        {
+            const string filePath = "config.example.json";
+
+            IConfig config = new JsonConfig();
+            config.LoadFile(filePath);
+
+            var item = config.GetItem<NovelCrawlConfig>();
+
+            Assert.AreEqual(item.Server, "www.duzhiwei.online");
+        }
     }
 }
