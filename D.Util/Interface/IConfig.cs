@@ -27,7 +27,7 @@ namespace D.Util.Interface
         /// <typeparam name="T"></typeparam>
         /// <param name="name"></param>
         /// <returns></returns>
-        T GetItem<T>(string name = null) where T : IConfigItem, new();
+        T GetItem<T>(string name = null) where T : class, IConfigItem, new();
 
         /// <summary>
         /// 将持有的配置项保存到文件
@@ -35,5 +35,11 @@ namespace D.Util.Interface
         /// <param name="version">版本号</param>
         /// <param name="describe">配置描述</param>
         void Save(string version = "1.0", string describe = null);
+
+        /// <summary>
+        /// 加载配置文件
+        /// </summary>
+        /// <param name="path"></param>
+        void LoadFile(string path);
     }
 }
