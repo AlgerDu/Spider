@@ -167,7 +167,25 @@ namespace D.Util.Config
         /// <param name="value"></param>
         private void JsonValue(string path, object value)
         {
+            JObject content = _fileContent;
 
+            var nameArray = path.Split(_splitChar);
+
+            var name = nameArray[0];
+
+            for (var i = 0; i < nameArray.Length - 1; i++)
+            {
+                if (content.Property(name) == null)
+                {
+                    content.Add(name, new JObject());
+                }
+
+                content = content[name] as JObject;
+
+                name = nameArray[i + 1];
+            }
+
+            content[name] = JObject.FromObject(value);
         }
 
         /// <summary>
