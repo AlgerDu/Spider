@@ -32,6 +32,8 @@ namespace D.Util.Config
         /// </summary>
         Dictionary<string, IConfigItem> _items;
 
+        string _filePath;
+
         public string Version
         {
             get
@@ -45,6 +47,17 @@ namespace D.Util.Config
             get
             {
                 return JsonValue(_describe).ToString();
+            }
+        }
+
+        /// <summary>
+        /// 配置文件的路径
+        /// </summary>
+        string Path
+        {
+            get
+            {
+                return _filePath;
             }
         }
 
@@ -74,12 +87,20 @@ namespace D.Util.Config
 
         public void Save(string version = "1.0", string describe = null)
         {
-            throw new NotImplementedException();
+            JsonValue(_version, version);
+            JsonValue(_describe, describe);
+
+            foreach (var path in _items.Keys)
+            {
+                JsonValue(path, _items[path]);
+            }
+
+            SaveJsonToFile();
         }
 
         public void LoadFile(string path)
         {
-
+            _filePath = path;
         }
 
         /// <summary>
@@ -107,6 +128,14 @@ namespace D.Util.Config
         /// <param name="path"></param>
         /// <param name="value"></param>
         private void JsonValue(string path, object value)
+        {
+
+        }
+
+        /// <summary>
+        /// 将 file content 保存到文件中
+        /// </summary>
+        private void SaveJsonToFile()
         {
 
         }
