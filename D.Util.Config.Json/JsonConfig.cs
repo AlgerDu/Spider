@@ -201,7 +201,6 @@ namespace D.Util.Config
             {
                 content[name] = JObject.FromObject(value);
             }
-
         }
 
         /// <summary>
@@ -214,6 +213,8 @@ namespace D.Util.Config
                 try
                 {
                     JsonWriter jr = new JsonTextWriter(wr);
+                    jr.Formatting = Formatting.Indented;
+
                     _fileContent.WriteTo(jr);
 
                     jr.Close();
