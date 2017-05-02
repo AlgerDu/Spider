@@ -46,5 +46,33 @@ namespace Test.D.Util.Config.Json
 
             Assert.AreEqual(item.Server, "www.duzhiwei.online");
         }
+
+        /// <summary>
+        /// 测试向配置文件中添加配置
+        /// </summary>
+        [TestMethod]
+        public void TestAddItem()
+        {
+            const string filePath = "TestAddItem.json";
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            IConfig config1 = new JsonConfig();
+            config1.LoadFile(filePath);
+
+            var item = config1.GetItem<NovelCrawlConfig>();
+
+            config1.Save();
+
+            IConfig config2 = new JsonConfig();
+            config2.LoadFile(filePath);
+
+            var item2 = config2.GetItem<NovelCrawlConfig>();
+
+            Assert.AreEqual(item2.Server, new NovelCrawlConfig().Server);
+        }
     }
 }

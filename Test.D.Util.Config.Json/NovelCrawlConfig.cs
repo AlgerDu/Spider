@@ -18,5 +18,10 @@ namespace Test.D.Util.Config.Json
         }
 
         public string Server { get; set; }
+
+        public NovelCrawlConfig()
+        {
+            Server = "test";
+        }
     }
 }
