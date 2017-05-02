@@ -17,17 +17,26 @@ namespace D.NovelCrawl.Core
     /// </summary>
     public class WebsiteProxy : IWebsiteProxy
     {
-        const string _host = "http://localhost:8091";
+        string _host = "";
 
         ILogger _logger;
 
         IjQuery _jQuery;
 
-        public WebsiteProxy(ILoggerFactory loggerFactory, IjQuery jQuery)
+        NovelCrawlConfig _config;
+
+        public WebsiteProxy(
+            ILoggerFactory loggerFactory
+            , IjQuery jQuery
+            , IConfig config)
         {
             _logger = loggerFactory.CreateLogger<WebsiteProxy>();
 
             _jQuery = jQuery;
+
+            _config = config.GetItem<NovelCrawlConfig>();
+
+            _host = _config.Server;
         }
 
         public NovelCatalogModel NovelCatalog(Guid uid)
