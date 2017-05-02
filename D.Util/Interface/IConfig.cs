@@ -12,6 +12,16 @@ namespace D.Util.Interface
     public interface IConfig
     {
         /// <summary>
+        /// 配置文件的版本
+        /// </summary>
+        string Version { get; }
+
+        /// <summary>
+        /// 配置文件的描述
+        /// </summary>
+        string Describe { get; }
+
+        /// <summary>
         /// 获取某个模块的配置
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -22,6 +32,8 @@ namespace D.Util.Interface
         /// <summary>
         /// 将持有的配置项保存到文件
         /// </summary>
-        void Save();
+        /// <param name="version">版本号</param>
+        /// <param name="describe">配置描述</param>
+        void Save(string version = "1.0", string describe = null);
     }
 }
