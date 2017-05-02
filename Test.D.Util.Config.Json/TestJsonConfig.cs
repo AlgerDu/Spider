@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using D.Util.Interface;
+using D.Util.Config;
 
 namespace Test.D.Util.Config.Json
 {
@@ -19,6 +21,14 @@ namespace Test.D.Util.Config.Json
             {
                 File.Delete(filePath);
             }
+
+            IConfig config = new JsonConfig();
+
+            config.LoadFile(filePath);
+
+            config.Save("1.0.0", "TestAutoCreateConfigFile");
+
+            Assert.IsTrue(File.Exists(filePath));
         }
     }
 }

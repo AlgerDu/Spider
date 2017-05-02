@@ -54,6 +54,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D.Util.Config.Json\D.Util.Config.Json.csproj">
+      <Project>{B630971F-301D-43D2-B22A-434F98A15918}</Project>
+      <Name>D.Util.Config.Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Util\D.Util.csproj">
+      <Project>{573803C2-538A-4ED1-8A98-D990DCB83B9E}</Project>
+      <Name>D.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
