@@ -12,6 +12,9 @@ namespace D.Util.Interface
     /// </summary>
     public interface IConfigItem
     {
+        /// <summary>
+        /// 配置项的查找 path
+        /// </summary>
         string Path { get; }
     }
 }
