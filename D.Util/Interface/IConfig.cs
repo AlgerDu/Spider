@@ -22,6 +22,11 @@ namespace D.Util.Interface
         string Describe { get; }
 
         /// <summary>
+        /// 配置文件的路径
+        /// </summary>
+        string Path { get; }
+
+        /// <summary>
         /// 获取某个模块的配置
         /// </summary>
         /// <typeparam name="T"></typeparam>
