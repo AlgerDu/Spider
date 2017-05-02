@@ -11,7 +11,11 @@
 
 ## 项目简要说明
 
-* `D.Util.x` 逐步积累的一些开发所必需的基础工具组件，比如 `log`、`configer`等。在 `spider` 中逐步完善，当到达一定程度之后就会分离成为一个单独项目。
+* `D.Util.x` 逐步积累的一些开发所必需的基础工具组件，比如 `log`、`config`等。在 `spider` 中逐步完善，当到达一定程度之后就会分离成为一个单独项目。
+
+    * 日志：`ILogWriter` 、`ILoggerFactory` 、`ILogger` 、`ILogContext`；
+    * 配置：`IConfig` 、`IConfigItem` 。
+
 * `D.Spider.x` 基本的爬虫流程。
 * `D.NovelCrawl.x` 小说爬取相关。
 
