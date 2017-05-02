@@ -74,5 +74,35 @@ namespace Test.D.Util.Config.Json
 
             Assert.AreEqual(item2.Server, new NovelCrawlConfig().Server);
         }
+
+        /// <summary>
+        /// 测试修改配置文件的内容
+        /// </summary>
+        [TestMethod]
+        public void TestEditItem()
+        {
+            const string filePath = "TestEditItem.json";
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            IConfig config1 = new JsonConfig();
+            config1.LoadFile(filePath);
+
+            var item1 = config1.GetItem<NovelCrawlConfig>();
+            item1.Server = filePath;
+
+            config1.Save();
+
+            IConfig config2 = new JsonConfig();
+            config2.LoadFile(filePath);
+
+            var item2 = config2.GetItem<NovelCrawlConfig>();
+
+            Assert.AreNotEqual(item2.Server, new NovelCrawlConfig().Server);
+            Assert.AreEqual(item2.Server, filePath);
+        }
     }
 }
