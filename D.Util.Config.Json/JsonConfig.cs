@@ -117,7 +117,8 @@ namespace D.Util.Config
 
             if (!File.Exists(path))
             {
-                throw new Exception(path + " 配置文件不存在");
+                _fileContent = new JObject();
+                //throw new Exception(path + " 配置文件不存在");
             }
 
             using (StreamReader sr = new StreamReader(path))
