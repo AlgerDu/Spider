@@ -316,7 +316,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                 foreach (var c in v.Chapters)
                 {
                     var rs = Chapters.Values
-                        .Where(cc => cc.Vip && IsNameEaual(cc.Name, c.Name));
+                        .Where(cc => cc.NeedCrawl && cc.Vip && IsNameEaual(cc.Name, c.Name));
 
                     if (rs.Count() == 0)
                     {
@@ -330,13 +330,10 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     {
                         var r = rs.FirstOrDefault();
 
-                        if (r.Vip && r.NeedCrawl)
-                        {
-                            //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
-                            var urlStr = unoff.CreateCompleteUrl(c.Href).String;
-                            var url = CreateChapterTxtUrl(urlStr, r);
-                            var inManager = _urlManager.AddUrl(url);
-                        }
+                        //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
+                        var urlStr = unoff.CreateCompleteUrl(c.Href).String;
+                        var url = CreateChapterTxtUrl(urlStr, r);
+                        var inManager = _urlManager.AddUrl(url);
                     }
                 }
             }
