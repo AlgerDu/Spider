@@ -46,6 +46,7 @@ namespace D.Util.Logger
             roller.StaticLogFileName = true;
             roller.File = file;
             roller.Name = _guid;
+            roller.Encoding = Encoding.Unicode;
 
             roller.AddFilter(levfilter);
             roller.Layout = layout;
