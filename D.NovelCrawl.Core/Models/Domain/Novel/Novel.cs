@@ -4,6 +4,7 @@ using D.NovelCrawl.Core.Models.Domain.CrawlUrl;
 using D.NovelCrawl.Core.Models.DTO;
 using D.Spider.Core.Interface;
 using D.Util.Interface;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -315,7 +316,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                 foreach (var c in v.Chapters)
                 {
                     var rs = Chapters.Values
-                        .Where(cc => cc.Vip && IsNameEaual(cc.Name, c.Name));
+                        .Where(cc => cc.NeedCrawl && cc.Vip && IsNameEaual(cc.Name, c.Name));
 
                     if (rs.Count() == 0)
                     {
@@ -329,13 +330,10 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
                     {
                         var r = rs.FirstOrDefault();
 
-                        if (r.Vip && r.NeedCrawl)
-                        {
-                            //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
-                            var urlStr = unoff.CreateCompleteUrl(c.Href).String;
-                            var url = CreateChapterTxtUrl(urlStr, r);
-                            var inManager = _urlManager.AddUrl(url);
-                        }
+                        //如果需要爬取的章节不是 vip 章节，直接从官网获取章节的内容信息
+                        var urlStr = unoff.CreateCompleteUrl(c.Href).String;
+                        var url = CreateChapterTxtUrl(urlStr, r);
+                        var inManager = _urlManager.AddUrl(url);
                     }
                 }
             }
@@ -360,7 +358,16 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
             var txt = RemoveHtmlTag(crawlData.Text);
             //2.判断字数
 
-            chapter.Text = txt;
+            //3.切分段落
+            var pArray = txt.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //4.去除段落前后的空格
+            for (var i = 0; i < pArray.Length; i++)
+            {
+                pArray[i] = pArray[i].Trim();
+            }
+
+            chapter.Text = JsonConvert.SerializeObject(pArray);
 
             lock (this)
             {

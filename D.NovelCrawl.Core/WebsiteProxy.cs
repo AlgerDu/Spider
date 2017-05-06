@@ -30,11 +30,10 @@ namespace D.NovelCrawl.Core
             , IjQuery jQuery
             , IConfig config)
         {
+            _config = config.GetItem<NovelCrawlConfig>();
             _logger = loggerFactory.CreateLogger<WebsiteProxy>();
 
             _jQuery = jQuery;
-
-            _config = config.GetItem<NovelCrawlConfig>();
 
             _host = _config.Server;
         }
