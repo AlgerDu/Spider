@@ -18,13 +18,17 @@ namespace D.Util.Logger
 
         log4net.ILog _log;
 
+        Log4netConfig _config;
+
         /// <summary>
         /// TODO 暂时还没有想到如何转入配置参数
         /// </summary>
         public Log4netWriter(
-            string file
+            IConfig config
             )
         {
+            _config = config.GetItem<Log4netConfig>();
+
             _guid = Guid.NewGuid().ToString();
 
             //过滤器
@@ -42,10 +46,11 @@ namespace D.Util.Logger
             roller.AppendToFile = true;
             roller.RollingStyle = RollingFileAppender.RollingMode.Size;
             roller.MaxSizeRollBackups = 100;
-            roller.MaximumFileSize = "1MB";
+            roller.MaximumFileSize = _config.MaxFileSize;
             roller.StaticLogFileName = true;
-            roller.File = file;
+            roller.File = _config.OutFilePath;
             roller.Name = _guid;
+            roller.Encoding = Encoding.Unicode;
 
             roller.AddFilter(levfilter);
             roller.Layout = layout;
