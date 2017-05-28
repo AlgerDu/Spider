@@ -20,6 +20,7 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
     /// </summary>
     internal class Novel
     {
+        NovelCrawlConfig _config;
         ILogger _logger;
 
         IUrlManager _urlManager;
@@ -91,9 +92,11 @@ namespace D.NovelCrawl.Core.Models.Domain.Novel
         public Novel(
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
-            , IWebsiteProxy website)
+            , IWebsiteProxy website
+            , IConfig config)
         {
-            _logger = loggerFactory.CreateLogger<Novel>();
+            _config = config.GetItem<NovelCrawlConfig>();
+            _logger = loggerFactory.CreateLogger<Novel>(_config.LogLevel);
             _urlManager = urlManager;
 
             Volumes = new Dictionary<int, Volume>();

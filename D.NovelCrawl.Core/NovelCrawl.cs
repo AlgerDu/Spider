@@ -18,6 +18,7 @@ namespace D.NovelCrawl.Core
     /// </summary>
     public class NovelCrawl : INvoelCrawl, IPageProcess
     {
+        NovelCrawlConfig _config;
         ILogger _logger;
         IUnityContainer _container;
 
@@ -47,9 +48,12 @@ namespace D.NovelCrawl.Core
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
             , IWebsiteProxy webProxy
-            , ISpiderscriptEngine spiderscriptEngine)
+            , ISpiderscriptEngine spiderscriptEngine
+            , IConfig config)
         {
-            _logger = loggerFactory.CreateLogger<NovelCrawl>();
+            _config = config.GetItem<NovelCrawlConfig>();
+            _logger = loggerFactory.CreateLogger<NovelCrawl>(_config.LogLevel);
+
             _spiderscriptEngine = spiderscriptEngine;
 
             _urlManager = urlManager;

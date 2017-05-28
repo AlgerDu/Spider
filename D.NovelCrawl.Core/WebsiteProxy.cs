@@ -31,7 +31,7 @@ namespace D.NovelCrawl.Core
             , IConfig config)
         {
             _config = config.GetItem<NovelCrawlConfig>();
-            _logger = loggerFactory.CreateLogger<WebsiteProxy>();
+            _logger = loggerFactory.CreateLogger<WebsiteProxy>(_config.LogLevel);
 
             _jQuery = jQuery;
 

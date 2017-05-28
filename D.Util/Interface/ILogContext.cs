@@ -9,7 +9,7 @@ namespace D.Util.Interface
     /// <summary>
     /// 日志类型定义需要按照严重等级，从上到下，依次越来越严重
     /// </summary>
-    public enum LogContextType
+    public enum LogLevel
     {
         trce,
         dbug,
@@ -25,9 +25,9 @@ namespace D.Util.Interface
     public interface ILogContext
     {
         /// <summary>
-        /// 日志上下文类型
+        /// 日志上下文等级
         /// </summary>
-        LogContextType Type { get; }
+        LogLevel Level { get; }
 
         /// <summary>
         /// 事件 ID 用来对同一业务的日志进行区分，方便日志查找

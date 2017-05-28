@@ -21,7 +21,7 @@ namespace D.Util.Logger
             lock (this)
             {
                 Print("[");
-                Print(context.Type.ToString(), LogContextTypeColor(context.Type));
+                Print(context.Level.ToString(), LogContextTypeColor(context.Level));
                 Print("]");
 
                 Print("[");
@@ -38,7 +38,7 @@ namespace D.Util.Logger
 
                 Print("\r\n      ");
 
-                Print(context.Text.Replace("\r\n", "\r\n      "), LogContextTypeColor(context.Type));
+                Print(context.Text.Replace("\r\n", "\r\n      "), LogContextTypeColor(context.Level));
 
                 Print("\r\n");
             }
@@ -55,16 +55,16 @@ namespace D.Util.Logger
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        ConsoleColor LogContextTypeColor(LogContextType type)
+        ConsoleColor LogContextTypeColor(LogLevel type)
         {
             switch (type)
             {
-                case LogContextType.trce: return ConsoleColor.Gray;
-                case LogContextType.dbug: return ConsoleColor.Blue;
-                case LogContextType.info: return ConsoleColor.Green;
-                case LogContextType.warn: return ConsoleColor.Yellow;
-                case LogContextType.fail: return ConsoleColor.Red;
-                case LogContextType.crit: return ConsoleColor.Red;
+                case LogLevel.trce: return ConsoleColor.Gray;
+                case LogLevel.dbug: return ConsoleColor.Blue;
+                case LogLevel.info: return ConsoleColor.Green;
+                case LogLevel.warn: return ConsoleColor.Yellow;
+                case LogLevel.fail: return ConsoleColor.Red;
+                case LogLevel.crit: return ConsoleColor.Red;
                 default: return ConsoleColor.Black;
             }
         }

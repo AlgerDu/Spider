@@ -33,7 +33,7 @@ namespace D.NovelCrawl.Core
         public NovelCrawlConfig()
         {
             Server = "www.duzhiwei.online";
-            LogLevel = LogContextType.trce.ToString();
+            LogLevel = Util.Interface.LogLevel.trce.ToString();
         }
     }
 }

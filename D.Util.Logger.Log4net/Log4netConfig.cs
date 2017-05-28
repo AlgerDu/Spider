@@ -34,5 +34,20 @@ namespace D.Util.Logger
         /// 输出日志文件最大的大小
         /// </summary>
         public string MaxFileSize { get; set; }
+
+        public LogLevel Level
+        {
+            get
+            {
+                try
+                {
+                    return (LogLevel)Enum.Parse(typeof(LogLevel), LogLevel);
+                }
+                catch
+                {
+                    return Util.Interface.LogLevel.info;
+                }
+            }
+        }
     }
 }

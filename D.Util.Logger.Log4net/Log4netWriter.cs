@@ -66,11 +66,16 @@ namespace D.Util.Logger
 
         public void Write(ILogContext context)
         {
+            if (context.Level < _config.Level)
+            {
+                return;
+            }
+
             //按照 log4net 的命名方式
             string message = string.Empty;
 
             message += string.Format("[{0}][{1}][thread {2}]",
-                context.Type.ToString(),
+                context.Level.ToString(),
                 context.CreateTime.ToString("HH:mm:ss ffff"),
                 context.ThreadID)
                 + Environment.NewLine;
