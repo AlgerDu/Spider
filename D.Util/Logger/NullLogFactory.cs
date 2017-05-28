@@ -9,9 +9,14 @@ namespace D.Util.Logger
 {
     public class NullLogFactory : ILoggerFactory
     {
-        public ILogger CreateLogger<T>() where T : class
+        public ILogger CreateLogger<T>(LogLevel level = LogLevel.info) where T : class
         {
-            return new Logger(new ILogWriter[] { new NullLogWriter() }, "");
+            return new NullLogger();
+        }
+
+        public ILogger CreateLogger<T>(string level) where T : class
+        {
+            return new NullLogger();
         }
     }
 }

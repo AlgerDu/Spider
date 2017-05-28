@@ -17,7 +17,16 @@ namespace D.Util.Interface
         /// 生成一个日志对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="level"></param>
         /// <returns></returns>
-        ILogger CreateLogger<T>() where T : class;
+        ILogger CreateLogger<T>(LogLevel level = LogLevel.info) where T : class;
+
+        /// <summary>
+        /// 生成一个日志对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="level">当传入的字符串错误时，默认为 info</param>
+        /// <returns></returns>
+        ILogger CreateLogger<T>(string level) where T : class;
     }
 }

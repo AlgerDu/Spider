@@ -15,6 +15,7 @@ namespace D.Util.Logger
     {
         IList<ILogWriter> _writers;
         string _fullName;
+        LogLevel _level;
 
         /// <summary>
         /// IWriters 用于给子类使用
@@ -27,19 +28,34 @@ namespace D.Util.Logger
             }
         }
 
+        protected LogLevel Level
+        {
+            get
+            {
+                return _level;
+            }
+        }
+
         public Logger(
             ILogWriter[] writers,
-            string fullName)
+            string fullName,
+            LogLevel level)
         {
             _writers = writers.ToList();
             _fullName = fullName;
+            _level = level;
         }
 
         protected virtual void WriterLog(
             int eventID,
-            LogLevel type,
+            LogLevel level,
             string text)
         {
+            if (level < _level)
+            {
+                return;
+            }
+
             var contect = new LogContext
             {
                 ClassFullName = _fullName,
@@ -47,7 +63,7 @@ namespace D.Util.Logger
                 EventID = eventID,
                 Text = text,
                 ThreadID = Thread.CurrentThread.ManagedThreadId,
-                Type = type
+                Level = level
             };
 
             foreach (var writer in _writers)

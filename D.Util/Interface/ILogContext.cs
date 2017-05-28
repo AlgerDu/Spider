@@ -25,9 +25,9 @@ namespace D.Util.Interface
     public interface ILogContext
     {
         /// <summary>
-        /// 日志上下文类型
+        /// 日志上下文等级
         /// </summary>
-        LogLevel Type { get; }
+        LogLevel Level { get; }
 
         /// <summary>
         /// 事件 ID 用来对同一业务的日志进行区分，方便日志查找

@@ -70,7 +70,7 @@ namespace D.Util.Logger
             string message = string.Empty;
 
             message += string.Format("[{0}][{1}][thread {2}]",
-                context.Type.ToString(),
+                context.Level.ToString(),
                 context.CreateTime.ToString("HH:mm:ss ffff"),
                 context.ThreadID)
                 + Environment.NewLine;

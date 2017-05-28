@@ -21,7 +21,7 @@ namespace D.Util.Logger
             lock (this)
             {
                 Print("[");
-                Print(context.Type.ToString(), LogContextTypeColor(context.Type));
+                Print(context.Level.ToString(), LogContextTypeColor(context.Level));
                 Print("]");
 
                 Print("[");
@@ -38,7 +38,7 @@ namespace D.Util.Logger
 
                 Print("\r\n      ");
 
-                Print(context.Text.Replace("\r\n", "\r\n      "), LogContextTypeColor(context.Type));
+                Print(context.Text.Replace("\r\n", "\r\n      "), LogContextTypeColor(context.Level));
 
                 Print("\r\n");
             }

@@ -19,6 +19,6 @@ namespace D.Util.Logger
 
         public int ThreadID { get; set; }
 
-        public LogLevel Type { get; set; }
+        public LogLevel Level { get; set; }
     }
 }
