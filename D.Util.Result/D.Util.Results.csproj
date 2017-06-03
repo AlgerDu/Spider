@@ -44,6 +44,9 @@
     <Compile Include="Interface\IResult.cs" />
     <Compile Include="Interface\ISearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\BathOpsResult.cs" />
+    <Compile Include="Results\Result.cs" />
+    <Compile Include="Results\Search.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
