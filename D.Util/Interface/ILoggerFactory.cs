@@ -19,7 +19,7 @@ namespace D.Util.Interface
         /// <typeparam name="T"></typeparam>
         /// <param name="level"></param>
         /// <returns></returns>
-        ILogger CreateLogger<T>(LogLevel level = LogLevel.info) where T : class;
+        ILogger CreateLogger<T>(LogLevel level = LogLevel.trce) where T : class;
 
         /// <summary>
         /// 生成一个日志对象

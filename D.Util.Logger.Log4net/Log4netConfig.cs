@@ -16,7 +16,7 @@ namespace D.Util.Logger
         {
             get
             {
-                return "logging.log4net";
+                return "logging.writer.log4net";
             }
         }
 
