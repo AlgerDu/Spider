@@ -12,12 +12,56 @@ namespace D.Util.Logger
     /// </summary>
     public class ConsoleLogWriter : ILogWriter
     {
-        public ConsoleLogWriter()
+        /// <summary>
+        /// console 日志配置文件
+        /// </summary>
+        class Config : IConfigItem
         {
+            public string Path
+            {
+                get
+                {
+                    return "logging.writer.console";
+                }
+            }
+
+            /// <summary>
+            /// 日志记录级别
+            /// </summary>
+            public string LogLevel { get; set; }
+
+            public LogLevel Level
+            {
+                get
+                {
+                    try
+                    {
+                        return (LogLevel)Enum.Parse(typeof(LogLevel), LogLevel);
+                    }
+                    catch
+                    {
+                        return Util.Interface.LogLevel.info;
+                    }
+                }
+            }
+        }
+
+        LogLevel _level;
+
+        public ConsoleLogWriter(
+            IConfig config
+            )
+        {
+            _level = config.GetItem<Config>().Level;
         }
 
         public void Write(ILogContext context)
         {
+            if (context.Level < _level)
+            {
+                return;
+            }
+
             lock (this)
             {
                 Print("[");
