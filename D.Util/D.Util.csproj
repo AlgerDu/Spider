@@ -52,6 +52,7 @@
     <Compile Include="Interface\ILoggerFactory.cs" />
     <Compile Include="Interface\ILogWriter.cs" />
     <Compile Include="Interface\IMapper.cs" />
+    <Compile Include="Logger\CommonConfig.cs" />
     <Compile Include="Logger\ConsoleLogWriter.cs" />
     <Compile Include="Logger\LogContext.cs" />
     <Compile Include="Logger\Logger.cs" />
