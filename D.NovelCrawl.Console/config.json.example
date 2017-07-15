@@ -2,12 +2,21 @@
   "version": "1.0",
   "describe": "配置模板",
   "logging": {
-    "console": {
-      "logLevel": "trce"
-    },
-    "log4net": {
-      "logLevel": "debug",
-      "path": "log/novelcrawl.log"
+    "filters": [
+      {
+        "namesapce": "D.Spider.Core",
+        "logLevel": "wran"
+      }
+    ],
+    "writer": {
+      "console": {
+        "logLevel": "trce"
+      },
+      "log4net": {
+        "logLevel": "warn",
+        "outFilePath": "log/novelcrawl.log",
+        "maxFileSize": "1MB"
+      }
     }
   },
   "core": {
@@ -16,7 +25,7 @@
     },
     "novelCrawl": {
       "logLevel": "debug",
-      "server": "www.duzhiwei.online"
+      "server": "http://localhost:8091"
     }
   }
 }
