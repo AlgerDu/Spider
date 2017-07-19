@@ -26,4 +26,35 @@ namespace D.Spider.Core.Interface.Plugin
         /// </summary>
         PageProcess
     }
+
+    /// <summary>
+    /// 插件事件状态
+    /// </summary>
+    public enum PluginEventState
+    {
+        /// <summary>
+        /// 创建
+        /// </summary>
+        Created,
+
+        /// <summary>
+        /// 等待处理
+        /// </summary>
+        Waiting,
+
+        /// <summary>
+        /// 处理中
+        /// </summary>
+        Handling,
+
+        /// <summary>
+        /// 处理完成
+        /// </summary>
+        Handled,
+
+        /// <summary>
+        /// 停止的
+        /// </summary>
+        Terminate
+    }
 }

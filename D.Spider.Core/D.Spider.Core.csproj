@@ -70,6 +70,7 @@
     <Compile Include="Events\UrlWaitingEvent.cs" />
     <Compile Include="HttpDownloader.cs" />
     <Compile Include="Interface\IDownloader.cs" />
+    <Compile Include="Interface\IEventSender.cs" />
     <Compile Include="Interface\IPage.cs" />
     <Compile Include="Interface\IPageProcess.cs" />
     <Compile Include="Interface\Plugin\Enum.cs" />

@@ -12,6 +12,16 @@ namespace D.Spider.Core.Interface.Plugin
     public interface IPluginEvent
     {
         /// <summary>
+        /// 事件类型唯一标识
+        /// </summary>
+        Guid TypeUid { get; set; }
+
+        /// <summary>
+        /// 事件类型名称
+        /// </summary>
+        string TypeName { get; }
+
+        /// <summary>
         /// 来源（唯一）
         /// </summary>
         IPluginSymbol FromPlugin { get; }
@@ -27,9 +37,9 @@ namespace D.Spider.Core.Interface.Plugin
         DateTime CreateTime { get; }
 
         /// <summary>
-        /// 事件名称
+        /// 事件状态
         /// </summary>
-        string Name { get; }
+        PluginEventState State { get; set; }
     }
 
     /// <summary>

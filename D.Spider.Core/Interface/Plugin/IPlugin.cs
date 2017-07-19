@@ -11,6 +11,9 @@ namespace D.Spider.Core.Interface.Plugin
     /// </summary>
     public interface IPlugin
     {
-        IPluginSymbol 
+        /// <summary>
+        /// 插件（实例）的唯一标志
+        /// </summary>
+        IPluginSymbol Symbol { get; }
     }
 }
