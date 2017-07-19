@@ -72,10 +72,14 @@
     <Compile Include="Interface\IDownloader.cs" />
     <Compile Include="Interface\IPage.cs" />
     <Compile Include="Interface\IPageProcess.cs" />
+    <Compile Include="Interface\Plugin\Enum.cs" />
+    <Compile Include="Interface\Plugin\IPlugin.cs" />
+    <Compile Include="Interface\Plugin\IPluginEvent.cs" />
     <Compile Include="Interface\ISpider.cs" />
     <Compile Include="Interface\ISpiderscriptEngine.cs" />
     <Compile Include="Interface\IUrl.cs" />
     <Compile Include="Interface\IUrlManager.cs" />
+    <Compile Include="Interface\Plugin\IPluginSymbol.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spider.cs" />
