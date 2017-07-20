@@ -57,4 +57,25 @@ namespace D.Spider.Core.Interface.Plugin
         /// </summary>
         Terminate
     }
+
+    /// <summary>
+    /// 插件状态
+    /// </summary>
+    public enum PluginState
+    {
+        /// <summary>
+        /// 停止
+        /// </summary>
+        Stop,
+
+        /// <summary>
+        /// 运行
+        /// </summary>
+        Running,
+
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        Pause
+    }
 }
