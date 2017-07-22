@@ -22,7 +22,7 @@ namespace D.NovelCrawl.Core
         ILogger _logger;
         IUnityContainer _container;
 
-        ISpiderscriptEngine _spiderscriptEngine;
+        ISpiderScriptEngine _spiderscriptEngine;
 
         IUrlManager _urlManager;
 
@@ -48,7 +48,7 @@ namespace D.NovelCrawl.Core
             ILoggerFactory loggerFactory
             , IUrlManager urlManager
             , IWebsiteProxy webProxy
-            , ISpiderscriptEngine spiderscriptEngine
+            , ISpiderScriptEngine spiderscriptEngine
             , IConfig config)
         {
             _config = config.GetItem<NovelCrawlConfig>();

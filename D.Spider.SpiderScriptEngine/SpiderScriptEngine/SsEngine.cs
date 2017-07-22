@@ -14,7 +14,7 @@ namespace D.Spider.Core.SpiderScriptEngine
     /// <summary>
     /// ISpiderscriptEngine 实现
     /// </summary>
-    public class SsEngine : ISpiderscriptEngine
+    public class SsEngine : ISpiderScriptEngine
     {
         /// <summary>
         /// 实现所有 KeywordHandler 的命名空间

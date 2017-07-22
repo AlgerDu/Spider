@@ -77,7 +77,6 @@
     <Compile Include="Interface\Plugin\IPlugin.cs" />
     <Compile Include="Interface\Plugin\IPluginEvent.cs" />
     <Compile Include="Interface\ISpider.cs" />
-    <Compile Include="Interface\ISpiderscriptEngine.cs" />
     <Compile Include="Interface\IUrl.cs" />
     <Compile Include="Interface\IUrlManager.cs" />
     <Compile Include="Interface\Plugin\IPluginEventHandler.cs" />
@@ -85,19 +84,6 @@
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spider.cs" />
-    <Compile Include="SpiderscriptEngine\ISsKeywordHandler.cs" />
-    <Compile Include="SpiderscriptEngine\KeywordHandlers\ArrayAddHandler.cs" />
-    <Compile Include="SpiderscriptEngine\KeywordHandlers\ForeachHandler.cs" />
-    <Compile Include="SpiderscriptEngine\KeywordHandlers\ReturnHandler.cs" />
-    <Compile Include="SpiderscriptEngine\KeywordHandlers\SetHandler.cs" />
-    <Compile Include="SpiderscriptEngine\KeywordHandlers\VarHandler.cs" />
-    <Compile Include="SpiderscriptEngine\SsCodeLines.cs" />
-    <Compile Include="SpiderscriptEngine\SsContext.cs" />
-    <Compile Include="SsEngine.cs" />
-    <Compile Include="SpiderscriptEngine\Enums.cs" />
-    <Compile Include="SpiderscriptEngine\SsCodeLine.cs" />
-    <Compile Include="SpiderscriptEngine\SsScope.cs" />
-    <Compile Include="SpiderscriptEngine\SsVariable.cs" />
     <Compile Include="Url.cs" />
     <Compile Include="UrlManager.cs" />
   </ItemGroup>

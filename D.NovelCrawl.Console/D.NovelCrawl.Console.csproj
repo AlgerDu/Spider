@@ -91,6 +91,10 @@
       <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
       <Name>D.Spider.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\D.Spider.SpiderScriptEngine\D.Spider.SpiderScriptEngine.csproj">
+      <Project>{00cac10e-534f-49e8-a484-f927203195f7}</Project>
+      <Name>D.Spider.SpiderScriptEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\D.Util.Config.Json\D.Util.Config.Json.csproj">
       <Project>{b630971f-301d-43d2-b22a-434f98a15918}</Project>
       <Name>D.Util.Config.Json</Name>

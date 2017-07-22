@@ -10,7 +10,7 @@ namespace D.Spider.Core.Interface
     /// <summary>
     /// 简化版的 js 语言，专为自定义的爬虫使用
     /// </summary>
-    public interface ISpiderscriptEngine
+    public interface ISpiderScriptEngine
     {
         /// <summary>
         /// 运行 spiderscript 代码
