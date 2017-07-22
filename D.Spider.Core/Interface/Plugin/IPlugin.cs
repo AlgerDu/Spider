@@ -19,7 +19,7 @@ namespace D.Spider.Core.Interface.Plugin
         /// <summary>
         /// 状态
         /// </summary>
-        PluginEventState State { get; }
+        PluginState State { get; }
 
         IPlugin Init();
 
