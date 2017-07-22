@@ -80,6 +80,7 @@
     <Compile Include="Interface\ISpiderscriptEngine.cs" />
     <Compile Include="Interface\IUrl.cs" />
     <Compile Include="Interface\IUrlManager.cs" />
+    <Compile Include="Interface\Plugin\IPluginEventHandler.cs" />
     <Compile Include="Interface\Plugin\IPluginSymbol.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
