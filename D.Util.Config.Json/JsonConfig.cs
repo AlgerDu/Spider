@@ -90,7 +90,14 @@ namespace D.Util.Config
 
                 if (jsonItem != null)
                 {
-                    item = jsonItem.ToObject<T>();
+                    try
+                    {
+                        item = jsonItem.ToObject<T>();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("配置文件读取 " + new T().Path + " 配置项错误：", ex);
+                    }
                 }
                 _items.Add(path, item);
             }
