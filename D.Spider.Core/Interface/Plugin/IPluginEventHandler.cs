@@ -14,7 +14,7 @@ namespace D.Spider.Core.Interface.Plugin
     {
         /// <summary>
         /// 处理事件，返回值暂定为 bool 标志成功与失败
-        /// TODO：可能需要扩充
+        /// TODO：返回值可能需要扩充
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
