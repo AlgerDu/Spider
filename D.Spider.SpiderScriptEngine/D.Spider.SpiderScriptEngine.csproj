@@ -7,7 +7,7 @@
     <ProjectGuid>{00CAC10E-534F-49E8-A484-F927203195F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>D.Spider</RootNamespace>
+    <RootNamespace>D.Spider.Core</RootNamespace>
     <AssemblyName>D.Spider.SpiderScriptEngine</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -33,6 +33,9 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSoup, Version=0.8.0.0, Culture=neutral, PublicKeyToken=6d44e53f0a65e802, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSoup.0.8.0\lib\net40\NSoup.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,10 +47,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\ISpiderscriptEngine.cs" />
+    <Compile Include="Interface\ISsKeywordHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpiderScriptEngine\Enums.cs" />
+    <Compile Include="SpiderScriptEngine\KeywordHandlers\ArrayAddHandler.cs" />
+    <Compile Include="SpiderScriptEngine\KeywordHandlers\ForeachHandler.cs" />
+    <Compile Include="SpiderScriptEngine\KeywordHandlers\ReturnHandler.cs" />
+    <Compile Include="SpiderScriptEngine\KeywordHandlers\SetHandler.cs" />
+    <Compile Include="SpiderScriptEngine\KeywordHandlers\VarHandler.cs" />
+    <Compile Include="SpiderScriptEngine\SsCodeLine.cs" />
+    <Compile Include="SpiderScriptEngine\SsCodeLines.cs" />
+    <Compile Include="SpiderScriptEngine\SsContext.cs" />
+    <Compile Include="SpiderScriptEngine\SsEngine.cs" />
+    <Compile Include="SpiderScriptEngine\SsScope.cs" />
+    <Compile Include="SpiderScriptEngine\SsVariable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\D.Util\D.Util.csproj">
+      <Project>{573803c2-538a-4ed1-8a98-d990dcb83b9e}</Project>
+      <Name>D.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
