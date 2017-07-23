@@ -73,6 +73,8 @@
     <Compile Include="Interface\IEventSender.cs" />
     <Compile Include="Interface\IPage.cs" />
     <Compile Include="Interface\IPageProcess.cs" />
+    <Compile Include="Interface\IPluginLoader.cs" />
+    <Compile Include="Interface\IPluginManager.cs" />
     <Compile Include="Interface\Plugin\Enum.cs" />
     <Compile Include="Interface\Plugin\IPlugin.cs" />
     <Compile Include="Interface\Plugin\IPluginEvent.cs" />
