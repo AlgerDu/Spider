@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D.Spider.Core.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,11 @@ namespace D.Spider.Core.Interface.Plugin
     /// <summary>
     /// 插件，一切都是插件
     /// </summary>
-    public interface IPlugin
+    public interface IPlugin :
+        IPluginEventHandler<PluginInitEvent>
+        , IPluginEventHandler<PluginRunEvent>
+        , IPluginEventHandler<PluginStopEvent>
+        , IPluginEventHandler<PluginPauseEvent>
     {
         /// <summary>
         /// 插件（实例）的唯一标志
@@ -20,13 +25,5 @@ namespace D.Spider.Core.Interface.Plugin
         /// 状态
         /// </summary>
         PluginState State { get; }
-
-        IPlugin Init();
-
-        IPlugin Run();
-
-        IPlugin Stop();
-
-        IPlugin Pause();
     }
 }

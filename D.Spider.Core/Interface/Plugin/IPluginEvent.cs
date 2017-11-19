@@ -22,7 +22,7 @@ namespace D.Spider.Core.Interface.Plugin
         string TypeName { get; }
 
         /// <summary>
-        /// 来源（唯一）
+        /// 来源（唯一），当来自爬虫自己时，这个值为 null
         /// </summary>
         IPluginSymbol FromPlugin { get; }
 
@@ -40,17 +40,5 @@ namespace D.Spider.Core.Interface.Plugin
         /// 事件状态
         /// </summary>
         PluginEventState State { get; set; }
-    }
-
-    /// <summary>
-    /// 插件事件 T
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IPluginEvent<T> : IPluginEvent
-    {
-        /// <summary>
-        /// 事件所携带的数据
-        /// </summary>
-        T Data { get; }
     }
 }

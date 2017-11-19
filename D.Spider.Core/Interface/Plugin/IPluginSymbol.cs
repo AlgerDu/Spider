@@ -9,18 +9,20 @@ namespace D.Spider.Core.Interface.Plugin
     /// <summary>
     /// 插件的标志
     /// 通过 symbol 可以确定符合条件的一个或者多个插件
+    /// 相当与通过三个条件定位插件
+    /// 当不限制某个条件时请返回 null
     /// </summary>
     public interface IPluginSymbol
     {
         /// <summary>
         /// 实例 Uid
         /// </summary>
-        Guid InstanceUid { get; }
+        Guid? InstanceUid { get; }
 
         /// <summary>
         /// 插件类型
         /// </summary>
-        PluginType PType { get; }
+        PluginType? PType { get; }
 
         /// <summary>
         /// 插件名

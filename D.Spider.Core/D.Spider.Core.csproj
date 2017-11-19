@@ -66,10 +66,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="Events\PluginInitEvent.cs" />
+    <Compile Include="Events\PluginPauseEvent.cs" />
+    <Compile Include="Events\PluginRunEvent.cs" />
+    <Compile Include="Events\PluginStopEvent.cs" />
     <Compile Include="Events\UrlCrawedEvent.cs" />
     <Compile Include="Events\UrlWaitingEvent.cs" />
     <Compile Include="HttpDownloader.cs" />
     <Compile Include="Interface\IDownloader.cs" />
+    <Compile Include="Interface\IEventFactory.cs" />
     <Compile Include="Interface\IEventSender.cs" />
     <Compile Include="Interface\IPage.cs" />
     <Compile Include="Interface\IPageProcess.cs" />
