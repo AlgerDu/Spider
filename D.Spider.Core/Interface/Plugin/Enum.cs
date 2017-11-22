@@ -78,4 +78,21 @@ namespace D.Spider.Core.Interface.Plugin
         /// </summary>
         Pause
     }
+
+    /// <summary>
+    /// 响应事件的插件个数 
+    /// TODO：命名不好，待修改
+    /// </summary>
+    public enum DealPluginEventType
+    {
+        /// <summary>
+        /// 第一个
+        /// </summary>
+        First,
+
+        /// <summary>
+        /// 所有符合条件的
+        /// </summary>
+        All
+    }
 }

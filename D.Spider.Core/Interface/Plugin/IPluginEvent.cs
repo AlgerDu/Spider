@@ -40,5 +40,10 @@ namespace D.Spider.Core.Interface.Plugin
         /// 事件状态
         /// </summary>
         PluginEventState State { get; set; }
+
+        /// <summary>
+        /// 响应事件的插件个数
+        /// </summary>
+        DealPluginEventType DealType { get; }
     }
 }
