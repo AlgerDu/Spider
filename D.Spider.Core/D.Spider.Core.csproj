@@ -97,16 +97,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\D.Util.Web\D.Util.Web.csproj">
-      <Project>{D6F61554-7F08-486F-80CC-2015D0B40610}</Project>
-      <Name>D.Util.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\D.Util\D.Util.csproj">
-      <Project>{573803c2-538a-4ed1-8a98-d990dcb83b9e}</Project>
-      <Name>D.Util</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

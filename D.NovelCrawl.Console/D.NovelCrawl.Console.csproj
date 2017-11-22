@@ -95,22 +95,6 @@
       <Project>{00cac10e-534f-49e8-a484-f927203195f7}</Project>
       <Name>D.Spider.SpiderScriptEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\D.Util.Config.Json\D.Util.Config.Json.csproj">
-      <Project>{b630971f-301d-43d2-b22a-434f98a15918}</Project>
-      <Name>D.Util.Config.Json</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\D.Util.Logger.Log4net\D.Util.Logger.Log4net.csproj">
-      <Project>{b0b9b1a2-a984-497f-b03f-5810451b06c9}</Project>
-      <Name>D.Util.Logger.Log4net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\D.Util.Web\D.Util.Web.csproj">
-      <Project>{D6F61554-7F08-486F-80CC-2015D0B40610}</Project>
-      <Name>D.Util.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\D.Util\D.Util.csproj">
-      <Project>{573803c2-538a-4ed1-8a98-d990dcb83b9e}</Project>
-      <Name>D.Util</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
