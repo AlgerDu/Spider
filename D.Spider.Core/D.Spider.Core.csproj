@@ -93,6 +93,7 @@
     <Compile Include="Interface\Plugin\IPluginEventHandler.cs" />
     <Compile Include="Interface\Plugin\IPluginSymbol.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="PluginEventManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spider.cs" />
     <Compile Include="Url.cs" />
