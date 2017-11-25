@@ -10,11 +10,7 @@ namespace D.Spider.Core.Interface.Plugin
     /// <summary>
     /// 插件，一切都是插件
     /// </summary>
-    public interface IPlugin :
-        IPluginEventHandler<PluginInitEvent>
-        , IPluginEventHandler<PluginRunEvent>
-        , IPluginEventHandler<PluginStopEvent>
-        , IPluginEventHandler<PluginPauseEvent>
+    public interface IPlugin
     {
         /// <summary>
         /// 插件（实例）的唯一标志
@@ -25,5 +21,9 @@ namespace D.Spider.Core.Interface.Plugin
         /// 状态
         /// </summary>
         PluginState State { get; }
+
+        IPlugin Run();
+
+        IPlugin Stop();
     }
 }

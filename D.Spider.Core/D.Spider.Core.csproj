@@ -69,10 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
-    <Compile Include="Events\PluginInitEvent.cs" />
-    <Compile Include="Events\PluginPauseEvent.cs" />
-    <Compile Include="Events\PluginRunEvent.cs" />
-    <Compile Include="Events\PluginStopEvent.cs" />
     <Compile Include="Events\UrlCrawedEvent.cs" />
     <Compile Include="Events\UrlWaitingEvent.cs" />
     <Compile Include="HttpDownloader.cs" />
@@ -92,6 +88,7 @@
     <Compile Include="Interface\IUrlManager.cs" />
     <Compile Include="Interface\Plugin\IPluginEventHandler.cs" />
     <Compile Include="Interface\Plugin\IPluginSymbol.cs" />
+    <Compile Include="Model\PluginEventTask.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PluginEventManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

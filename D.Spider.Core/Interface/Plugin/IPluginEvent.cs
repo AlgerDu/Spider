@@ -12,6 +12,11 @@ namespace D.Spider.Core.Interface.Plugin
     public interface IPluginEvent
     {
         /// <summary>
+        /// 事件的唯一标识
+        /// </summary>
+        Guid Uid { get; }
+
+        /// <summary>
         /// 事件类型唯一标识
         /// </summary>
         Guid TypeUid { get; set; }
@@ -29,7 +34,7 @@ namespace D.Spider.Core.Interface.Plugin
         /// <summary>
         /// 目标（不唯一，可以是某一个类型的插件）
         /// </summary>
-        IPluginSymbol ToPluginSymbol { get; }
+        IEnumerable<IPluginSymbol> ToPluginSymbol { get; }
 
         /// <summary>
         /// 创建时间

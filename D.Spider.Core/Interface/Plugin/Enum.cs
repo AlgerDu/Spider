@@ -53,7 +53,7 @@ namespace D.Spider.Core.Interface.Plugin
         Handled,
 
         /// <summary>
-        /// 停止的
+        /// 已销毁，不在执行
         /// </summary>
         Terminate
     }
