@@ -17,11 +17,12 @@ namespace D.Spider.Core
     public class PluginEventManager : IPluginEventManager, IEventSender
     {
         ILogger _logger;
+        IPluginManager _pluginManager;
 
         /// <summary>
         /// 所以这在处理中的插件事件
         /// </summary>
-        ConcurrentDictionary<Guid, PluginEventTask> _allEvents;
+        ConcurrentDictionary<Guid, PluginEventTask> _allEventTasks;
 
         /// <summary>
         /// 待分发的事件
@@ -33,12 +34,16 @@ namespace D.Spider.Core
         /// </summary>
         Dictionary<Guid, ConcurrentQueue<IPluginEvent>> _perPluginWaitingExecutingEvents;
 
+        bool _isDistributingEvents;
+
         public PluginEventManager(
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory
+            , IPluginManager pluginManager)
         {
             _logger = loggerFactory.CreateLogger<PluginEventManager>();
+            _pluginManager = pluginManager;
 
-            _allEvents = new ConcurrentDictionary<Guid, PluginEventTask>();
+            _allEventTasks = new ConcurrentDictionary<Guid, PluginEventTask>();
             _waitingDistributeEvents = new ConcurrentQueue<IPluginEvent>();
             _perPluginWaitingExecutingEvents = new Dictionary<Guid, ConcurrentQueue<IPluginEvent>>();
         }
@@ -54,7 +59,38 @@ namespace D.Spider.Core
             _logger.LogInformation($"{e.FromPlugin} 发送事件 {e}");
 
             var task = new PluginEventTask(e);
+
+            if (_allEventTasks.TryAdd(task.Uid, task))
+            {
+                _waitingDistributeEvents.Enqueue(task.PluginEvent);
+                DistributeEvents();
+            }
+            else
+            {
+                _logger.LogWarning($"向 allEventTasks 列表中添加事件 {e} 失败");
+            }
         }
         #endregion
+
+        /// <summary>
+        /// 从待分配队列中取出事件，添加到需要处理这个事件的插件事件队列中
+        /// </summary>
+        /// <returns></returns>
+        private Task DistributeEvents()
+        {
+            return Task.Run(() =>
+            {
+                lock (this)
+                {
+                    if (_isDistributingEvents)
+                    {
+                        _logger.LogTrace("正在有其它线程进行事件任务的分配");
+                        return;
+                    }
+
+                    _isDistributingEvents = false;
+                }
+            });
+        }
     }
 }

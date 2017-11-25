@@ -12,7 +12,7 @@ namespace D.Spider.Core.Interface.Plugin
     /// 相当与通过三个条件定位插件
     /// 当不限制某个条件时请返回 null
     /// </summary>
-    public interface IPluginSymbol
+    public interface IPluginSymbol : IEqualityComparer<IPluginSymbol>
     {
         /// <summary>
         /// 实例 Uid
