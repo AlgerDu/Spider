@@ -25,11 +25,6 @@ namespace D.Spider.Core
         ConcurrentDictionary<Guid, PluginEventTask> _allEventTasks;
 
         /// <summary>
-        /// 待分发的事件
-        /// </summary>
-        ConcurrentQueue<IPluginEvent> _waitingDistributeEvents;
-
-        /// <summary>
         /// 每个插件正在等待执行的插件
         /// </summary>
         Dictionary<Guid, ConcurrentQueue<IPluginEvent>> _perPluginWaitingExecutingEvents;
@@ -44,7 +39,6 @@ namespace D.Spider.Core
             _pluginManager = pluginManager;
 
             _allEventTasks = new ConcurrentDictionary<Guid, PluginEventTask>();
-            _waitingDistributeEvents = new ConcurrentQueue<IPluginEvent>();
             _perPluginWaitingExecutingEvents = new Dictionary<Guid, ConcurrentQueue<IPluginEvent>>();
         }
 
@@ -62,7 +56,6 @@ namespace D.Spider.Core
 
             if (_allEventTasks.TryAdd(task.Uid, task))
             {
-                _waitingDistributeEvents.Enqueue(task.PluginEvent);
                 DistributeEvents();
             }
             else
