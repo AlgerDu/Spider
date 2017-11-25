@@ -29,8 +29,6 @@ namespace D.Spider.Core
         /// </summary>
         Dictionary<Guid, ConcurrentQueue<IPluginEvent>> _perPluginWaitingExecutingEvents;
 
-        bool _isDistributingEvents;
-
         public PluginEventManager(
             ILoggerFactory loggerFactory
             , IPluginManager pluginManager)
@@ -56,7 +54,7 @@ namespace D.Spider.Core
 
             if (_allEventTasks.TryAdd(task.Uid, task))
             {
-                DistributeEvents();
+                DistributeEvents(task);
             }
             else
             {
@@ -69,20 +67,10 @@ namespace D.Spider.Core
         /// 从待分配队列中取出事件，添加到需要处理这个事件的插件事件队列中
         /// </summary>
         /// <returns></returns>
-        private Task DistributeEvents()
+        private Task DistributeEvents(PluginEventTask task)
         {
             return Task.Run(() =>
             {
-                lock (this)
-                {
-                    if (_isDistributingEvents)
-                    {
-                        _logger.LogTrace("正在有其它线程进行事件任务的分配");
-                        return;
-                    }
-
-                    _isDistributingEvents = false;
-                }
             });
         }
     }
