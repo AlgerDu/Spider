@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using D.Spider.Core.Interface.Plugin;
 using D.Util.Interface;
 using System.Collections.Concurrent;
-using D.Spider.Core.Model;
 
 namespace D.Spider.Core
 {
@@ -20,14 +19,14 @@ namespace D.Spider.Core
         IPluginManager _pluginManager;
 
         /// <summary>
-        /// 所以这在处理中的插件事件
+        /// 每个插件的事件队列
         /// </summary>
         ConcurrentDictionary<Guid, PluginEventTask> _allEventTasks;
 
         /// <summary>
         /// 每个插件正在等待执行的插件
         /// </summary>
-        Dictionary<Guid, ConcurrentQueue<IPluginEvent>> _perPluginWaitingExecutingEvents;
+        Dictionary<Guid, PluginEventQueue> _pluginQueues;
 
         public PluginEventManager(
             ILoggerFactory loggerFactory
@@ -37,7 +36,7 @@ namespace D.Spider.Core
             _pluginManager = pluginManager;
 
             _allEventTasks = new ConcurrentDictionary<Guid, PluginEventTask>();
-            _perPluginWaitingExecutingEvents = new Dictionary<Guid, ConcurrentQueue<IPluginEvent>>();
+            _pluginQueues = new Dictionary<Guid, PluginEventQueue>();
         }
 
         #region IEventSender 实现
@@ -71,6 +70,7 @@ namespace D.Spider.Core
         {
             return Task.Run(() =>
             {
+
             });
         }
     }
