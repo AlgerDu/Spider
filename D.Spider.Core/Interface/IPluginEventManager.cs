@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D.Spider.Core.Interface.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,16 @@ namespace D.Spider.Core.Interface
     /// </summary>
     public interface IPluginEventManager
     {
+        /// <summary>
+        /// 添加事件处理器
+        /// </summary>
+        /// <param name="plugin"></param>
+        void AddEventHandler(IPlugin plugin);
+
+        /// <summary>
+        /// 移除事件处理器
+        /// </summary>
+        /// <param name="plugin"></param>
+        void RemoveEventHandler(IPlugin plugin);
     }
 }

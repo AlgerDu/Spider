@@ -75,7 +75,7 @@
     <Compile Include="HttpDownloader.cs" />
     <Compile Include="Interface\IDownloader.cs" />
     <Compile Include="Interface\IEventFactory.cs" />
-    <Compile Include="Interface\IEventSender.cs" />
+    <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="Interface\IPage.cs" />
     <Compile Include="Interface\IPageProcess.cs" />
     <Compile Include="Interface\IPluginEventManager.cs" />
