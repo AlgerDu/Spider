@@ -12,7 +12,7 @@ namespace D.Util
     /// 感觉好像有一种数据结构是处理这个东西的，但是想不到是什么了，也可能是记错了。
     /// 存储 A 和 B 的多对多关系
     /// </summary>
-    public class RelationMap<A, B>
+    public class AssociationMap<A, B>
     {
     }
 }

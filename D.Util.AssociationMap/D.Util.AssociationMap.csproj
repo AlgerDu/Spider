@@ -7,8 +7,8 @@
     <ProjectGuid>{7634F563-1A28-4638-8600-E41138CCECD3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>D.Util.RelationMap</RootNamespace>
-    <AssemblyName>D.Util.RelationMap</AssemblyName>
+    <RootNamespace>D.Util.AssociationMap</RootNamespace>
+    <AssemblyName>D.Util.AssociationMap</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AEnumerator.cs" />
+    <Compile Include="AHead.cs" />
+    <Compile Include="AssociationNode.cs" />
     <Compile Include="IAssociationMap.cs" />
     <Compile Include="RelationMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

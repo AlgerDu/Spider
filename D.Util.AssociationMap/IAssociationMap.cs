@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.Util.RelationMap
+namespace D.Util.Interface
 {
     /// <summary>
     /// TODO：后面会迁移到 D.Util 项目中；

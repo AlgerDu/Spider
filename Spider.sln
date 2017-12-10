@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Spider.SpiderScriptEngine
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{00D94361-D8F4-4D30-8EAB-55CC320C6690}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Util.RelationMap", "D.Util.RelationMap\D.Util.RelationMap.csproj", "{7634F563-1A28-4638-8600-E41138CCECD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Util.AssociationMap", "D.Util.AssociationMap\D.Util.AssociationMap.csproj", "{7634F563-1A28-4638-8600-E41138CCECD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
