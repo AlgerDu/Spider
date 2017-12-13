@@ -13,8 +13,9 @@ namespace D.Spider.Core
     /// <summary>
     /// IPluginEventManager，IEventSender 的实现
     /// </summary>
-    public class PluginEventManager : IPluginEventManager, IEventSender
+    public class PluginEventManager : IPluginEventManager, Interface.IEventBus
     {
+        ILoggerFactory _loggerFactory;
         ILogger _logger;
         IPluginManager _pluginManager;
 
@@ -70,7 +71,17 @@ namespace D.Spider.Core
         {
             return Task.Run(() =>
             {
+                var toPlugins = _pluginManager.Search(task.PluginEvent.ToPluginSymbol);
 
+                if (toPlugins.Count() == 0)
+                {
+
+                }
+                else
+                {
+                    var e = task.PluginEvent;
+                    _logger.LogInformation($"{e.FromPlugin} 发送的事件 {e} 没有找到任何")
+                }
             });
         }
     }

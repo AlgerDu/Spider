@@ -72,6 +72,7 @@
     <Compile Include="EventManager\PluginEventQueue.cs" />
     <Compile Include="Events\UrlCrawedEvent.cs" />
     <Compile Include="Events\UrlWaitingEvent.cs" />
+    <Compile Include="Event\EventMap.cs" />
     <Compile Include="HttpDownloader.cs" />
     <Compile Include="Interface\IDownloader.cs" />
     <Compile Include="Interface\IEventFactory.cs" />

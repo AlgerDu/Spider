@@ -16,6 +16,10 @@ namespace D.Util.AssociationMap
 
         public B ObjectB { get; set; }
 
-        public AssociationNode<A, B> Next { get; set; }
+        public AssociationNode<A, B> PreA { get; set; }
+        public AssociationNode<A, B> NextA { get; set; }
+
+        public AssociationNode<A, B> PreB { get; set; }
+        public AssociationNode<A, B> NextB { get; set; }
     }
 }

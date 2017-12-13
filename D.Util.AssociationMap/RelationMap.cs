@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D.Util.AssociationMap;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,7 @@ namespace D.Util
     /// </summary>
     public class AssociationMap<A, B>
     {
+        Dictionary<A, AHead<A, B>> _dictionaryA;
+        
     }
 }

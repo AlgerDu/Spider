@@ -1,4 +1,5 @@
 ﻿using D.Spider.Core.Interface.Plugin;
+using D.Util.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace D.Spider.Core
     /// </summary>
     internal class PluginEventQueue
     {
+        ILogger _logger;
         IPlugin _plugin;
         Queue<PluginEventTask> _events;
         bool _isDeallingEvents;
@@ -20,8 +22,11 @@ namespace D.Spider.Core
         public Guid PluginInstaceUid { get => (Guid)_plugin.Symbol.InstanceUid; }
 
         public PluginEventQueue(
-            IPlugin plugin)
+            IPlugin plugin
+            , ILoggerFactory loggerFactory
+            )
         {
+            _logger = loggerFactory.CreateLogger<PluginEventQueue>();
             _plugin = plugin;
             _isDeallingEvents = false;
 
@@ -32,7 +37,7 @@ namespace D.Spider.Core
         {
             lock (_events)
             {
-
+                _events.Enqueue(e);
             }
         }
 
@@ -49,6 +54,71 @@ namespace D.Spider.Core
                 }
 
                 _events.Clear();
+            }
+        }
+
+        /// <summary>
+        /// 如果当前没有线程在处理任务，则开始处理任务
+        /// </summary>
+        /// <returns></returns>
+        private Task RunEventTask()
+        {
+            return Task.Run(() =>
+            {
+                lock (this)
+                {
+                    if (_isDeallingEvents)
+                    {
+                        return;
+                    }
+
+                    _isDeallingEvents = true;
+                }
+
+                while (_events.Count > 0)
+                {
+                    try
+                    {
+                        var task = _events.Dequeue();
+
+                        DealEvent(task);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{_plugin} 执行事件发生错误：{ex.StackTrace}");
+                        break;
+                    }
+                }
+
+                lock (this)
+                {
+                    _isDeallingEvents = false;
+                }
+            });
+        }
+
+        private void DealEvent(PluginEventTask task)
+        {
+            if (_plugin.State == PluginState.Running)
+            {
+                var e = task.PluginEvent;
+                if (e.State == PluginEventState.Terminate)
+                {
+                    var eType = e.GetType();
+                    var handlerType = _plugin.GetType().GetInterface(typeof(IPluginEventHandler<>).Name);
+
+                    var has = handlerType.GetGenericArguments().FirstOrDefault(tt => tt == eType);
+
+                    handlerType.InvokeMember("Handle", System.Reflection.BindingFlags.Public, null, _plugin, new object[] { e });
+                }
+                else
+                {
+                    task.CancelCount++;
+                }
+            }
+            else
+            {
+                task.CancelCount++;
             }
         }
     }

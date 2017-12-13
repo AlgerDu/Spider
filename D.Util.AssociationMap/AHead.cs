@@ -7,16 +7,26 @@ using System.Threading.Tasks;
 
 namespace D.Util.AssociationMap
 {
-    internal class AHead<A, B> : AssociationNode<A, B>, IEnumerable<A>
+    /// <summary>
+    /// A 的头节点
+    /// </summary>
+    /// <typeparam name="A"></typeparam>
+    /// <typeparam name="B"></typeparam>
+    internal class AHead<A, B> : IEnumerable<B>
     {
-        public IEnumerator<A> GetEnumerator()
+        Dictionary<A, AssociationNode<A, B>> _dictionaryA;
+
+
+
+        public IEnumerator<B> GetEnumerator()
         {
-            return new AEnumerator<A, B>(this);
+            var bs = _dictionaryA.Values.Select(nn => nn.ObjectB);
+            return bs.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new AEnumerator<A, B>(this);
+            return GetEnumerator();
         }
     }
 }

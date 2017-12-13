@@ -43,6 +43,8 @@
     <Compile Include="AEnumerator.cs" />
     <Compile Include="AHead.cs" />
     <Compile Include="AssociationNode.cs" />
+    <Compile Include="BEnumerator.cs" />
+    <Compile Include="BHead.cs" />
     <Compile Include="IAssociationMap.cs" />
     <Compile Include="RelationMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -30,9 +30,9 @@ namespace D.Util.AssociationMap
 
         public bool MoveNext()
         {
-            if (_current.Next != null)
+            if (_current.NextA != null)
             {
-                _current = _current.Next;
+                _current = _current.NextA;
                 return true;
             }
             else
