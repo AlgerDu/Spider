@@ -80,7 +80,7 @@ namespace D.Spider.Core
                 else
                 {
                     var e = task.PluginEvent;
-                    _logger.LogInformation($"{e.FromPlugin} 发送的事件 {e} 没有找到任何")
+                    _logger.LogInformation($"{e.FromPlugin} 发送的事件 {e} 没有找到任何");
                 }
             });
         }
