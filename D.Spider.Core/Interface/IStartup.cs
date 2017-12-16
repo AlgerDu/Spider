@@ -24,5 +24,11 @@ namespace D.Spider.Core.Interface
         /// </summary>
         /// <param name="builder"></param>
         void ConfigService(ContainerBuilder builder);
+
+        /// <summary>
+        /// 手动添加一些插件
+        /// </summary>
+        /// <param name="pluginCollecter"></param>
+        void ManualCollectPlugin(IPluginCollecter pluginCollecter);
     }
 }
