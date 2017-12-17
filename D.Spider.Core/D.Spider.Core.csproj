@@ -70,9 +70,11 @@
     <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="Interface\IPage.cs" />
     <Compile Include="Interface\IPageProcess.cs" />
+    <Compile Include="Interface\IPluginCollecter.cs" />
     <Compile Include="Interface\IPluginEventManager.cs" />
     <Compile Include="Interface\IPluginLoader.cs" />
     <Compile Include="Interface\IPluginManager.cs" />
+    <Compile Include="Interface\ISpiderBuilder.cs" />
     <Compile Include="Interface\IStartup.cs" />
     <Compile Include="Interface\Plugin\Enum.cs" />
     <Compile Include="Interface\Plugin\IPlugin.cs" />
@@ -93,9 +95,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
