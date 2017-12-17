@@ -22,17 +22,17 @@ namespace D.Spider.Example
 
         public void CollectConfig(IConfigCollector configCollector)
         {
-
+            Console.WriteLine("Startup 收集配置");
         }
 
         public void ConfigService(ContainerBuilder builder)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Startup 配置服务（依赖注入）");
         }
 
         public void ManualCollectPlugin(IPluginCollecter pluginCollecter)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Startup 手动添加插件");
         }
     }
 
@@ -40,7 +40,7 @@ namespace D.Spider.Example
     {
         static void Main(string[] args)
         {
-            new SpiderBuilder()
+            new SpiderBuilder(args)
                 .UseStartup<Startup>()
                 .Build()
                 .Run();
