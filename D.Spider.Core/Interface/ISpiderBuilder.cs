@@ -14,9 +14,9 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 使用 Startup 类
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">自定义 ISpiderBuilder</typeparam>
         /// <returns></returns>
-        ISpiderBuilder UseStartup<T>() where T : ISpiderBuilder, new();
+        ISpiderBuilder UseStartup<T>() where T : IStartup, new();
 
         /// <summary>
         /// 创建一个 Spider

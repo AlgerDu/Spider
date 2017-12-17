@@ -89,6 +89,7 @@
     <Compile Include="EventManager\PluginEventManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spider.cs" />
+    <Compile Include="SpiderBuilder.cs" />
     <Compile Include="Url.cs" />
     <Compile Include="UrlManager.cs" />
   </ItemGroup>
