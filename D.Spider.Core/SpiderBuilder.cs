@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using D.Spider.Core.Interface;
 using D.Util.Config;
+using D.Util.Interface;
 using D.Utils.AutofacExt;
 using System;
 using System.Collections.Generic;
@@ -23,19 +24,9 @@ namespace D.Spider.Core
         {
             var startup = _startupType.Assembly.CreateInstance(_startupType.FullName) as IStartup;
 
-            var configCollector = new ConfigCollector();
+            var configCollector = CreateConfigCollector(startup);
 
-            startup.CollectConfig(configCollector);
-
-            var builder = new ContainerBuilder();
-
-            builder.AddUtils();
-            builder.AddConsoleLogWriter();
-            builder.AddConfigProvider(configCollector.CreateProvider());
-
-            startup.ConfigService(builder);
-
-            var container = builder.Build();
+            var container = CreateAutofacContainer(startup, configCollector);
 
             return container.Resolve<ISpider>();
         }
@@ -45,6 +36,45 @@ namespace D.Spider.Core
             _startupType = typeof(T);
 
             return this;
+        }
+
+        /// <summary>
+        /// 创建一个 ConfigCollector，并且调用 Startup 
+        /// </summary>
+        /// <param name="startup"></param>
+        /// <returns></returns>
+        private IConfigCollector CreateConfigCollector(IStartup startup)
+        {
+            var configCollector = new ConfigCollector();
+
+            startup.CollectConfig(configCollector);
+
+            return configCollector;
+        }
+
+        /// <summary>
+        /// 创建 autofac 的 container
+        /// </summary>
+        /// <param name="startup"></param>
+        /// <param name="configCollector"></param>
+        /// <returns></returns>
+        private IContainer CreateAutofacContainer(IStartup startup, IConfigCollector configCollector)
+        {
+            //TODO：需要迁移到其它地方，暂时写在这里
+            var pluginCollecter = new PluginCollecter();
+            startup.ManualCollectPlugin(pluginCollecter);
+
+            var builder = new ContainerBuilder();
+
+            builder.AddUtils();
+            builder.AddConfigProvider(configCollector.CreateProvider());
+
+            //TODO：需要迁移到其它地方，暂时写在这里
+            builder.RegisterInstance<IPluginCollecter>(pluginCollecter);
+
+            startup.ConfigService(builder);
+
+            return builder.Build();
         }
     }
 }

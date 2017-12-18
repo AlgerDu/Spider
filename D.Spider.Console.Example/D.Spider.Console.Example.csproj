@@ -38,6 +38,9 @@
     <Reference Include="D.Util, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\D.Util.1.0.1\lib\D.Util.dll</HintPath>
     </Reference>
+    <Reference Include="D.Utils.AutofacExt, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\D.Utils.AutofacExt.1.0.1\lib\D.Utils.AutofacExt.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
