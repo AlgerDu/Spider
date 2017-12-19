@@ -10,7 +10,7 @@ namespace D.Spider.Core.Interface
     /// <summary>
     /// 事件发送器（用来给插件发送事件），将事件发送到事件队列中
     /// </summary>
-    public interface IEventBus
+    public interface IEventSender
     {
         /// <summary>
         /// 发送事件到事件控制中心

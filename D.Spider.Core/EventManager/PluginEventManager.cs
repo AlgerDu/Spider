@@ -13,7 +13,7 @@ namespace D.Spider.Core
     /// <summary>
     /// IPluginEventManager，IEventSender 的实现
     /// </summary>
-    public class PluginEventManager : IPluginEventManager, Interface.IEventBus
+    public class PluginEventManager : IPluginEventManager, IEventSender
     {
         ILoggerFactory _loggerFactory;
         ILogger _logger;

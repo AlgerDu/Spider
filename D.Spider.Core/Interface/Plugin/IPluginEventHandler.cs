@@ -18,6 +18,6 @@ namespace D.Spider.Core.Interface.Plugin
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        bool Handle(Event e);
+        void Handle(Event e);
     }
 }

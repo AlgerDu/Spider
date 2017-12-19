@@ -1,4 +1,7 @@
-﻿using D.Spider.Core.Interface.Plugin;
+﻿using D.Spider.Core.Event;
+using D.Spider.Core.Extension;
+using D.Spider.Core.Interface;
+using D.Spider.Core.Interface.Plugin;
 using D.Util.Interface;
 using System;
 using System.Collections.Generic;
@@ -12,11 +15,17 @@ namespace D.Spider.Example
     /// 最简单插件
     /// </summary>
     class MiniPlugin : IPlugin
+        , IPluginEventHandler<IPageDownloadEvent>
     {
+        const string _exampleUrl = "www.bing.com";
+
         ILogger _logger;
 
         IPluginSymbol _symbol;
         PluginState _pluginState;
+
+        IEventSender _eventSender;
+        IEventFactory _eventFactory;
 
         public IPluginSymbol Symbol => _symbol;
 
@@ -24,6 +33,8 @@ namespace D.Spider.Example
 
         public MiniPlugin(
             ILoggerFactory loggerFactory
+            , IEventFactory eventFactory
+            , IEventSender eventSender
             )
         {
             _logger = loggerFactory.CreateLogger<MiniPlugin>();
@@ -33,6 +44,10 @@ namespace D.Spider.Example
         {
             _logger.LogInformation($"{Symbol} run");
 
+            var e = _eventFactory.CreateUrlEvent(_exampleUrl);
+
+            _eventSender.Publish(e);
+
             return this;
         }
 
@@ -41,6 +56,11 @@ namespace D.Spider.Example
             _logger.LogInformation($"{Symbol} stop");
 
             return this;
+        }
+
+        public void Handle(IPageDownloadEvent e)
+        {
+            _logger.LogInformation($"url 下载完成");
         }
     }
 }
