@@ -32,7 +32,7 @@ namespace D.Spider.Core
         #endregion
 
         ILogger _logger;
-        IEventSender _eventBus;
+        IEventBus _eventBus;
 
         IUrlManager _urlManager;
         bool _running;
@@ -41,7 +41,7 @@ namespace D.Spider.Core
         IUrl _downloaderUrl;
 
         public CefDownloader(
-            IEventSender eventBus
+            IEventBus eventBus
             , ILoggerFactory loggerFactory
             , IUrlManager urlManager)
         {

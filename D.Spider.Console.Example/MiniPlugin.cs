@@ -24,7 +24,7 @@ namespace D.Spider.Example
         IPluginSymbol _symbol;
         PluginState _pluginState;
 
-        IEventSender _eventSender;
+        IEventBus _eventBus;
         IEventFactory _eventFactory;
 
         public IPluginSymbol Symbol => _symbol;
@@ -34,10 +34,13 @@ namespace D.Spider.Example
         public MiniPlugin(
             ILoggerFactory loggerFactory
             , IEventFactory eventFactory
-            , IEventSender eventSender
+            , IEventBus eventBus
             )
         {
             _logger = loggerFactory.CreateLogger<MiniPlugin>();
+
+            _eventBus = eventBus;
+            _eventFactory = eventFactory;
         }
 
         public IPlugin Run()
@@ -46,7 +49,7 @@ namespace D.Spider.Example
 
             var e = _eventFactory.CreateUrlEvent(_exampleUrl);
 
-            _eventSender.Publish(e);
+            _eventBus.Publish(e);
 
             return this;
         }
