@@ -1,5 +1,4 @@
-﻿using D.Spider.Core.Interface.Plugin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +9,7 @@ namespace D.Spider.Core.Interface
     /// <summary>
     /// 插件事件管理者
     /// </summary>
-    public interface IPluginEventManager
+    public interface IPluginEventManager : IRunningable<IPluginEventManager>
     {
         /// <summary>
         /// 添加事件处理器

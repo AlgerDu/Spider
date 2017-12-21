@@ -75,6 +75,7 @@
     <Compile Include="Interface\IPluginEventManager.cs" />
     <Compile Include="Interface\IPluginLoader.cs" />
     <Compile Include="Interface\IPluginManager.cs" />
+    <Compile Include="Interface\IRunningable.cs" />
     <Compile Include="Interface\ISpiderBuilder.cs" />
     <Compile Include="Interface\IStartup.cs" />
     <Compile Include="Enum.cs" />

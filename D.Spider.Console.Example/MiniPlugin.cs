@@ -32,6 +32,8 @@ namespace D.Spider.Example
 
         public PluginState State => _pluginState;
 
+        public bool IsRunning => throw new NotImplementedException();
+
         public MiniPlugin(
             ILoggerFactory loggerFactory
             , IEventFactory eventFactory

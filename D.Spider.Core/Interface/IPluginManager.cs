@@ -1,5 +1,4 @@
-﻿using D.Spider.Core.Interface.Plugin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +12,7 @@ namespace D.Spider.Core.Interface
     public interface IPluginManager
     {
         /// <summary>
-        /// 获取所有的插件
+        /// 获取所有的插件实例
         /// </summary>
         IEnumerable<IPlugin> Plugins { get; }
 
@@ -30,5 +29,10 @@ namespace D.Spider.Core.Interface
         /// <param name="symbols"></param>
         /// <returns></returns>
         IEnumerable<IPlugin> Search(IEnumerable<IPluginSymbol> symbols);
+
+        /// <summary>
+        /// 加载所有的插件，并且实例化
+        /// </summary>
+        void LoadAllPlugin();
     }
 }
