@@ -1,7 +1,7 @@
-﻿using D.Spider.Core.Event;
+﻿using D.Spider.Core;
+using D.Spider.Core.Event;
 using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
-using D.Spider.Core.Interface.Plugin;
 using D.Util.Interface;
 using System;
 using System.Collections.Generic;
