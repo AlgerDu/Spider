@@ -1,5 +1,4 @@
 ﻿using D.Spider.Core.Interface;
-using D.Spider.Core.Interface.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;

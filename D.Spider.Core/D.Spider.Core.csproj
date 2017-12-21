@@ -62,20 +62,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common.cs" />
     <Compile Include="EventManager\PluginEventQueue.cs" />
-    <Compile Include="Events\UrlCrawedEvent.cs" />
-    <Compile Include="Events\UrlWaitingEvent.cs" />
-    <Compile Include="Event\EventMap.cs" />
     <Compile Include="Event\IPageDownloadEvent.cs" />
     <Compile Include="Event\IUrlEvent.cs" />
+    <Compile Include="Extension\PluginExts.cs" />
     <Compile Include="Extension\UrlEventExtensions.cs" />
-    <Compile Include="HttpDownloader.cs" />
-    <Compile Include="Interface\IDownloader.cs" />
+    <Compile Include="Interface\IPageDownloader.cs" />
     <Compile Include="Interface\IEventFactory.cs" />
     <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="Interface\IPage.cs" />
-    <Compile Include="Interface\IPageProcess.cs" />
     <Compile Include="Interface\IPluginCollecter.cs" />
     <Compile Include="Interface\IPluginEventManager.cs" />
     <Compile Include="Interface\IPluginLoader.cs" />

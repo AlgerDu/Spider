@@ -17,7 +17,7 @@ namespace D.Spider.Core
     /// <summary>
     /// 封装 CefSharp.OffScreen 下载网页请求
     /// </summary>
-    public class CefDownloader : IDownloader, IDisposable
+    public class CefDownloader : IPageDownloader, IDisposable
     {
         #region 常量
         /// <summary>

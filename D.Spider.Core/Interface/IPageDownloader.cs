@@ -1,16 +1,16 @@
-﻿using System;
+﻿using D.Util.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.Spider.Core.Event
+namespace D.Spider.Core.Interface
 {
     /// <summary>
-    /// 记录 event 和 plugin 之间的 map 关系
+    /// 页面下载器
     /// </summary>
-    internal class EventMap
+    public interface IPageDownloader : IPlugin
     {
-
     }
 }

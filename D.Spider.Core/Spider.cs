@@ -24,7 +24,7 @@ namespace D.Spider.Core
 
         IUrlManager _urlManager;
         IPageProcess _pageProcess;
-        IDownloader _downloader;
+        IPageDownloader _downloader;
 
         public DSpider()
         {
@@ -51,7 +51,7 @@ namespace D.Spider.Core
         {
             _urlManager = _unityContainer.Resolve<IUrlManager>();
             _pageProcess = _unityContainer.Resolve<IPageProcess>();
-            _downloader = _unityContainer.Resolve<IDownloader>();
+            _downloader = _unityContainer.Resolve<IPageDownloader>();
 
             _eventBus = _unityContainer.Resolve<IEventBus>();
 
