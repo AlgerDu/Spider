@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D.Spider.Core.Interface
+namespace D.Spider.Core
 {
     /// <summary>
     /// 插件类型
