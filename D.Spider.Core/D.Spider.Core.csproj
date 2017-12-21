@@ -82,7 +82,7 @@
     <Compile Include="Interface\IPluginManager.cs" />
     <Compile Include="Interface\ISpiderBuilder.cs" />
     <Compile Include="Interface\IStartup.cs" />
-    <Compile Include="Interface\Plugin\Enum.cs" />
+    <Compile Include="Enum.cs" />
     <Compile Include="Interface\Plugin\IPlugin.cs" />
     <Compile Include="Interface\Plugin\IPluginEvent.cs" />
     <Compile Include="Interface\ISpider.cs" />
