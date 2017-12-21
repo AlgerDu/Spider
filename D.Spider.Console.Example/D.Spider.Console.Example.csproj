@@ -35,8 +35,8 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="D.Util, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\D.Util.1.0.1\lib\D.Util.dll</HintPath>
+    <Reference Include="D.Util, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\D.Util.1.0.2\lib\D.Util.dll</HintPath>
     </Reference>
     <Reference Include="D.Utils.AutofacExt, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\D.Utils.AutofacExt.1.0.1\lib\D.Utils.AutofacExt.dll</HintPath>
