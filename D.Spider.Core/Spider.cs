@@ -38,33 +38,18 @@ namespace D.Spider.Core
         {
             _logger.LogInformation("spider 开始运行");
 
-            _pluginManager.LoadAllPlugin();
-
-            foreach (var p in _pluginManager.Plugins)
-            {
-                _pluginEventManager.AddEventHandler(p);
-            }
-
-            foreach (var p in _pluginManager.Plugins)
-            {
-                p.Run();
-            }
-
             _pluginEventManager.Run();
+
+            _pluginManager.LoadAllPlugin();
+            _pluginManager.Run();
 
             return this;
         }
 
         public ISpider Stop()
         {
-            _logger.LogInformation("spider 开始停止");
-
-            foreach (var p in _pluginManager.Plugins)
-            {
-                p.Stop();
-            }
-
             _pluginEventManager.Stop();
+            _pluginManager.Stop();
 
             _logger.LogInformation("spider 停止");
 

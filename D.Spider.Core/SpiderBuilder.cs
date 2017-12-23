@@ -25,8 +25,9 @@ namespace D.Spider.Core
             var startup = _startupType.Assembly.CreateInstance(_startupType.FullName) as IStartup;
 
             var configCollector = CreateConfigCollector(startup);
+            var pluginCollector = CreateIPluginCollecter(startup);
 
-            var container = CreateAutofacContainer(startup, configCollector);
+            var container = CreateAutofacContainer(startup, configCollector, pluginCollector);
 
             return container.Resolve<ISpider>();
         }
@@ -58,11 +59,9 @@ namespace D.Spider.Core
         /// <param name="startup"></param>
         /// <param name="configCollector"></param>
         /// <returns></returns>
-        private IContainer CreateAutofacContainer(IStartup startup, IConfigCollector configCollector)
+        private IContainer CreateAutofacContainer(IStartup startup, IConfigCollector configCollector, IPluginCollecter pluginCollecter)
         {
             //TODO：需要迁移到其它地方，暂时写在这里
-            var pluginCollecter = new PluginCollecter();
-            startup.ManualCollectPlugin(pluginCollecter);
 
             var builder = new ContainerBuilder();
 
@@ -75,6 +74,18 @@ namespace D.Spider.Core
             startup.ConfigService(builder);
 
             return builder.Build();
+        }
+
+        /// <summary>
+        /// 创建一个 IPluginCollecter
+        /// </summary>
+        /// <returns></returns>
+        private IPluginCollecter CreateIPluginCollecter(IStartup startup)
+        {
+            var pluginCollecter = new PluginCollecter();
+            startup.ManualCollectPlugin(pluginCollecter);
+
+            return pluginCollecter;
         }
     }
 }

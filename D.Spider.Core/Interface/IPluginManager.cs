@@ -9,7 +9,7 @@ namespace D.Spider.Core.Interface
     /// <summary>
     /// 插件管理器
     /// </summary>
-    public interface IPluginManager
+    public interface IPluginManager : IRunningable<IPluginManager>
     {
         /// <summary>
         /// 获取所有的插件实例

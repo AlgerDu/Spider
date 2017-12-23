@@ -1,5 +1,4 @@
-﻿using D.Spider.Core.Interface.Plugin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +22,11 @@ namespace D.Spider.Core.Interface
         /// </summary>
         /// <param name="plugingType"></param>
         bool Collect(Type plugingType);
+
+        /// <summary>
+        /// 获取所有已经收集到的插件类型
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Type> GetCollectedPluginType();
     }
 }
