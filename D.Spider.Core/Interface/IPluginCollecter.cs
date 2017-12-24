@@ -15,12 +15,14 @@ namespace D.Spider.Core.Interface
         /// 收集插件类型
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        void Collect<T>() where T : IPlugin;
+        /// <returns>此类型是否已经添加</returns>
+        bool Collect<T>() where T : IPlugin;
 
         /// <summary>
         /// 收集插件类型
         /// </summary>
-        /// <param name="plugingType"></param>
+        /// <param name="plugingType">此类型是否已经添加</param>
+        /// <returns></returns>
         bool Collect(Type plugingType);
 
         /// <summary>

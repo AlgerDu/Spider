@@ -9,14 +9,36 @@ namespace D.Spider.Core
 {
     public class PluginCollecter : IPluginCollecter
     {
-        public void Collect<T>() where T : IPlugin
+        Dictionary<string, Type> _dic_PluginTypes;
+
+        public PluginCollecter()
         {
-            throw new NotImplementedException();
+            _dic_PluginTypes = new Dictionary<string, Type>();
+        }
+
+        public bool Collect<T>() where T : IPlugin
+        {
+            return Collect(typeof(T));
         }
 
         public bool Collect(Type plugingType)
         {
-            throw new NotImplementedException();
+            var fullName = plugingType.FullName;
+
+            if (_dic_PluginTypes.ContainsKey(fullName))
+            {
+                return false;
+            }
+            else
+            {
+                _dic_PluginTypes.Add(fullName, plugingType);
+                return true;
+            }
+        }
+
+        public IEnumerable<Type> GetCollectedPluginType()
+        {
+            return _dic_PluginTypes.Values;
         }
     }
 }
