@@ -19,6 +19,14 @@ namespace D.Spider.Core.Extension
             builder.RegisterType<DSpider>()
                 .As<ISpider>()
                 .SingleInstance();
+
+            builder.RegisterType<PluginManager>()
+                .As<IPluginManager>()
+                .SingleInstance();
+
+            builder.RegisterType<PluginEventManager>()
+                .As<IPluginEventManager>()
+                .SingleInstance();
         }
     }
 }

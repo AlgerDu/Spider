@@ -14,9 +14,7 @@ namespace D.Spider.Core
     /// </summary>
     public class PluginEventManager : IPluginEventManager, IEventBus
     {
-        ILoggerFactory _loggerFactory;
         ILogger _logger;
-        IPluginManager _pluginManager;
 
         /// <summary>
         /// 每个插件的事件队列
@@ -29,11 +27,9 @@ namespace D.Spider.Core
         Dictionary<Guid, PluginEventQueue> _pluginQueues;
 
         public PluginEventManager(
-            ILoggerFactory loggerFactory
-            , IPluginManager pluginManager)
+            ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<PluginEventManager>();
-            _pluginManager = pluginManager;
 
             _allEventTasks = new ConcurrentDictionary<Guid, PluginEventTask>();
             _pluginQueues = new Dictionary<Guid, PluginEventQueue>();
@@ -69,7 +65,7 @@ namespace D.Spider.Core
 
         public IPluginEventManager Run()
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         public void Send(IPluginEvent e)
@@ -90,7 +86,7 @@ namespace D.Spider.Core
 
         public IPluginEventManager Stop()
         {
-            throw new NotImplementedException();
+            return this;
         }
         #endregion
 
@@ -102,17 +98,17 @@ namespace D.Spider.Core
         {
             return Task.Run(() =>
             {
-                var toPlugins = _pluginManager.Search(task.PluginEvent.ToPluginSymbol);
+                ////var toPlugins = _pluginManager.Search(task.PluginEvent.ToPluginSymbol);
 
-                if (toPlugins.Count() == 0)
-                {
+                //if (toPlugins.Count() == 0)
+                //{
 
-                }
-                else
-                {
-                    var e = task.PluginEvent;
-                    _logger.LogInformation($"{e.FromPlugin} 发送的事件 {e} 没有找到任何");
-                }
+                //}
+                //else
+                //{
+                //    var e = task.PluginEvent;
+                //    _logger.LogInformation($"{e.FromPlugin} 发送的事件 {e} 没有找到任何");
+                //}
             });
         }
     }
