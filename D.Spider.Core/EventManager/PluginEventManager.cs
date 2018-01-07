@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using D.Spider.Core.Interface.Plugin;
 using D.Util.Interface;
 using System.Collections.Concurrent;
 
@@ -40,8 +39,35 @@ namespace D.Spider.Core
             _pluginQueues = new Dictionary<Guid, PluginEventQueue>();
         }
 
+        public bool IsRunning => throw new NotImplementedException();
+
+        public void AddEventHandler(IPlugin plugin)
+        {
+            throw new NotImplementedException();
+        }
+
         #region IEventSender 实现
         public bool Cancel(IPluginEvent e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Cancel<eType>(eType e) where eType : IPluginEvent
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Publish<eType>(eType e) where eType : IPluginEvent
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveEventHandler(IPlugin plugin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPluginEventManager Run()
         {
             throw new NotImplementedException();
         }
@@ -60,6 +86,11 @@ namespace D.Spider.Core
             {
                 _logger.LogWarning($"向 allEventTasks 列表中添加事件 {e} 失败");
             }
+        }
+
+        public IPluginEventManager Stop()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

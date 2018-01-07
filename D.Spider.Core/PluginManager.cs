@@ -1,4 +1,5 @@
-﻿using D.Spider.Core.Interface;
+﻿using Autofac;
+using D.Spider.Core.Interface;
 using D.Util.Interface;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace D.Spider.Core
         ILogger _logger;
 
         IPluginCollecter _pluginCollecter;
+        ILifetimeScope _containerScope;
 
         IPluginEventManager _pluginEventManager;
 
@@ -32,12 +34,14 @@ namespace D.Spider.Core
             ILoggerFactory loggerFactory
             , IPluginEventManager pluginEventManager
             , IPluginCollecter pluginCollecter
+            , ILifetimeScope containerScope
             )
         {
             _logger = loggerFactory.CreateLogger<PluginManager>();
 
             _pluginEventManager = pluginEventManager;
             _pluginCollecter = pluginCollecter;
+            _containerScope = containerScope;
 
             _dic_PluginTypes = new Dictionary<string, Type>();
             _list_plugins = new List<IPlugin>();
@@ -47,7 +51,24 @@ namespace D.Spider.Core
 
         public void LoadAllPlugin()
         {
+            _logger.LogInformation($"开始加载可以获取到的所有类型的插件");
+
             var collectedTypes = _pluginCollecter.GetCollectedPluginType();
+
+            foreach (var pluginType in collectedTypes)
+            {
+                if (_dic_PluginTypes.ContainsKey(pluginType.FullName))
+                {
+                    _logger.LogWarning($"插件类型 {pluginType.FullName} 已经加载");
+                }
+                else
+                {
+                    _dic_PluginTypes.Add(pluginType.FullName, pluginType);
+                    _logger.LogInformation($"将插件类型 {pluginType.FullName} 加载到 plugin manager 中");
+                }
+            }
+
+            CreatePluginInstance();
         }
 
         public IPluginManager Run()
@@ -86,6 +107,38 @@ namespace D.Spider.Core
             _logger.LogInformation($"plugin manager stop");
 
             return this;
+        }
+
+        /// <summary>
+        /// 通过 ILifetimeScope 注入所有收集到的 Plugin 类型，并且全部生成实例
+        /// </summary>
+        private void CreatePluginInstance()
+        {
+            using (var scope = _containerScope.BeginLifetimeScope(new Action<ContainerBuilder>(SocpeBuilder)))
+            {
+                var plugins = scope.Resolve<IEnumerable<IPlugin>>();
+
+                plugins = plugins.OrderBy(pp => pp.Symbol.PType);
+
+                foreach (var plugin in plugins)
+                {
+                    _logger.LogInformation($"创建插件实例 {plugin.Symbol}");
+                    _list_plugins.Add(plugin);
+                }
+            }
+        }
+
+        /// <summary>
+        /// autofac ILifetimeScope BeginLifetimeScope 使用的 action
+        /// </summary>
+        /// <param name="builder"></param>
+        private void SocpeBuilder(ContainerBuilder builder)
+        {
+            foreach (var t in _dic_PluginTypes.Values)
+            {
+                builder.RegisterType(t)
+                    .Keyed<IPlugin>(t.FullName);
+            }
         }
     }
 }

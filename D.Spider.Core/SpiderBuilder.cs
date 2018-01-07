@@ -28,7 +28,7 @@ namespace D.Spider.Core
             var pluginCollector = CreateIPluginCollecter(startup);
 
             var container = CreateAutofacContainer(startup, configCollector, pluginCollector);
-
+            
             return container.Resolve<ISpider>();
         }
 
@@ -64,7 +64,7 @@ namespace D.Spider.Core
             //TODO：需要迁移到其它地方，暂时写在这里
 
             var builder = new ContainerBuilder();
-
+            
             builder.AddUtils();
             builder.AddConfigProvider(configCollector.CreateProvider());
 

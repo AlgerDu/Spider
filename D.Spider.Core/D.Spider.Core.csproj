@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>D.Spider.Core</RootNamespace>
     <AssemblyName>D.Spider.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +67,7 @@
     <Compile Include="Event\IPageDownloadEvent.cs" />
     <Compile Include="Event\IUrlEvent.cs" />
     <Compile Include="Extension\PluginExts.cs" />
+    <Compile Include="Extension\SpiderCoreExtensions.cs" />
     <Compile Include="Extension\UrlEventExtensions.cs" />
     <Compile Include="Interface\IPageDownloader.cs" />
     <Compile Include="Interface\IEventFactory.cs" />

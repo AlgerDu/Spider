@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
 using D.Util.Interface;
 using D.Utils.AutofacExt;
@@ -21,6 +22,8 @@ namespace D.Spider.Example
             Console.WriteLine("Startup 配置服务（依赖注入）");
 
             builder.AddConsoleLogWriter();
+
+            builder.AddSpiderCoreService();
         }
 
         public void ManualCollectPlugin(IPluginCollecter pluginCollecter)
