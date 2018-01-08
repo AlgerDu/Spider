@@ -118,11 +118,11 @@ namespace D.Spider.Core
             {
                 var plugins = scope.Resolve<IEnumerable<IPlugin>>();
 
-                plugins = plugins.OrderBy(pp => pp.Symbol.PType);
+                plugins = plugins.OrderBy(pp => pp.Symbol?.PType);
 
                 foreach (var plugin in plugins)
                 {
-                    _logger.LogInformation($"创建插件实例 {plugin.Symbol}");
+                    _logger.LogInformation($"创建插件实例 {plugin}");
                     _list_plugins.Add(plugin);
                 }
             }
@@ -137,7 +137,9 @@ namespace D.Spider.Core
             foreach (var t in _dic_PluginTypes.Values)
             {
                 builder.RegisterType(t)
-                    .Keyed<IPlugin>(t.FullName);
+                    //.Named<IPlugin>(t.FullName);
+                    .AsSelf()
+                    .As<IPlugin>();
             }
         }
     }

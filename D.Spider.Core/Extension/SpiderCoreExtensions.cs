@@ -26,6 +26,11 @@ namespace D.Spider.Core.Extension
 
             builder.RegisterType<PluginEventManager>()
                 .As<IPluginEventManager>()
+                .As<IEventBus>()
+                .SingleInstance();
+
+            builder.RegisterType<EventFactory>()
+                .As<IEventFactory>()
                 .SingleInstance();
         }
     }

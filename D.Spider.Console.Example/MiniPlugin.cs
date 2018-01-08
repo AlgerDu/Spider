@@ -14,7 +14,7 @@ namespace D.Spider.Example
     /// <summary>
     /// 最简单插件
     /// </summary>
-    class MiniPlugin : IPlugin
+    class MiniPlugin : BasePlugin, IPlugin
         , IPluginEventHandler<IPageDownloadEvent>
     {
         readonly Guid _uid = Guid.NewGuid();
@@ -22,17 +22,8 @@ namespace D.Spider.Example
 
         ILogger _logger;
 
-        IPluginSymbol _symbol;
-        PluginState _pluginState;
-
         IEventBus _eventBus;
         IEventFactory _eventFactory;
-
-        public IPluginSymbol Symbol => _symbol;
-
-        public PluginState State => _pluginState;
-
-        public bool IsRunning => throw new NotImplementedException();
 
         public MiniPlugin(
             ILoggerFactory loggerFactory
@@ -45,12 +36,13 @@ namespace D.Spider.Example
             _eventBus = eventBus;
             _eventFactory = eventFactory;
 
+            _isRunning = false;
             _symbol = this.CreateSymbol(_uid, PluginType.PageProcess);
         }
 
-        public IPlugin Run()
+        public override IPlugin Run()
         {
-            _logger.LogInformation($"{Symbol} run");
+            _logger.LogInformation($"{this} run");
 
             var e = _eventFactory.CreateUrlEvent(_exampleUrl);
 
@@ -59,9 +51,9 @@ namespace D.Spider.Example
             return this;
         }
 
-        public IPlugin Stop()
+        public override IPlugin Stop()
         {
-            _logger.LogInformation($"{Symbol} stop");
+            _logger.LogInformation($"{this} stop");
 
             return this;
         }
