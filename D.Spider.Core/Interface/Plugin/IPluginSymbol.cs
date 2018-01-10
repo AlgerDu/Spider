@@ -15,17 +15,17 @@ namespace D.Spider.Core.Interface
     public interface IPluginSymbol : IEqualityComparer<IPluginSymbol>
     {
         /// <summary>
-        /// 实例 Uid
-        /// </summary>
-        Guid? InstanceUid { get; }
-
-        /// <summary>
-        /// 插件类型
+        /// 插件分类
         /// </summary>
         PluginType? PType { get; }
 
         /// <summary>
-        /// 插件名
+        /// 实例 ID，在一个 spider 的生命周期内，应该是唯一的 (应该有 plugin manager 给与赋值，不暴露 set 方法，由其它方式赋值)
+        /// </summary>
+        int? InstanceID { get; }
+
+        /// <summary>
+        /// 插件名（理论上应该是唯一的，但是如何让大家的插件名唯一，需要想办法解决）
         /// </summary>
         string Name { get; }
     }

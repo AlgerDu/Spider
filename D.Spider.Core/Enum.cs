@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace D.Spider.Core
 {
     /// <summary>
-    /// 插件类型
+    /// 插件分类
     /// </summary>
     public enum PluginType
     {

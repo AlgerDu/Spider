@@ -30,5 +30,10 @@ namespace D.Spider.Core
         {
             return _symbol.ToString();
         }
+
+        protected CreateSymbol(Guid guid)
+        {
+
+        }
     }
 }
