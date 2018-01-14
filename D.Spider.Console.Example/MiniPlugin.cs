@@ -17,7 +17,7 @@ namespace D.Spider.Example
     class MiniPlugin : BasePlugin, IPlugin
         , IPluginEventHandler<IPageDownloadEvent>
     {
-        readonly Guid _uid = Guid.NewGuid();
+        readonly string _name = "example";
         const string _exampleUrl = "www.bing.com";
 
         ILogger _logger;
@@ -37,7 +37,8 @@ namespace D.Spider.Example
             _eventFactory = eventFactory;
 
             _isRunning = false;
-            _symbol = this.CreateSymbol(_uid, PluginType.PageProcess);
+
+            CreateSymbol(_name, PluginType.PageProcess);
         }
 
         public override IPlugin Run()

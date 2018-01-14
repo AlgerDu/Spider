@@ -9,22 +9,40 @@ namespace D.Spider.Core
 {
     public class PluginSymbol : IPluginSymbol
     {
-        public PluginType? PType => throw new NotImplementedException();
+        public PluginType? PType { get; set; }
 
-        public Guid PluginTypeUid => throw new NotImplementedException();
+        public int? InstanceID { get; set; }
 
-        public int? InstanceID => throw new NotImplementedException();
-
-        public string Name => throw new NotImplementedException();
+        public string Name { get; set; }
 
         public bool Equals(IPluginSymbol x, IPluginSymbol y)
         {
-            throw new NotImplementedException();
+            if (x.PType.HasValue && y.PType.HasValue && x.PType != y.PType)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(x.Name) && !string.IsNullOrEmpty(y.Name) && x.Name != y.Name)
+            {
+                return false;
+            }
+
+            if (x.InstanceID.HasValue && y.InstanceID.HasValue && x.InstanceID != y.InstanceID)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public int GetHashCode(IPluginSymbol obj)
         {
-            throw new NotImplementedException();
+            return obj.InstanceID.GetHashCode() * obj.PType.GetHashCode() * obj.PType.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{InstanceID} {Name}";
         }
     }
 }

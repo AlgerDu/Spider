@@ -31,9 +31,13 @@ namespace D.Spider.Core
             return _symbol.ToString();
         }
 
-        protected CreateSymbol(Guid guid)
+        protected void CreateSymbol(string name, PluginType pluginType)
         {
-
+            _symbol = new PluginSymbol
+            {
+                Name = name,
+                PType = pluginType
+            };
         }
     }
 }
