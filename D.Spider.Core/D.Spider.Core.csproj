@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="BasePlugin.cs" />
     <Compile Include="EventFactory.cs" />
+    <Compile Include="EventManager\HandlerShell.cs" />
     <Compile Include="EventManager\PluginEventQueue.cs" />
     <Compile Include="Event\IPageDownloadEvent.cs" />
     <Compile Include="Event\IUrlEvent.cs" />
