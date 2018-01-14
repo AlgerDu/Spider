@@ -17,7 +17,7 @@ namespace D.Spider.Example
     class MiniPlugin : BasePlugin, IPlugin
         , IPluginEventHandler<IPageDownloadEvent>
     {
-        readonly string _name = "example";
+        const string _name = "example";
         const string _exampleUrl = "www.bing.com";
 
         ILogger _logger;

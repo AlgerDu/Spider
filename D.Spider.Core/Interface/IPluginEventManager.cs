@@ -15,12 +15,12 @@ namespace D.Spider.Core.Interface
         /// 添加事件处理器
         /// </summary>
         /// <param name="plugin"></param>
-        void AddEventHandler(IPlugin plugin);
+        void AddPlugin(IPlugin plugin);
 
         /// <summary>
         /// 移除事件处理器
         /// </summary>
         /// <param name="plugin"></param>
-        void RemoveEventHandler(IPlugin plugin);
+        void RemovePlugin(IPlugin plugin);
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using D.Util.Interface;
 using System.Collections.Concurrent;
+using D.Spider.Core.EventManager;
 
 namespace D.Spider.Core
 {
@@ -16,38 +17,25 @@ namespace D.Spider.Core
     {
         ILogger _logger;
 
-        /// <summary>
-        /// 每个插件的事件队列
-        /// </summary>
-        ConcurrentDictionary<Guid, PluginEventTask> _allEventTasks;
+        bool _isRunning;
 
-        /// <summary>
-        /// 每个插件正在等待执行的插件
-        /// </summary>
-        Dictionary<Guid, PluginEventQueue> _pluginQueues;
+        Dictionary<int, HandlerShell> dic_Plugins;
+
+        Dictionary<Guid, PluginEventTask> dic_EventTasks;
 
         public PluginEventManager(
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory
+            )
         {
             _logger = loggerFactory.CreateLogger<PluginEventManager>();
 
-            _allEventTasks = new ConcurrentDictionary<Guid, PluginEventTask>();
-            _pluginQueues = new Dictionary<Guid, PluginEventQueue>();
+            dic_EventTasks = new Dictionary<Guid, PluginEventTask>();
+            dic_Plugins = new Dictionary<int, HandlerShell>();
         }
 
-        public bool IsRunning => throw new NotImplementedException();
+        public bool IsRunning => _isRunning;
 
-        public void AddEventHandler(IPlugin plugin)
-        {
-            throw new NotImplementedException();
-        }
-
-        #region IEventSender 实现
-        public bool Cancel(IPluginEvent e)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region IEventBus 实现
         public int Cancel<eType>(eType e) where eType : IPluginEvent
         {
             throw new NotImplementedException();
@@ -57,36 +45,65 @@ namespace D.Spider.Core
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public void RemoveEventHandler(IPlugin plugin)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region IPluginEventManager 实现
         public IPluginEventManager Run()
         {
+            _isRunning = true;
+
             return this;
-        }
-
-        public void Send(IPluginEvent e)
-        {
-            _logger.LogInformation($"{e.FromPlugin} 发送事件 {e}");
-
-            var task = new PluginEventTask(e);
-
-            if (_allEventTasks.TryAdd(task.Uid, task))
-            {
-                DistributeEvents(task);
-            }
-            else
-            {
-                _logger.LogWarning($"向 allEventTasks 列表中添加事件 {e} 失败");
-            }
         }
 
         public IPluginEventManager Stop()
         {
+            _isRunning = false;
+
             return this;
+        }
+
+        public void AddPlugin(IPlugin plugin)
+        {
+            var shell = new HandlerShell(plugin);
+
+            lock (dic_Plugins)
+            {
+                if (dic_Plugins.ContainsKey(shell.Key))
+                {
+                    var containedShell = dic_Plugins[shell.Key];
+                    _logger.LogWarning(
+                        $"{shell.Plugin} 和 {containedShell.Plugin} 具有相同的 {shell.Key}\n" +
+                        $"不能在 event manager 中添加 {shell.Plugin}");
+                }
+                else
+                {
+                    dic_Plugins.Add(shell.Key, shell);
+                }
+            }
+        }
+
+        public void RemovePlugin(IPlugin plugin)
+        {
+            if (plugin == null)
+            {
+                _logger.LogDebug($"RemovePlugin 传入的 plugin 为 null");
+            }
+            else
+            {
+                var key = plugin.Symbol.InstanceID.Value;
+
+                lock (dic_Plugins)
+                {
+                    if (dic_Plugins.ContainsKey(key))
+                    {
+                        dic_Plugins.Remove(key);
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"event manager 没有对 {plugin} 的处理");
+                    }
+                }
+            }
         }
         #endregion
 
