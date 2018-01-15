@@ -2,20 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace D.Spider.Core.EventManager
 {
     /// <summary>
-    /// event handler 的一个壳
+    /// event handler 的一个壳，
+    /// 分析 plugin handle 了哪些事件，调用 plugin 执行事件
     /// </summary>
     internal class HandlerShell
     {
         /// <summary>
         /// plugin 能够处理的 event 类型 fullName 集合
         /// </summary>
-        HashSet<string> _handleTypes;
+        Dictionary<string, MemberInfo> _handleTpes;
+
+        HashSet<string> _unhandleTypes;
 
         /// <summary>
         /// shell 里面包含的 plugin
@@ -41,7 +45,8 @@ namespace D.Spider.Core.EventManager
                 throw new Exception("handler shell plugin is null");
             }
 
-            _handleTypes = new HashSet<string>();
+            _handleTpes = new Dictionary<string, MemberInfo>();
+            _unhandleTypes = new HashSet<string>();
 
             HasDealEventTask = false;
             EventTasks = new Queue<PluginEventTask>();
@@ -70,6 +75,11 @@ namespace D.Spider.Core.EventManager
             {
                 return false;
             }
+        }
+
+        public void HandleEvent(IPluginEvent e)
+        {
+
         }
 
         /// <summary>
