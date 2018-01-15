@@ -25,6 +25,7 @@ namespace D.Spider.Core
         IList<IPlugin> _list_plugins;
 
         bool _isRunning;
+        int _pluginInstanceCount;
 
         public IEnumerable<IPlugin> Plugins => throw new NotImplementedException();
 
@@ -47,6 +48,7 @@ namespace D.Spider.Core
             _list_plugins = new List<IPlugin>();
 
             _isRunning = false;
+            _pluginInstanceCount = 0;
         }
 
         public void LoadAllPlugin()
@@ -122,8 +124,12 @@ namespace D.Spider.Core
 
                 foreach (var plugin in plugins)
                 {
+                    DealNewPluginInstance(plugin);
+
                     _logger.LogInformation($"创建插件实例 {plugin}");
+
                     _list_plugins.Add(plugin);
+                    _pluginEventManager.AddPlugin(plugin);
                 }
             }
         }
@@ -141,6 +147,17 @@ namespace D.Spider.Core
                     .AsSelf()
                     .As<IPlugin>();
             }
+        }
+
+        /// <summary>
+        /// 对新生成的插件实例进行一些处理
+        /// </summary>
+        /// <param name="plugin"></param>
+        private void DealNewPluginInstance(IPlugin plugin)
+        {
+            //TODO 后面需要修改
+            _pluginInstanceCount++;
+            (plugin.Symbol as PluginSymbol).InstanceID = _pluginInstanceCount;
         }
     }
 }
