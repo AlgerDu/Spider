@@ -17,7 +17,7 @@ namespace D.Spider.Core.EventManager
         /// <summary>
         /// plugin 能够处理的 event 类型 fullName 集合
         /// </summary>
-        Dictionary<string, MemberInfo> _handleTpes;
+        Dictionary<Type, MethodInfo> _handleTpes;
 
         HashSet<string> _unhandleTypes;
 
@@ -45,7 +45,7 @@ namespace D.Spider.Core.EventManager
                 throw new Exception("handler shell plugin is null");
             }
 
-            _handleTpes = new Dictionary<string, MemberInfo>();
+            _handleTpes = new Dictionary<Type, MethodInfo>();
             _unhandleTypes = new HashSet<string>();
 
             HasDealEventTask = false;
@@ -63,23 +63,46 @@ namespace D.Spider.Core.EventManager
         /// <returns></returns>
         public bool IsHandleEvent(Type t)
         {
-            var isHandle = _handleTypes.Contains(t.FullName);
-
-            var fullName = t.FullName;
-
-            if (_handleTypes.Contains(t.FullName))
+            if (_handleTpes.ContainsKey(t))
             {
                 return true;
             }
+            else if (_unhandleTypes.Contains(t.FullName))
+            {
+                return false;
+            }
             else
             {
+                foreach (var handleType in _handleTpes.Keys)
+                {
+                    if (t.IsSubclassOf(handleType))
+                    {
+                        _handleTpes.Add(t, _handleTpes[handleType]);
+
+                        return true;
+                    }
+                }
+
+                _unhandleTypes.Add(t.FullName);
+
                 return false;
             }
         }
 
         public void HandleEvent(IPluginEvent e)
         {
+            var eType = e.GetType();
 
+            if (_handleTpes.ContainsKey(eType))
+            {
+                var m = _handleTpes[eType];
+
+                m.Invoke(Plugin, new object[] { e });
+            }
+            else
+            {
+                throw new Exception($"{Plugin} 不能处理事件 {e}");
+            }
         }
 
         /// <summary>
@@ -87,7 +110,24 @@ namespace D.Spider.Core.EventManager
         /// </summary>
         private void AnalysisHandler()
         {
+            var pType = Plugin.GetType();
 
+            var handleMemberInfos = pType.GetMethods(BindingFlags.Public);
+
+            foreach (var m in handleMemberInfos)
+            {
+                if (m.Name == "Handle")
+                {
+                    var paras = m.GetParameters();
+
+                    if (paras.Count() == 1)
+                    {
+                        var p = paras.FirstOrDefault();
+
+                        _handleTpes.Add(p.ParameterType, m);
+                    }
+                }
+            }
         }
     }
 }
