@@ -22,5 +22,10 @@ namespace D.Spider.Core.Event
                 PType = PluginType.UrlManager
             });
         }
+
+        public override string ToString()
+        {
+            return $"{Uid} 爬取 {ToCrawlUrl}";
+        }
     }
 }
