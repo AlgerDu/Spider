@@ -17,7 +17,7 @@ namespace D.Spider.Example
         , IPluginEventHandler<IPageDownloadEvent>
     {
         const string _name = "example";
-        const string _exampleUrl = "www.bing.com";
+        const string _exampleUrl = "http://www.bing.com";
 
         ILogger _logger;
 

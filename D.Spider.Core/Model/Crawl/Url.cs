@@ -107,7 +107,7 @@ namespace D.Spider.Core.Model.Crawl
             }
             else
             {
-                return new Url(String + href);
+                return new Url(this.ToString() + href);
             }
         }
         #endregion
@@ -115,6 +115,24 @@ namespace D.Spider.Core.Model.Crawl
         public override string ToString()
         {
             return _host + _relativePath;
+        }
+
+        /// <summary>
+        /// 判断一个字符串是否为url
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private bool IsUrl(string str)
+        {
+            try
+            {
+                string Url = @"^http[s]?://[^/:]+(:\d*)?";
+                return Regex.IsMatch(str, Url);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
