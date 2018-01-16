@@ -55,7 +55,7 @@ namespace D.Spider.Core
 
             dic_EventTasks.Add(e.Uid, eTask);
 
-            var toSymbols = e.ToPluginSymbol;
+            var toSymbols = e.ToPluginSymbols;
 
             var findPluginShells = from ps in dic_Plugins.Values
                                    from s in toSymbols

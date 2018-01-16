@@ -17,16 +17,6 @@ namespace D.Spider.Core.Interface
         Guid Uid { get; }
 
         /// <summary>
-        /// 事件类型唯一标识
-        /// </summary>
-        Guid TypeUid { get; set; }
-
-        /// <summary>
-        /// 事件类型名称
-        /// </summary>
-        string TypeName { get; }
-
-        /// <summary>
         /// 来源（唯一），当来自爬虫自己时，这个值为 null
         /// </summary>
         IPluginSymbol FromPlugin { get; }
@@ -34,7 +24,7 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 目标（不唯一，可以是某一个类型的插件）
         /// </summary>
-        IEnumerable<IPluginSymbol> ToPluginSymbol { get; }
+        IEnumerable<IPluginSymbol> ToPluginSymbols { get; }
 
         /// <summary>
         /// 创建时间

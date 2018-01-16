@@ -1,5 +1,4 @@
 ﻿using D.Spider.Core;
-using D.Spider.Core.Event;
 using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
 using D.Util.Interface;
@@ -45,7 +44,7 @@ namespace D.Spider.Example
         {
             _logger.LogInformation($"{this} run");
 
-            var e = _eventFactory.CreateUrlEvent(_exampleUrl);
+            var e = _eventFactory.CreateUrlEvent(this, _exampleUrl);
 
             _eventBus.Publish(e);
 

@@ -1,5 +1,6 @@
 ﻿using D.Spider.Core.Event;
 using D.Spider.Core.Interface;
+using D.Spider.Core.Model.Crawl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,13 @@ namespace D.Spider.Core.Extension
 {
     public static class UrlEventExtensions
     {
-        public static IUrlEvent CreateUrlEvent(this IEventFactory eventFactory, string url)
+        public static IUrlEvent CreateUrlEvent(this IEventFactory eventFactory, IPlugin fromPlugin, string url)
         {
-            return null;
+            return new UrlEvent
+            {
+                FromPlugin = fromPlugin.Symbol,
+                ToCrawlUrl = new Url(url)
+            };
         }
     }
 }

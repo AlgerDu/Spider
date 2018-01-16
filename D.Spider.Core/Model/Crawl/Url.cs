@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace D.Spider.Core
+namespace D.Spider.Core.Model.Crawl
 {
     /// <summary>
     /// IUrl 的实现
@@ -17,15 +17,8 @@ namespace D.Spider.Core
         string _host;
         string _urlString;
 
-        DateTime? _lastCrawledTime;
-        int _interval;
-        bool _needCrawl;
-
         private Url()
         {
-            _lastCrawledTime = null;
-            _interval = -1;
-            _needCrawl = false;
         }
 
         public Url(string url) : this()
@@ -63,51 +56,11 @@ namespace D.Spider.Core
             }
         }
 
-        public object CustomData { get; set; }
-
         public string Host
         {
             get
             {
                 return _host;
-            }
-        }
-
-        public DateTime? LastCrawledTime
-        {
-            get
-            {
-                return _lastCrawledTime;
-            }
-            set
-            {
-                lock (this)
-                {
-                    if (_interval == -1)
-                    {
-                        _needCrawl = false;
-                    }
-                }
-
-                _lastCrawledTime = value;
-            }
-        }
-
-        /// <summary>
-        /// Url 爬取的时间间隔
-        /// 时间单位 秒
-        /// </summary>
-        public int Interval
-        {
-            get
-            {
-                lock (this)
-                    return _interval;
-            }
-            set
-            {
-                lock (this)
-                    _interval = value;
             }
         }
 
@@ -119,34 +72,12 @@ namespace D.Spider.Core
             }
         }
 
-        public string String
-        {
-            get
-            {
-                return _urlString;
-            }
-        }
-
-        public bool NeedCrawl
-        {
-            get
-            {
-                return _needCrawl &&
-                    (LastCrawledTime == null || DateTime.Now - LastCrawledTime > new TimeSpan(0, 0, Interval));
-            }
-            set
-            {
-                _needCrawl = value;
-            }
-        }
-
-        public IPage Page { get; set; }
         #endregion
 
         #region IUrl 方法
-        public bool Equal(IUrl r)
+        public bool Equals(IUrl r)
         {
-            return String == r.String;
+            return this.ToString() == r.ToString();
         }
 
         /// <summary>
@@ -181,22 +112,9 @@ namespace D.Spider.Core
         }
         #endregion
 
-        /// <summary>
-        /// 判断一个字符串是否为url
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool IsUrl(string str)
+        public override string ToString()
         {
-            try
-            {
-                string Url = @"^http[s]?://[^/:]+(:\d*)?";
-                return Regex.IsMatch(str, Url);
-            }
-            catch
-            {
-                return false;
-            }
+            return _host + _relativePath;
         }
     }
 }
