@@ -42,7 +42,7 @@ namespace D.Spider.Core
 
         public override string ToString()
         {
-            return $"{InstanceID} {Name}";
+            return $"{InstanceID}({Name})";
         }
     }
 }
