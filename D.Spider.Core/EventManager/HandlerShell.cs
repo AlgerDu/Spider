@@ -112,7 +112,8 @@ namespace D.Spider.Core.EventManager
         {
             var pType = Plugin.GetType();
 
-            var handleMemberInfos = pType.GetMethods(BindingFlags.Public);
+            //var handleMemberInfos = pType.GetMethods(BindingFlags.Public);
+            var handleMemberInfos = pType.GetMethods();
 
             foreach (var m in handleMemberInfos)
             {

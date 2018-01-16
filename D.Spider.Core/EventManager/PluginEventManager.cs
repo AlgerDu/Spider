@@ -43,6 +43,12 @@ namespace D.Spider.Core
 
         public void Publish<eType>(eType e) where eType : IPluginEvent
         {
+            if (e == null)
+            {
+                _logger.LogWarning("IPluginEventManager.Publish 接收到了 null 事件");
+                return;
+            }
+
             _logger.LogDebug($"{e.FromPlugin} 发布事件：{e}");
 
             var eTask = new PluginEventTask(e);

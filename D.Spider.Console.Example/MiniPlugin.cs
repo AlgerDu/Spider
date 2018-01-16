@@ -14,7 +14,7 @@ namespace D.Spider.Example
     /// <summary>
     /// 最简单插件
     /// </summary>
-    class MiniPlugin : BasePlugin, IPlugin
+    public class MiniPlugin : BasePlugin, IPlugin
         , IPluginEventHandler<IPageDownloadEvent>
     {
         const string _name = "example";
