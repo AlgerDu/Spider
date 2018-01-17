@@ -103,7 +103,6 @@
     <Compile Include="Spider.cs" />
     <Compile Include="SpiderBuilder.cs" />
     <Compile Include="Model\Crawl\Url.cs" />
-    <Compile Include="UrlManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
