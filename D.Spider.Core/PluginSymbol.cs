@@ -44,5 +44,15 @@ namespace D.Spider.Core
         {
             return $"{InstanceID}({Name})";
         }
+
+        public static bool operator ==(PluginSymbol lhs, PluginSymbol rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(PluginSymbol lhs, PluginSymbol rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
     }
 }

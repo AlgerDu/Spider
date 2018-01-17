@@ -59,7 +59,7 @@ namespace D.Spider.Core
 
             var findPluginShells = from ps in dic_Plugins.Values
                                    from s in toSymbols
-                                   where ps.Plugin.Symbol == s && ps.IsHandleEvent(e.GetType())
+                                   where s.Equals(ps.Plugin.Symbol, s) && ps.IsHandleEvent(e.GetType())
                                    select ps;
 
             _logger.LogDebug($"{e.Uid} 分配给了 {findPluginShells.Count()} 个插件");

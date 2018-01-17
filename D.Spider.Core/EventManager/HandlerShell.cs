@@ -75,7 +75,7 @@ namespace D.Spider.Core.EventManager
             {
                 foreach (var handleType in _handleTpes.Keys)
                 {
-                    if (t.IsSubclassOf(handleType))
+                    if (handleType.IsAssignableFrom(t))
                     {
                         _handleTpes.Add(t, _handleTpes[handleType]);
 
