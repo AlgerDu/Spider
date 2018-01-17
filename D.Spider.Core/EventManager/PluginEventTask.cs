@@ -14,10 +14,6 @@ namespace D.Spider.Core
     {
         IPluginEvent _event;
 
-        Int32 _executing;
-        Int32 _executed;
-        Int32 _cancel;
-
         /// <summary>
         /// 任务 ID，实际是 event ID
         /// </summary>
@@ -33,51 +29,23 @@ namespace D.Spider.Core
         /// <summary>
         /// 正在执行此事件的插件个数
         /// </summary>
-        public Int32 ExecutingCount
-        {
-            get => _executing;
-            set
-            {
-                lock (this) _executing = value;
-            }
-        }
+        public Int32 ExecutingCount { get; set; }
 
         /// <summary>
         /// 执行完成的个数
         /// </summary>
-        public Int32 ExecutedCount
-        {
-            get => _executed;
-            set
-            {
-                lock (this) _executed = value;
-            }
-        }
+        public Int32 ExecutedCount { get; set; }
 
         /// <summary>
         /// 取消执行的插件个数
         /// </summary>
-        public Int32 CancelCount
-        {
-            get => _cancel;
-            set
-            {
-                lock (this) _cancel = value;
-            }
-        }
+        public Int32 CancelCount { get; set; }
+
+        public bool IsFinished => ExecutedCount - DistributeCount == 0;
 
         public PluginEventTask(IPluginEvent e)
         {
             _event = e;
-
-            _cancel = 0;
-            _executed = 0;
-            _executing = 0;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
     }
 }

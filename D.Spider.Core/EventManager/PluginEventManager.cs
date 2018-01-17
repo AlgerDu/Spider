@@ -53,7 +53,8 @@ namespace D.Spider.Core
 
             var eTask = new PluginEventTask(e);
 
-            dic_EventTasks.Add(e.Uid, eTask);
+            lock (dic_EventTasks)
+                dic_EventTasks.Add(e.Uid, eTask);
 
             var toSymbols = e.ToPluginSymbols;
 
@@ -64,9 +65,16 @@ namespace D.Spider.Core
 
             _logger.LogDebug($"{e.Uid} 分配给了 {findPluginShells.Count()} 个插件");
 
+            if (findPluginShells.Count() == 0) return;
+
+            lock (eTask)
+            {
+                eTask.DistributeCount = findPluginShells.Count();
+            }
+
             foreach (var ps in findPluginShells)
             {
-                Distribution(eTask, ps);
+                DistributionTask(eTask, ps);
             }
         }
         #endregion
@@ -137,7 +145,7 @@ namespace D.Spider.Core
         /// <param name="eventTask"></param>
         /// <param name="shell"></param>
         /// <returns></returns>
-        private Task Distribution(PluginEventTask eventTask, HandlerShell shell)
+        private Task DistributionTask(PluginEventTask eventTask, HandlerShell shell)
         {
             return Task.Run(() =>
             {
@@ -198,11 +206,45 @@ namespace D.Spider.Core
         /// <param name="shell"></param>
         private void HandleEventTask(PluginEventTask eTask, HandlerShell shell)
         {
+            lock (eTask)
+            {
+                eTask.ExecutingCount++;
+            }
+
             var e = eTask.PluginEvent;
 
             //TODO 添加对 PluginEventTask 中有关数量的处理
+            try
+            {
+                shell.HandleEvent(e);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{shell.Plugin} 处理事件 {e.Uid} 出现异常：{ex}");
+            }
+            finally
+            {
+                lock (eTask)
+                {
+                    eTask.ExecutingCount--;
+                    eTask.ExecutedCount++;
+                }
 
-            shell.HandleEvent(e);
+                if (eTask.IsFinished) EventTaskFinished(eTask);
+            }
+        }
+
+        private Task EventTaskFinished(PluginEventTask eTask)
+        {
+            return Task.Run(() =>
+            {
+                _logger.LogDebug($"事件 {eTask.Uid} 已经执行完成，分发给了 {eTask.DistributeCount} 个插件，有 {eTask.CancelCount} 个取消执行");
+
+                lock (dic_EventTasks)
+                {
+                    dic_EventTasks.Remove(eTask.Uid);
+                }
+            });
         }
     }
 }
