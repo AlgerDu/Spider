@@ -20,5 +20,10 @@ namespace D.Spider.Core.Interface
         /// 爬去参数
         /// </summary>
         IUrlCrawlOptions CrawlOptions { get; }
+
+        /// <summary>
+        /// 爬取任务的类型（默认是 Normal）
+        /// </summary>
+        UrlEventType TaskType { get; }
     }
 }

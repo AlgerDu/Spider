@@ -95,4 +95,35 @@ namespace D.Spider.Core
         /// </summary>
         All
     }
+
+    /// <summary>
+    /// url 爬取事件的类型
+    /// </summary>
+    public enum UrlEventType
+    {
+        /// <summary>
+        /// 普通
+        /// </summary>
+        Normal,
+
+        /// <summary>
+        /// 计划任务
+        /// </summary>
+        Cron,
+
+        /// <summary>
+        /// 循环爬去任务
+        /// </summary>
+        Cycle,
+
+        /// <summary>
+        /// 紧急
+        /// </summary>
+        Emergency,
+
+        /// <summary>
+        /// 取消对 url 的爬取任务
+        /// </summary>
+        Cancel
+    }
 }

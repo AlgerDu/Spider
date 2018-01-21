@@ -93,6 +93,7 @@
     <Compile Include="Interface\Plugin\IPluginEventHandler.cs" />
     <Compile Include="Interface\Plugin\IPluginSymbol.cs" />
     <Compile Include="EventManager\PluginEventTask.cs" />
+    <Compile Include="Model\Crawl\UrlCrawlOptions.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="EventManager\PluginEventManager.cs" />
     <Compile Include="PluginCollecter.cs" />
