@@ -17,6 +17,8 @@ namespace D.Spider.Core.Event
 
         public UrlEvent() : base()
         {
+            TaskType = UrlEventType.Normal;
+
             DealType = DealPluginEventType.First;
 
             AddToPluginSymbol(new PluginSymbol
@@ -27,7 +29,7 @@ namespace D.Spider.Core.Event
 
         public override string ToString()
         {
-            return $"{Uid} 爬取 {ToCrawlUrl}";
+            return $"事件 {Uid} ：{TaskType} 爬取 {ToCrawlUrl}";
         }
     }
 }

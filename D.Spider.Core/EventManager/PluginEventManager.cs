@@ -49,7 +49,7 @@ namespace D.Spider.Core
                 return;
             }
 
-            _logger.LogDebug($"{e.FromPlugin} 发布事件：{e}");
+            _logger.LogDebug($"{e.FromPlugin} 发布 {e}");
 
             var eTask = new PluginEventTask(e);
 
