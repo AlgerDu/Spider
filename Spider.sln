@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Spider.Core", "D.Spider.Core\D.Spider.Core.csproj", "{96D8A6C2-C50C-4961-9458-04EBED78CB69}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{7BEFF0B3-E19F-4C47-9B1B-03D651F3263D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Spider.Console.Example", "D.Spider.Console.Example\D.Spider.Console.Example.csproj", "{7617B26C-5899-4E5A-9143-1E2905816C42}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{8C9E8CD3-94D9-450F-85D1-F89B5C2EE148}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
