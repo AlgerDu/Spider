@@ -99,7 +99,8 @@
     <Compile Include="PluginCollecter.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="PluginSymbol.cs" />
-    <Compile Include="Plugin\UrlManager.cs" />
+    <Compile Include="Plugin\UrlManagers\UrlManager.cs" />
+    <Compile Include="Plugin\UrlManagers\UrlTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spider.cs" />
     <Compile Include="SpiderBuilder.cs" />
