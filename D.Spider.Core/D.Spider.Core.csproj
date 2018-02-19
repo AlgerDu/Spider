@@ -67,7 +67,10 @@
     <Compile Include="EventFactory.cs" />
     <Compile Include="EventManager\HandlerShell.cs" />
     <Compile Include="Event\BaseEvent.cs" />
+    <Compile Include="Event\PageDownloadEvent.cs" />
     <Compile Include="Event\UrlEvent.cs" />
+    <Compile Include="Extension\EventExts_PageDownloadEvent.cs" />
+    <Compile Include="Interface\Event\IPageDownload.cs" />
     <Compile Include="Interface\Event\IPageDownloadEvent.cs" />
     <Compile Include="Interface\Event\IUrlEvent.cs" />
     <Compile Include="Extension\PluginExts.cs" />

@@ -14,7 +14,7 @@ namespace D.Spider.Example
     /// 最简单插件
     /// </summary>
     public class MiniPlugin : BasePlugin, IPlugin
-        , IPluginEventHandler<IPageDownloadEvent>
+        , IPluginEventHandler<IPageDownloadCompleteEvent>
     {
         const string _name = "example";
         const string _exampleUrl = "http://www.bing.com";
@@ -58,7 +58,7 @@ namespace D.Spider.Example
             return this;
         }
 
-        public void Handle(IPageDownloadEvent e)
+        public void Handle(IPageDownloadCompleteEvent e)
         {
             _logger.LogInformation($"url 下载完成");
         }

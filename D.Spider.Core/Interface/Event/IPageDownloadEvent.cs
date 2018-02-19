@@ -9,7 +9,7 @@ namespace D.Spider.Core.Interface
     /// <summary>
     /// 页面下载完成事件
     /// </summary>
-    public interface IPageDownloadEvent : IPluginEvent
+    public interface IPageDownloadCompleteEvent : IPluginEvent
     {
     }
 }

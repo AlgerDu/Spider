@@ -1,4 +1,5 @@
-﻿using D.Spider.Core.Interface;
+﻿using D.Spider.Core.Extension;
+using D.Spider.Core.Interface;
 using D.Spider.Core.Plugin.UrlManagers;
 using D.Util.Interface;
 using System;
@@ -57,7 +58,7 @@ namespace D.Spider.Core.Plugin
 
             t.CauseEvent = e;
             t.Url = e.ToCrawlUrl;
-            t.ToCrawlTime = e.CrawlOptions.StartTime.Value;
+            t.ToCrawlTime = DateTime.Now;//= e.CrawlOptions.StartTime.HasValue ? e.CrawlOptions.StartTime.Value : DateTime.Now;
 
             _toCrawlTasks.Add(t);
 
@@ -90,9 +91,20 @@ namespace D.Spider.Core.Plugin
                 {
                     if (_toCrawlTasks.Count > 0 && _crawlingTask == null)
                     {
+                        _crawlingTask = _toCrawlTasks[0];
 
+                        _toCrawlTasks.RemoveAt(0);
+                    }
+                    else
+                    {
+                        return;
                     }
                 }
+
+                //发布一个新的 IPageDownloadEvent 给 downloader
+
+                var e = _eventFactory.CreatePageDownloadEvent(this, _crawlingTask.Url);
+                _eventBus.Publish(e);
             });
         }
     }
