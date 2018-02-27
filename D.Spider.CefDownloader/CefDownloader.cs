@@ -1,23 +1,21 @@
-﻿using D.Spider.Core.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D.Spider.Core.Events;
-using D.Util.Interface;
-using CefSharp.OffScreen;
-using CefSharp;
-using System.Threading;
+﻿using CefSharp;
 using CefSharp.Internals;
+using CefSharp.OffScreen;
+using D.Spider.Core;
 using D.Spider.Core.Hnadler;
+using D.Spider.Core.Interface;
+using D.Util.Interface;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace D.Spider.Core
+namespace D.Spider.Extension.Plugin
 {
     /// <summary>
     /// 封装 CefSharp.OffScreen 下载网页请求
     /// </summary>
-    public class CefDownloader : IPageDownloader, IDisposable
+    public class CefDownloader : BasePlugin, IPlugin
+        , IPluginEventHandler<IPageDownloadEvent>
     {
         #region 常量
         /// <summary>
@@ -34,7 +32,6 @@ namespace D.Spider.Core
         ILogger _logger;
         IEventBus _eventBus;
 
-        IUrlManager _urlManager;
         bool _running;
 
         ChromiumWebBrowser _browser;
@@ -42,15 +39,10 @@ namespace D.Spider.Core
 
         public CefDownloader(
             IEventBus eventBus
-            , ILoggerFactory loggerFactory
-            , IUrlManager urlManager)
+            , ILoggerFactory loggerFactory)
         {
             _eventBus = eventBus;
             _logger = loggerFactory.CreateLogger<CefDownloader>();
-
-            _urlManager = urlManager;
-
-            _eventBus.Subscribe(this);
         }
 
         ~CefDownloader()
@@ -64,7 +56,7 @@ namespace D.Spider.Core
             DownloaderPage();
         }
 
-        public void Run()
+        public void Run2()
         {
             var setting = new BrowserSettings();
             setting.ImageLoading = CefState.Disabled;
@@ -92,6 +84,26 @@ namespace D.Spider.Core
             {
                 _running = false;
             }
+        }
+        #endregion
+
+        #region IPlugin 相关
+        public override IPlugin Run()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IPlugin Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Handlers
+        public void Handle(IPageDownloadEvent e)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
