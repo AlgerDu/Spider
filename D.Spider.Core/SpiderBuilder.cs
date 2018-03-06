@@ -25,7 +25,7 @@ namespace D.Spider.Core
             var startup = _startupType.Assembly.CreateInstance(_startupType.FullName) as IStartup;
 
             var configCollector = CreateConfigCollector(startup);
-            var pluginCollector = CreateIPluginCollecter(startup);
+            var pluginCollector = CreatePluginCollecter(startup);
 
             var container = CreateAutofacContainer(startup, configCollector, pluginCollector);
             
@@ -80,7 +80,7 @@ namespace D.Spider.Core
         /// 创建一个 IPluginCollecter
         /// </summary>
         /// <returns></returns>
-        private IPluginCollecter CreateIPluginCollecter(IStartup startup)
+        private IPluginCollecter CreatePluginCollecter(IStartup startup)
         {
             var pluginCollecter = new PluginCollecter();
             startup.ManualCollectPlugin(pluginCollecter);

@@ -98,7 +98,7 @@ namespace D.Spider.Extension.Plugin
         {
             lock (this)
             {
-                if (_pageDownloadEvent != null)
+                if (_pageDownloadEvent == null)
                 {
                     _pageDownloadEvent = e;
 
@@ -146,11 +146,6 @@ namespace D.Spider.Extension.Plugin
             {
                 Thread.Sleep(_cefBrowserLoadEndSleepTime);
 
-                lock (this)
-                {
-                    _pageDownloadEvent = null;
-                }
-
                 var html = await _browser.GetSourceAsync();
                 var oldEvent = _pageDownloadEvent;
 
@@ -165,6 +160,11 @@ namespace D.Spider.Extension.Plugin
                 var completeEvent = _eventFactory.CreatePageDownloadCompleteEvent(this, page);
 
                 _eventBus.Publish(completeEvent);
+
+                lock (this)
+                {
+                    _pageDownloadEvent = null;
+                }
             }
         }
 

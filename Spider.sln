@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D.Spider.Core", "D.Spider.Core\D.Spider.Core.csproj", "{96D8A6C2-C50C-4961-9458-04EBED78CB69}"
 EndProject
@@ -83,8 +83,8 @@ Global
 		{00CAC10E-534F-49E8-A484-F927203195F7}.Release|x86.Build.0 = Release|Any CPU
 		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|x64.Build.0 = Debug|Any CPU
+		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|x64.ActiveCfg = Debug|x64
+		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|x64.Build.0 = Debug|x64
 		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7617B26C-5899-4E5A-9143-1E2905816C42}.Debug|x86.Build.0 = Debug|Any CPU
 		{7617B26C-5899-4E5A-9143-1E2905816C42}.Release|Any CPU.ActiveCfg = Release|Any CPU

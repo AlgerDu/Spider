@@ -15,7 +15,7 @@ namespace D.Spider.Core.Extension
             return new PageDownloadEvent
             {
                 FromPlugin = fromPlugin.Symbol,
-                Url = url
+                Url = url,
             };
         }
 

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
+using D.Spider.Extension.Plugin;
 using D.Util.Interface;
 using D.Utils.AutofacExt;
 using System;
@@ -29,6 +30,8 @@ namespace D.Spider.Example
         public void ManualCollectPlugin(IPluginCollecter pluginCollecter)
         {
             Console.WriteLine("Startup 手动添加插件");
+
+            pluginCollecter.Collect<CefDownloader>();
 
             pluginCollecter.Collect<MiniPlugin>();
         }
