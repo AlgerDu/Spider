@@ -12,6 +12,11 @@ namespace D.Spider.Core.Interface
     public interface IPage
     {
         /// <summary>
+        /// 页面对应的 url
+        /// </summary>
+        IUrl Url { get; }
+
+        /// <summary>
         /// 整个页面的 Html 文本
         /// </summary>
         string HtmlTxt { get; }

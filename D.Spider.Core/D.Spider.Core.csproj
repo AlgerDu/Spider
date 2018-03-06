@@ -67,6 +67,7 @@
     <Compile Include="EventFactory.cs" />
     <Compile Include="EventManager\HandlerShell.cs" />
     <Compile Include="Event\BaseEvent.cs" />
+    <Compile Include="Event\PageDownloadCompleteEvent.cs" />
     <Compile Include="Event\PageDownloadEvent.cs" />
     <Compile Include="Event\UrlEvent.cs" />
     <Compile Include="Extension\EventExts_PageDownloadEvent.cs" />
@@ -96,8 +97,8 @@
     <Compile Include="Interface\Plugin\IPluginEventHandler.cs" />
     <Compile Include="Interface\Plugin\IPluginSymbol.cs" />
     <Compile Include="EventManager\PluginEventTask.cs" />
+    <Compile Include="Model\Crawl\Page.cs" />
     <Compile Include="Model\Crawl\UrlCrawlOptions.cs" />
-    <Compile Include="Page.cs" />
     <Compile Include="EventManager\PluginEventManager.cs" />
     <Compile Include="PluginCollecter.cs" />
     <Compile Include="PluginManager.cs" />

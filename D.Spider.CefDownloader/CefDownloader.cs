@@ -2,8 +2,10 @@
 using CefSharp.Internals;
 using CefSharp.OffScreen;
 using D.Spider.Core;
+using D.Spider.Core.Extension;
 using D.Spider.Core.Hnadler;
 using D.Spider.Core.Interface;
+using D.Spider.Core.Model.Crawl;
 using D.Util.Interface;
 using System;
 using System.Threading;
@@ -144,16 +146,25 @@ namespace D.Spider.Extension.Plugin
             {
                 Thread.Sleep(_cefBrowserLoadEndSleepTime);
 
+                lock (this)
+                {
+                    _pageDownloadEvent = null;
+                }
+
                 var html = await _browser.GetSourceAsync();
+                var oldEvent = _pageDownloadEvent;
 
                 _logger.LogDebug($"{_symbol} {_pageDownloadEvent.Url} 页面下载完成，共 {html.Length} 个字符");
 
-                _downloaderUrl.Page = new Page(html);
-                _eventBus.Publish(new UrlCrawledEvent(_downloaderUrl));
+                var page = new Page()
+                {
+                    HtmlTxt = html,
+                    Url = oldEvent.Url
+                };
 
-                _downloaderUrl = null;
+                var completeEvent = _eventFactory.CreatePageDownloadCompleteEvent(this, page);
 
-                DownloadPage();
+                _eventBus.Publish(completeEvent);
             }
         }
 

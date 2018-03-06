@@ -18,5 +18,14 @@ namespace D.Spider.Core.Extension
                 Url = url
             };
         }
+
+        public static IPageDownloadCompleteEvent CreatePageDownloadCompleteEvent(this IEventFactory eventFactory, IPlugin fromPlugin, IPage page)
+        {
+            return new PageDownloadCompleteEvent
+            {
+                FromPlugin = fromPlugin.Symbol,
+                Page = page
+            };
+        }
     }
 }
