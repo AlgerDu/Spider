@@ -157,7 +157,7 @@ namespace D.Spider.Extension.Plugin
                     Url = oldEvent.Url
                 };
 
-                var completeEvent = _eventFactory.CreatePageDownloadCompleteEvent(this, page);
+                var completeEvent = _eventFactory.CreatePageDownloadCompleteEvent(this, oldEvent.FromPlugin, page);
 
                 _eventBus.Publish(completeEvent);
 

@@ -19,13 +19,17 @@ namespace D.Spider.Core.Extension
             };
         }
 
-        public static IPageDownloadCompleteEvent CreatePageDownloadCompleteEvent(this IEventFactory eventFactory, IPlugin fromPlugin, IPage page)
+        public static IPageDownloadCompleteEvent CreatePageDownloadCompleteEvent(this IEventFactory eventFactory, IPlugin fromPlugin, IPluginSymbol toPlugin, IPage page)
         {
-            return new PageDownloadCompleteEvent
+            var e = new PageDownloadCompleteEvent
             {
                 FromPlugin = fromPlugin.Symbol,
                 Page = page
             };
+
+            e.AddToPluginSymbol(toPlugin);
+
+            return e;
         }
     }
 }

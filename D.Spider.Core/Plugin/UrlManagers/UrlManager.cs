@@ -18,6 +18,7 @@ namespace D.Spider.Core.Plugin
     /// </summary>
     public class UrlManager : BasePlugin, IPlugin
         , IPluginEventHandler<IUrlEvent>
+        , IPluginEventHandler<IPageDownloadCompleteEvent>
     {
         ILogger _logger;
 
@@ -61,6 +62,13 @@ namespace D.Spider.Core.Plugin
             t.ToCrawlTime = DateTime.Now;//= e.CrawlOptions.StartTime.HasValue ? e.CrawlOptions.StartTime.Value : DateTime.Now;
 
             _toCrawlTasks.Add(t);
+
+            StartIsNotRunningAnyTask();
+        }
+
+        public void Handle(IPageDownloadCompleteEvent e)
+        {
+            _logger.LogDebug($"{e.Page.Url} 下载完成");
 
             StartIsNotRunningAnyTask();
         }

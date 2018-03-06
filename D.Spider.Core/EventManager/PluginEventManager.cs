@@ -175,9 +175,7 @@ namespace D.Spider.Core
         {
             return Task.Run(() =>
             {
-                var running = true;
-
-                while (running)
+                while (shell.HasDealEventTask)
                 {
                     PluginEventTask eTask = null;
 
@@ -189,7 +187,10 @@ namespace D.Spider.Core
                         }
                         else
                         {
-                            running = false;
+                            lock (shell)
+                            {
+                                shell.HasDealEventTask = false;
+                            }
                         }
                     }
 

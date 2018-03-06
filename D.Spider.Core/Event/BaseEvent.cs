@@ -32,7 +32,7 @@ namespace D.Spider.Core.Event
             _toPluginSymbols = new List<IPluginSymbol>();
         }
 
-        protected void AddToPluginSymbol(IPluginSymbol symbol)
+        public void AddToPluginSymbol(IPluginSymbol symbol)
         {
             if (symbol != null)
                 _toPluginSymbols.Add(symbol);
