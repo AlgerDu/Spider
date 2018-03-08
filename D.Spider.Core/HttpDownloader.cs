@@ -18,7 +18,7 @@ namespace D.Spider.Core
     /// IDownloader 的实现
     /// 使用 IjQuery 进行网页下载
     /// </summary>
-    public class HttpDownloader : IDownloader, IDisposable
+    public class HttpDownloader : IPageDownloader, IDisposable
     {
         /// <summary>
         /// 同时下载的最大数量

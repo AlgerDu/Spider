@@ -1,23 +1,24 @@
-﻿using D.Spider.Core.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D.Spider.Core.Events;
-using D.Util.Interface;
-using CefSharp.OffScreen;
-using CefSharp;
-using System.Threading;
+﻿using CefSharp;
 using CefSharp.Internals;
+using CefSharp.OffScreen;
+using D.Spider.Core;
+using D.Spider.Core.Extension;
 using D.Spider.Core.Hnadler;
+using D.Spider.Core.Interface;
+using D.Spider.Core.Model.Crawl;
+using D.Util.Interface;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace D.Spider.Core
+namespace D.Spider.Extension.Plugin
 {
     /// <summary>
-    /// 封装 CefSharp.OffScreen 下载网页请求
+    /// 封装 CefSharp.OffScreen 下载网页；
+    /// 需要修改的地方还比较多，暂时还是已可运行为目标
     /// </summary>
-    public class CefDownloader : IDownloader, IDisposable
+    public class CefDownloader : BasePlugin, IPlugin
+        , IPluginEventHandler<IPageDownloadEvent>
     {
         #region 常量
         /// <summary>
@@ -32,65 +33,81 @@ namespace D.Spider.Core
         #endregion
 
         ILogger _logger;
-        IEventBus _eventBus;
 
-        IUrlManager _urlManager;
+        IEventBus _eventBus;
+        IEventFactory _eventFactory;
+
         bool _running;
 
         ChromiumWebBrowser _browser;
-        IUrl _downloaderUrl;
+
+        IPageDownloadEvent _pageDownloadEvent;
 
         public CefDownloader(
             IEventBus eventBus
-            , ILoggerFactory loggerFactory
-            , IUrlManager urlManager)
+            , IEventFactory eventFactory
+            , ILoggerFactory loggerFactory)
         {
-            _eventBus = eventBus;
             _logger = loggerFactory.CreateLogger<CefDownloader>();
 
-            _urlManager = urlManager;
+            _eventBus = eventBus;
+            _eventFactory = eventFactory;
 
-            _eventBus.Subscribe(this);
+            CreateSymbol("cef_downloader", PluginType.Downloader);
         }
 
-        ~CefDownloader()
+        #region IPlugin 相关
+        public override IPlugin Run()
         {
-            Dispose();
-        }
-
-        #region IDownloader 接口实现
-        public void Handle(UrlWaitingEvent e)
-        {
-            DownloaderPage();
-        }
-
-        public void Run()
-        {
-            var setting = new BrowserSettings();
-            setting.ImageLoading = CefState.Disabled;
-
-            _browser = new ChromiumWebBrowser("", setting);
-
-            _browser.LifeSpanHandler = new LifeSpanHandler();
-
-            _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
-            _browser.FrameLoadStart += new EventHandler<FrameLoadStartEventArgs>(FrameLoadStart);
-
             lock (this)
             {
                 _running = true;
+
+                InitCef();
+
+                var setting = new BrowserSettings();
+                setting.ImageLoading = CefState.Disabled;
+
+                _browser = new ChromiumWebBrowser("", setting);
+
+                _browser.LifeSpanHandler = new LifeSpanHandler();
+
+                _browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(CefBrowserLoadEnd);
+                _browser.FrameLoadStart += new EventHandler<FrameLoadStartEventArgs>(FrameLoadStart);
             }
 
-            DownloaderPage();
+            return this;
         }
-        #endregion
 
-        #region IDisposable 实现
-        public void Dispose()
+        public override IPlugin Stop()
         {
             lock (this)
             {
+                ShutdownCef();
+
                 _running = false;
+            }
+
+            return this;
+        }
+
+        #endregion
+
+        #region Handlers
+        public void Handle(IPageDownloadEvent e)
+        {
+            lock (this)
+            {
+                if (_pageDownloadEvent == null)
+                {
+                    _pageDownloadEvent = e;
+
+                    DownloadPage();
+                }
+                else
+                {
+                    _logger.LogWarning($"{_symbol} 正在执行下载任务，不能处理事件 {e}");
+                }
             }
         }
         #endregion
@@ -99,7 +116,7 @@ namespace D.Spider.Core
         /// <summary>
         /// 初始化 cef
         /// </summary>
-        public static void InitCef()
+        private void InitCef()
         {
             var set = new CefSettings();
             set.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
@@ -110,7 +127,7 @@ namespace D.Spider.Core
         /// <summary>
         /// 关闭 Cef
         /// </summary>
-        public static void ShutdownCef()
+        private void ShutdownCef()
         {
             Cef.Shutdown();
         }
@@ -118,25 +135,9 @@ namespace D.Spider.Core
         /// <summary>
         /// 获取需要下载的 url，并且调用 cef 下载
         /// </summary>
-        private void DownloaderPage()
+        private void DownloadPage()
         {
-            lock (this)
-            {
-                if (!_running)
-                    return;
-
-                if (_downloaderUrl != null)
-                    return;
-                else
-                {
-                    _downloaderUrl = _urlManager.NextCrawl();
-
-                    if (_downloaderUrl != null)
-                    {
-                        LoadPageAsync(_browser, _downloaderUrl.String);
-                    }
-                }
-            }
+            LoadPageAsync(_browser, _pageDownloadEvent.Url.ToString());
         }
 
         private async void CefBrowserLoadEnd(object sender, FrameLoadEndEventArgs e)
@@ -146,15 +147,24 @@ namespace D.Spider.Core
                 Thread.Sleep(_cefBrowserLoadEndSleepTime);
 
                 var html = await _browser.GetSourceAsync();
+                var oldEvent = _pageDownloadEvent;
 
-                _logger.LogDebug("{0} 下载完成，获取 html 数据长度：{1}", _downloaderUrl.String, html.Length);
+                _logger.LogDebug($"{_symbol} {_pageDownloadEvent.Url} 页面下载完成，共 {html.Length} 个字符");
 
-                _downloaderUrl.Page = new Page(html);
-                _eventBus.Publish(new UrlCrawledEvent(_downloaderUrl));
+                var page = new Page()
+                {
+                    HtmlTxt = html,
+                    Url = oldEvent.Url
+                };
 
-                _downloaderUrl = null;
+                var completeEvent = _eventFactory.CreatePageDownloadCompleteEvent(this, oldEvent.FromPlugin, page);
 
-                DownloaderPage();
+                _eventBus.Publish(completeEvent);
+
+                lock (this)
+                {
+                    _pageDownloadEvent = null;
+                }
             }
         }
 
@@ -188,9 +198,11 @@ namespace D.Spider.Core
 
         private void FrameLoadStart(object sender, FrameLoadStartEventArgs e)
         {
-            if (e.Frame.IsMain && e.Url != _downloaderUrl.String)
+            var url = _pageDownloadEvent.Url.ToString();
+
+            if (e.Frame.IsMain && e.Url != url)
             {
-                _logger.LogWarning("页面发生自动跳转 {0} => {1}", _downloaderUrl.String, e.Url);
+                _logger.LogWarning($"{_symbol} 下载时页面发生自动跳转 {url} => {e.Url}");
 
                 e.Browser.StopLoad();
             }

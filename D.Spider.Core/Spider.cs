@@ -1,15 +1,12 @@
 ﻿using D.Spider.Core.Interface;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using System;
+using D.Util.Interface;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using D.Spider.Core.Events;
-using D.Util.Interface;
+using System;
 
 namespace D.Spider.Core
 {
@@ -18,65 +15,45 @@ namespace D.Spider.Core
     /// </summary>
     public class DSpider : ISpider
     {
-        IUnityContainer _unityContainer;
+        ILogger _logger;
 
-        IEventBus _eventBus;
+        IPluginManager _pluginManager;
+        IPluginEventManager _pluginEventManager;
 
-        IUrlManager _urlManager;
-        IPageProcess _pageProcess;
-        IDownloader _downloader;
+        public bool IsRunning => throw new NotImplementedException();
 
-        public DSpider()
+        public DSpider(
+            ILoggerFactory loggerFactory
+            , IPluginManager pluginManager
+            , IPluginEventManager pluginEventManager
+            )
         {
-            _unityContainer = new UnityContainer();
+            _logger = loggerFactory.CreateLogger<DSpider>();
+
+            _pluginManager = pluginManager;
+            _pluginEventManager = pluginEventManager;
         }
 
-        #region ISpider 属性
-
-        public IUrlManager UrlManager { get { return _urlManager; } }
-
-        public IUnityContainer UnityContainer { get { return _unityContainer; } }
-
-        #endregion
-
-        #region ISpider 接口
         public ISpider Run()
         {
-            _eventBus.Subscribe(this);
-            _downloader.Run();
-            return this;
-        }
+            _logger.LogInformation("spider 开始运行");
 
-        public ISpider Initialization()
-        {
-            _urlManager = _unityContainer.Resolve<IUrlManager>();
-            _pageProcess = _unityContainer.Resolve<IPageProcess>();
-            _downloader = _unityContainer.Resolve<IDownloader>();
+            _pluginEventManager.Run();
 
-            _eventBus = _unityContainer.Resolve<IEventBus>();
+            _pluginManager.LoadAllPlugin();
+            _pluginManager.Run();
 
             return this;
         }
 
-        public ISpider UnityConfigerPath(string path)
+        public ISpider Stop()
         {
-            if (!File.Exists(path))
-            {
-                throw new Exception("传入的 spider unity container 配置文件不存在");
-            }
+            _pluginEventManager.Stop();
+            _pluginManager.Stop();
 
-            var fileMap = new ExeConfigurationFileMap { ExeConfigFilename = path };
-            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
-            var section = (UnityConfigurationSection)configuration.GetSection("unity");
-            _unityContainer.LoadConfiguration(section, "SpiderContainer");
+            _logger.LogInformation("spider 停止");
 
             return this;
         }
-
-        public void Handle(UrlCrawledEvent e)
-        {
-            _pageProcess.Process(e.Url);
-        }
-        #endregion
     }
 }
