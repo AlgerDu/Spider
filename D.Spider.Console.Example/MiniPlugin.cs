@@ -14,7 +14,7 @@ namespace D.Spider.Example
     /// 最简单插件
     /// </summary>
     public class MiniPlugin : BasePlugin, IPlugin
-        , IPluginEventHandler<IPageDownloadCompleteEvent>
+        , IPluginEventHandler<IUrlCrawledEvent>
     {
         const string _name = "example";
         const string _exampleUrl = "http://www.bing.com";
@@ -58,9 +58,9 @@ namespace D.Spider.Example
             return this;
         }
 
-        public void Handle(IPageDownloadCompleteEvent e)
+        public void Handle(IUrlCrawledEvent e)
         {
-            _logger.LogInformation($"url 下载完成");
+            _logger.LogInformation($"{_exampleUrl} 下载完成，前 20 个字符是：{e.Page.HtmlTxt.Substring(0, 20)}");
         }
     }
 }

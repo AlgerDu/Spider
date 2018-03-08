@@ -31,5 +31,22 @@ namespace D.Spider.Core.Extension
 
             return e;
         }
+
+        public static IUrlCrawledEvent CreateUrlCrawledEvent(
+            this IEventFactory eventFactory
+            , IPlugin fromPlugin
+            , IPluginSymbol toPlugin
+            , IPage page)
+        {
+            var e = new UrlCrawledEvent
+            {
+                FromPlugin = fromPlugin.Symbol,
+                Page = page
+            };
+
+            e.AddToPluginSymbol(toPlugin);
+
+            return e;
+        }
     }
 }

@@ -70,6 +70,11 @@ namespace D.Spider.Core.Plugin
         {
             _logger.LogDebug($"{e.Page.Url} 下载完成");
 
+            var crawledTask = _crawlingTask;
+
+            var ne = _eventFactory.CreateUrlCrawledEvent(this, crawledTask.CauseEvent.FromPlugin, e.Page);
+            _eventBus.Publish(ne);
+
             StartIsNotRunningAnyTask();
         }
 
