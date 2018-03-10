@@ -19,7 +19,7 @@ namespace D.Spider.Core.SpiderScriptEngine
         /// <summary>
         /// 实现所有 KeywordHandler 的命名空间
         /// </summary>
-        const string _handlerNamespce = "D.Spider.Core.SpiderscriptEngine.KeywordHandlers";
+        const string _handlerNamespce = "D.Spider.Core.SpiderScriptEngine.KeywordHandlers";
 
         ILogger _logger;
 
