@@ -61,6 +61,9 @@
     <Reference Include="D.Utils.AutofacExt, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\D.Utils.AutofacExt.1.0.1\lib\D.Utils.AutofacExt.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -92,6 +95,10 @@
     <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
       <Project>{96d8a6c2-c50c-4961-9458-04ebed78cb69}</Project>
       <Name>D.Spider.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\D.Spider.SpiderScriptEngine\D.Spider.SpiderScriptEngine.csproj">
+      <Project>{00cac10e-534f-49e8-a484-f927203195f7}</Project>
+      <Name>D.Spider.SpiderScriptEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

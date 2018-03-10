@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
+using D.Spider.Core.SpiderScriptEngine;
 using D.Spider.Extension.Plugin;
 using D.Util.Interface;
 using D.Utils.AutofacExt;
@@ -21,6 +22,8 @@ namespace D.Spider.Example
         public void ConfigService(ContainerBuilder builder)
         {
             Console.WriteLine("Startup 配置服务（依赖注入）");
+
+            builder.RegisterType<SsEngine>().As<ISpiderScriptEngine>().SingleInstance();
 
             builder.AddConsoleLogWriter();
 
