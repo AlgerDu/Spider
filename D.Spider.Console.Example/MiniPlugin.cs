@@ -66,13 +66,24 @@ namespace D.Spider.Example
 
         public void Handle(IUrlCrawledEvent e)
         {
-            _logger.LogInformation($"{_exampleUrl} 下载完成，前 20 个字符是：{e.Page.HtmlTxt.Substring(0, 20)}");
+            var html = e.Page.HtmlTxt;
+
+            if (html.Length < 400000)
+            {
+                var ne = _eventFactory.CreateUrlEvent(this, _exampleUrl);
+
+                _eventBus.Publish(ne);
+
+                return;
+            }
+
+
 
             var script = @"
                     var vs:array
                     foreach $('div.catalog-content-wrap div.volume-wrap div.volume')
                         var v:object
-                        v.Name = $('h3').text
+                        v = $('h3').html.regex('</a>(?<Name>[\s\S]*?)<i>')
                         var cs:array
                         foreach $('li')
                             var c:object
@@ -85,7 +96,7 @@ namespace D.Spider.Example
                         vs[] = v
                     return vs";
 
-            var data = _ssEngine.Run(e.Page.HtmlTxt, script);
+            var data = _ssEngine.Run(html, script);
 
             _logger.LogInformation($"{data}");
         }

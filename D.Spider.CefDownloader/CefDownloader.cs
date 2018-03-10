@@ -29,7 +29,7 @@ namespace D.Spider.Extension.Plugin
         /// <summary>
         /// 防止在网页加载完成之后还有部分需要的数据还没有加载完成，需要等待一段时间 （ms）
         /// </summary>
-        const int _cefBrowserLoadEndSleepTime = 500;
+        const int _cefBrowserLoadEndSleepTime = 5000;
         #endregion
 
         ILogger _logger;
