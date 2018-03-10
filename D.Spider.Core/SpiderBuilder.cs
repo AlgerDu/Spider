@@ -2,6 +2,7 @@
 using D.Spider.Core.Interface;
 using D.Util.Config;
 using D.Util.Interface;
+using D.Util.Logger;
 using D.Utils.AutofacExt;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,13 @@ namespace D.Spider.Core
             //TODO：需要迁移到其它地方，暂时写在这里
 
             var builder = new ContainerBuilder();
-            
-            builder.AddUtils();
+
+            //builder.AddUtils();
+
+            builder.RegisterType<LoggerFactory>()
+                .As<ILoggerFactory>()
+                .SingleInstance();
+
             builder.AddConfigProvider(configCollector.CreateProvider());
 
             //TODO：需要迁移到其它地方，暂时写在这里
