@@ -72,6 +72,11 @@ namespace D.Spider.Core.Plugin
 
             var crawledTask = _crawlingTask;
 
+            lock (this)
+            {
+                _crawlingTask = null;
+            }
+
             var ne = _eventFactory.CreateUrlCrawledEvent(this, crawledTask.CauseEvent.FromPlugin, e.Page);
             _eventBus.Publish(ne);
 
