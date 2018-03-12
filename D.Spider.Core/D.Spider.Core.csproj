@@ -78,7 +78,7 @@
     <Compile Include="Interface\Event\IUrlCrawlEvent.cs" />
     <Compile Include="Extension\PluginExts.cs" />
     <Compile Include="Extension\SpiderCoreExtensions.cs" />
-    <Compile Include="Extension\UrlEventExtensions.cs" />
+    <Compile Include="Extension\UrlCrawlEventExtensions.cs" />
     <Compile Include="Interface\IPageDownloader.cs" />
     <Compile Include="Interface\IEventFactory.cs" />
     <Compile Include="Interface\IEventBus.cs" />

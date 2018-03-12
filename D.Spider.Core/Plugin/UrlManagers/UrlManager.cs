@@ -21,8 +21,7 @@ namespace D.Spider.Core.Plugin
         , IPluginEventHandler<IPageDownloadCompleteEvent>
     {
         ILogger _logger;
-
-        IEventFactory _eventFactory;
+        
         IEventBus _eventBus;
 
         /// <summary>
@@ -37,13 +36,11 @@ namespace D.Spider.Core.Plugin
 
         public UrlManager(
             ILoggerFactory loggerFactory
-            , IEventFactory eventFactory
             , IEventBus eventBus
             )
         {
             _logger = loggerFactory.CreateLogger<UrlManager>();
-
-            _eventFactory = eventFactory;
+            
             _eventBus = eventBus;
 
             CreateSymbol("Core.UrlManager", PluginType.UrlManager);
