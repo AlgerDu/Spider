@@ -17,7 +17,7 @@ namespace D.Spider.Core.Interface
         IUrl ToCrawlUrl { get; }
 
         /// <summary>
-        /// 爬去参数
+        /// 爬取参数，不同的 CrawlType 对应的爬去参数也不同
         /// </summary>
         IUrlCrawlOptions CrawlOptions { get; }
 
