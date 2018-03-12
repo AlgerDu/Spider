@@ -24,6 +24,6 @@ namespace D.Spider.Core.Interface
         /// <summary>
         /// 爬取任务的类型（默认是 Normal）
         /// </summary>
-        UrlEventType TaskType { get; }
+        UrlCrwalEventType CrawlType { get; }
     }
 }

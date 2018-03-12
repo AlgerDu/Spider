@@ -13,11 +13,11 @@ namespace D.Spider.Core.Event
 
         public IUrlCrawlOptions CrawlOptions { get; set; }
 
-        public UrlEventType TaskType { get; set; }
+        public UrlCrwalEventType TaskType { get; set; }
 
         public UrlCrwalEvent() : base()
         {
-            TaskType = UrlEventType.Normal;
+            TaskType = UrlCrwalEventType.Normal;
 
             DealType = DealPluginEventType.First;
 
