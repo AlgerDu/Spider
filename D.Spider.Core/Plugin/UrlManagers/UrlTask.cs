@@ -28,6 +28,6 @@ namespace D.Spider.Core.Plugin.UrlManagers
         /// 但是仔细思考之后觉得这个暂时没有什么用处，修改成一个。
         /// 请原谅我英语不好，起不了满意的名字
         /// </summary>
-        public IUrlEvent CauseEvent { get; set; }
+        public IUrlCrawlEvent CauseEvent { get; set; }
     }
 }

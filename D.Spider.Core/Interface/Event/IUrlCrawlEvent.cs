@@ -9,7 +9,7 @@ namespace D.Spider.Core.Interface
     /// <summary>
     /// Url 需要爬取的事件
     /// </summary>
-    public interface IUrlEvent : IPluginEvent
+    public interface IUrlCrawlEvent : IPluginEvent
     {
         /// <summary>
         /// 需要抓取的 url

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace D.Spider.Core.Event
 {
-    public class UrlEvent : BaseEvent, IUrlEvent
+    public class UrlCrwalEvent : BaseEvent, IUrlCrawlEvent
     {
         public IUrl ToCrawlUrl { get; set; }
 
@@ -15,7 +15,7 @@ namespace D.Spider.Core.Event
 
         public UrlEventType TaskType { get; set; }
 
-        public UrlEvent() : base()
+        public UrlCrwalEvent() : base()
         {
             TaskType = UrlEventType.Normal;
 

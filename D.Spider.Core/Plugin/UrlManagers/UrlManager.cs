@@ -17,7 +17,7 @@ namespace D.Spider.Core.Plugin
     /// 处理 url 队列
     /// </summary>
     public class UrlManager : BasePlugin, IPlugin
-        , IPluginEventHandler<IUrlEvent>
+        , IPluginEventHandler<IUrlCrawlEvent>
         , IPluginEventHandler<IPageDownloadCompleteEvent>
     {
         ILogger _logger;
@@ -51,7 +51,7 @@ namespace D.Spider.Core.Plugin
             _toCrawlTasks = new List<UrlCrawlTask>();
         }
 
-        public void Handle(IUrlEvent e)
+        public void Handle(IUrlCrawlEvent e)
         {
             _logger.LogDebug($"url manager 接收到事件 {e.Uid}");
 

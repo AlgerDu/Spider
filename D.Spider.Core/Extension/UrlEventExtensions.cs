@@ -11,9 +11,9 @@ namespace D.Spider.Core.Extension
 {
     public static class UrlEventExtensions
     {
-        public static IUrlEvent CreateUrlEvent(this IEventFactory eventFactory, IPlugin fromPlugin, string url)
+        public static IUrlCrawlEvent CreateUrlEvent(this IEventFactory eventFactory, IPlugin fromPlugin, string url)
         {
-            return new UrlEvent
+            return new UrlCrwalEvent
             {
                 FromPlugin = fromPlugin.Symbol,
                 ToCrawlUrl = new Url(url)
