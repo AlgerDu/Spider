@@ -13,23 +13,20 @@ namespace D.Spider.Core.Event
 
         public IUrlCrawlOptions CrawlOptions { get; set; }
 
-        public UrlCrwalEventType TaskType { get; set; }
+        public UrlCrwalEventType CrawlType { get; set; }
 
         public UrlCrwalEvent() : base()
         {
-            TaskType = UrlCrwalEventType.Normal;
+            CrawlType = UrlCrwalEventType.Normal;
 
             DealType = DealPluginEventType.First;
 
-            AddToPluginSymbol(new PluginSymbol
-            {
-                PType = PluginType.UrlManager
-            });
+            AddToPluginSymbol(PluginType.UrlManager);
         }
 
         public override string ToString()
         {
-            return $"事件 {Uid} ：{TaskType} 爬取 {ToCrawlUrl}";
+            return $"事件 {Uid} ：{CrawlType} 爬取 {ToCrawlUrl}";
         }
     }
 }

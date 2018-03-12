@@ -10,14 +10,12 @@ namespace D.Spider.Core.Model.Crawl
     /// <summary>
     /// 
     /// </summary>
-    public class UrlCrawlOptions : IUrlCrawlOptions
+    public class UrlCrawlOptions : IUrlCrawlOptions, ICycleCrawlOptions
     {
-        public string Token { get; set; }
+        public TimeSpan Interval { get; set; }
 
-        public DateTime? StartTime { get; set; }
+        public int CycleCount { get; set; }
 
-        public TimeSpan? Interval { get; set; }
-
-        public int? CycleCount { get; set; }
+        public TimeSpan PageLoadingTime { get; set; }
     }
 }
