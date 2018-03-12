@@ -70,7 +70,7 @@ namespace D.Spider.Example
 
             if (html.Length < 400000)
             {
-                var ne = _eventFactory.CreateUrlEvent(this, _exampleUrl);
+                var ne = _eventFactory.CreateUrlEvent(this, "http://www.baidu.com");
 
                 _eventBus.Publish(ne);
 
