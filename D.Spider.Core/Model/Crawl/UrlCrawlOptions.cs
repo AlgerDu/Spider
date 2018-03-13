@@ -16,6 +16,6 @@ namespace D.Spider.Core.Model.Crawl
 
         public int CycleCount { get; set; }
 
-        public TimeSpan PageLoadingTime { get; set; }
+        public UrlCrwalEventType CrawlType { get; set; }
     }
 }

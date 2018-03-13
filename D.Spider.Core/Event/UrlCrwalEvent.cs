@@ -13,12 +13,10 @@ namespace D.Spider.Core.Event
 
         public IUrlCrawlOptions CrawlOptions { get; set; }
 
-        public UrlCrwalEventType CrawlType { get; set; }
+        public IPageDownloadOptions PownloadOptions { get; set; }
 
         public UrlCrwalEvent() : base()
         {
-            CrawlType = UrlCrwalEventType.Normal;
-
             DealType = DealPluginEventType.First;
 
             AddToPluginSymbol(PluginType.UrlManager);
@@ -26,7 +24,7 @@ namespace D.Spider.Core.Event
 
         public override string ToString()
         {
-            return $"事件 {Uid} ：{CrawlType} 爬取 {ToCrawlUrl}";
+            return $"事件 {Uid} ：{CrawlOptions.CrawlType} 爬取 {ToCrawlUrl}";
         }
     }
 }

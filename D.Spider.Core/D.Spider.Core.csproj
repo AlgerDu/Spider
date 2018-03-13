@@ -72,6 +72,7 @@
     <Compile Include="Event\UrlCrawledEvent.cs" />
     <Compile Include="Event\UrlCrwalEvent.cs" />
     <Compile Include="Extension\EventExts_PageDownloadEvent.cs" />
+    <Compile Include="Interface\Crawl\IPageDownloadOptions.cs" />
     <Compile Include="Interface\Event\IPageDownloadEvent.cs" />
     <Compile Include="Interface\Event\IPageDownloadCompleteEvent.cs" />
     <Compile Include="Interface\Event\IUrlCrawledEvent.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Extension\PluginExts.cs" />
     <Compile Include="Extension\SpiderCoreExtensions.cs" />
     <Compile Include="Extension\UrlCrawlEventExtensions.cs" />
+    <Compile Include="Model\Crawl\PageDownloadOptions.cs" />
     <Compile Include="Interface\IPageDownloader.cs" />
     <Compile Include="Interface\IEventFactory.cs" />
     <Compile Include="Interface\IEventBus.cs" />

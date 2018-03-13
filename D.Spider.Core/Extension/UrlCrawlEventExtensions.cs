@@ -29,9 +29,12 @@ namespace D.Spider.Core.Extension
                 ToCrawlUrl = new Url(url),
                 CrawlOptions = new UrlCrawlOptions
                 {
-                    PageLoadingTime = TimeSpan.FromSeconds(pageLoadingSeconds)
+                    CrawlType = UrlCrwalEventType.Normal
                 },
-                CrawlType = UrlCrwalEventType.Normal
+                PownloadOptions = new PageDownloadOptions
+                {
+                    PageLoadingTime = TimeSpan.FromSeconds(pageLoadingSeconds)
+                }
             };
         }
     }

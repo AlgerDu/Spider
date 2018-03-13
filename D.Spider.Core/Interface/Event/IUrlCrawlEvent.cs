@@ -22,8 +22,8 @@ namespace D.Spider.Core.Interface
         IUrlCrawlOptions CrawlOptions { get; }
 
         /// <summary>
-        /// 爬取任务的类型（默认是 Normal）
+        /// 页面下载时的一些参数
         /// </summary>
-        UrlCrwalEventType CrawlType { get; }
+        IPageDownloadOptions PownloadOptions { get; }
     }
 }
