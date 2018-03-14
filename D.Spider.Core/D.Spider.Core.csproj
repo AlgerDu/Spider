@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasePlugin.cs" />
-    <Compile Include="EventFactory.cs" />
     <Compile Include="EventManager\HandlerShell.cs" />
     <Compile Include="Event\BaseEvent.cs" />
     <Compile Include="Event\PageDownloadCompleteEvent.cs" />
