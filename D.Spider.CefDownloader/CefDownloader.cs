@@ -141,7 +141,13 @@ namespace D.Spider.Extension.Plugin
         {
             if (e.Frame.IsMain)
             {
-                Thread.Sleep(_cefBrowserLoadEndSleepTime);
+                var options = _pageDownloadEvent.DownloadOptions;
+
+                if (options != null && options.PageLoadingTime > TimeSpan.FromSeconds(0))
+                {
+                    _logger.LogDebug($"页面加载过程中将会等待 {options.PageLoadingTime.TotalSeconds} 秒");
+                    Thread.Sleep(options.PageLoadingTime);
+                }
 
                 var html = await _browser.GetSourceAsync();
                 var oldEvent = _pageDownloadEvent;

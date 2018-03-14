@@ -47,7 +47,7 @@ namespace D.Spider.Example
         {
             _logger.LogInformation($"{this} run");
 
-            var e = this.CreateUrlCrawlEvent(_exampleUrl, 6);
+            var e = this.CreateUrlCrawlEvent(_exampleUrl, 0);
 
             _eventBus.Publish(e);
 
@@ -73,9 +73,7 @@ namespace D.Spider.Example
 
                 return;
             }
-
-
-
+            
             var script = @"
                     var vs:array
                     foreach $('div.catalog-content-wrap div.volume-wrap div.volume')
@@ -95,7 +93,8 @@ namespace D.Spider.Example
 
             var data = _ssEngine.Run(html, script);
 
-            _logger.LogInformation($"{data}");
+            //_logger.LogInformation($"{data}");
+            _logger.LogInformation("解析完成");
         }
     }
 }
