@@ -21,7 +21,7 @@ namespace D.Spider.Core.Plugin
         , IPluginEventHandler<IPageDownloadCompleteEvent>
     {
         ILogger _logger;
-        
+
         IEventBus _eventBus;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace D.Spider.Core.Plugin
             )
         {
             _logger = loggerFactory.CreateLogger<UrlManager>();
-            
+
             _eventBus = eventBus;
 
             CreateSymbol("Core.UrlManager", PluginType.UrlManager);
@@ -74,8 +74,8 @@ namespace D.Spider.Core.Plugin
                 _crawlingTask = null;
             }
 
-            var ne = _eventFactory.CreateUrlCrawledEvent(this, crawledTask.CauseEvent.FromPlugin, e.Page);
-            _eventBus.Publish(ne);
+            var crawledEvent = this.CreateUrlCrawledEvent(crawledTask.CauseEvent.FromPlugin, e.Page);
+            _eventBus.Publish(crawledEvent);
 
             StartIsNotRunningAnyTask();
         }
@@ -118,7 +118,7 @@ namespace D.Spider.Core.Plugin
 
                 //发布一个新的 IPageDownloadEvent 给 downloader
 
-                var e = _eventFactory.CreatePageDownloadEvent(this, _crawlingTask.Url);
+                var e = this.CreatePageDownloadEvent(_crawlingTask.Url, _crawlingTask.CauseEvent.PownloadOptions);
                 _eventBus.Publish(e);
             });
         }

@@ -82,7 +82,6 @@
     <Compile Include="Extension\UrlCrawlEventExtensions.cs" />
     <Compile Include="Model\Crawl\PageDownloadOptions.cs" />
     <Compile Include="Interface\IPageDownloader.cs" />
-    <Compile Include="Interface\IEventFactory.cs" />
     <Compile Include="Interface\IEventBus.cs" />
     <Compile Include="Interface\Crawl\IPage.cs" />
     <Compile Include="Interface\IPluginCollecter.cs" />
