@@ -37,5 +37,21 @@ namespace D.Spider.Core.Extension
                 }
             };
         }
+
+        public static IUrlCrawledEvent CreateUrlCrawledEvent(
+            this IPlugin fromPlugin
+            , IPluginSymbol toPlugin
+            , IPage page)
+        {
+            var e = new UrlCrawledEvent
+            {
+                FromPlugin = fromPlugin.Symbol,
+                Page = page
+            };
+
+            e.AddToPluginSymbol(toPlugin);
+
+            return e;
+        }
     }
 }

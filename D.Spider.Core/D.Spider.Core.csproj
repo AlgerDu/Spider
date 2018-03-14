@@ -71,7 +71,7 @@
     <Compile Include="Event\PageDownloadEvent.cs" />
     <Compile Include="Event\UrlCrawledEvent.cs" />
     <Compile Include="Event\UrlCrwalEvent.cs" />
-    <Compile Include="Extension\EventExts_PageDownloadEvent.cs" />
+    <Compile Include="Extension\PageDownloadEventExtensions.cs" />
     <Compile Include="Interface\Crawl\IPageDownloadOptions.cs" />
     <Compile Include="Interface\Event\IPageDownloadEvent.cs" />
     <Compile Include="Interface\Event\IPageDownloadCompleteEvent.cs" />
