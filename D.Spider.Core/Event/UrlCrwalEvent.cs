@@ -7,29 +7,24 @@ using System.Threading.Tasks;
 
 namespace D.Spider.Core.Event
 {
-    public class UrlEvent : BaseEvent, IUrlEvent
+    public class UrlCrwalEvent : BaseEvent, IUrlCrawlEvent
     {
         public IUrl ToCrawlUrl { get; set; }
 
         public IUrlCrawlOptions CrawlOptions { get; set; }
 
-        public UrlEventType TaskType { get; set; }
+        public IPageDownloadOptions PownloadOptions { get; set; }
 
-        public UrlEvent() : base()
+        public UrlCrwalEvent() : base()
         {
-            TaskType = UrlEventType.Normal;
-
             DealType = DealPluginEventType.First;
 
-            AddToPluginSymbol(new PluginSymbol
-            {
-                PType = PluginType.UrlManager
-            });
+            AddToPluginSymbol(PluginType.UrlManager);
         }
 
         public override string ToString()
         {
-            return $"事件 {Uid} ：{TaskType} 爬取 {ToCrawlUrl}";
+            return $"事件 {Uid} ：{CrawlOptions.CrawlType} 爬取 {ToCrawlUrl}";
         }
     }
 }

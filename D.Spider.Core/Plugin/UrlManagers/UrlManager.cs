@@ -17,12 +17,11 @@ namespace D.Spider.Core.Plugin
     /// 处理 url 队列
     /// </summary>
     public class UrlManager : BasePlugin, IPlugin
-        , IPluginEventHandler<IUrlEvent>
+        , IPluginEventHandler<IUrlCrawlEvent>
         , IPluginEventHandler<IPageDownloadCompleteEvent>
     {
         ILogger _logger;
 
-        IEventFactory _eventFactory;
         IEventBus _eventBus;
 
         /// <summary>
@@ -37,13 +36,11 @@ namespace D.Spider.Core.Plugin
 
         public UrlManager(
             ILoggerFactory loggerFactory
-            , IEventFactory eventFactory
             , IEventBus eventBus
             )
         {
             _logger = loggerFactory.CreateLogger<UrlManager>();
 
-            _eventFactory = eventFactory;
             _eventBus = eventBus;
 
             CreateSymbol("Core.UrlManager", PluginType.UrlManager);
@@ -51,7 +48,7 @@ namespace D.Spider.Core.Plugin
             _toCrawlTasks = new List<UrlCrawlTask>();
         }
 
-        public void Handle(IUrlEvent e)
+        public void Handle(IUrlCrawlEvent e)
         {
             _logger.LogDebug($"url manager 接收到事件 {e.Uid}");
 
@@ -77,8 +74,8 @@ namespace D.Spider.Core.Plugin
                 _crawlingTask = null;
             }
 
-            var ne = _eventFactory.CreateUrlCrawledEvent(this, crawledTask.CauseEvent.FromPlugin, e.Page);
-            _eventBus.Publish(ne);
+            var crawledEvent = this.CreateUrlCrawledEvent(crawledTask.CauseEvent.FromPlugin, e.Page);
+            _eventBus.Publish(crawledEvent);
 
             StartIsNotRunningAnyTask();
         }
@@ -121,7 +118,7 @@ namespace D.Spider.Core.Plugin
 
                 //发布一个新的 IPageDownloadEvent 给 downloader
 
-                var e = _eventFactory.CreatePageDownloadEvent(this, _crawlingTask.Url);
+                var e = this.CreatePageDownloadEvent(_crawlingTask.Url, _crawlingTask.CauseEvent.PownloadOptions);
                 _eventBus.Publish(e);
             });
         }

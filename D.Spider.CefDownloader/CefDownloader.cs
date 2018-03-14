@@ -35,7 +35,6 @@ namespace D.Spider.Extension.Plugin
         ILogger _logger;
 
         IEventBus _eventBus;
-        IEventFactory _eventFactory;
 
         bool _running;
 
@@ -45,13 +44,11 @@ namespace D.Spider.Extension.Plugin
 
         public CefDownloader(
             IEventBus eventBus
-            , IEventFactory eventFactory
             , ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<CefDownloader>();
 
             _eventBus = eventBus;
-            _eventFactory = eventFactory;
 
             CreateSymbol("cef_downloader", PluginType.Downloader);
         }
@@ -144,7 +141,13 @@ namespace D.Spider.Extension.Plugin
         {
             if (e.Frame.IsMain)
             {
-                Thread.Sleep(_cefBrowserLoadEndSleepTime);
+                var options = _pageDownloadEvent.DownloadOptions;
+
+                if (options != null && options.PageLoadingTime > TimeSpan.FromSeconds(0))
+                {
+                    _logger.LogDebug($"页面加载过程中将会等待 {options.PageLoadingTime.TotalSeconds} 秒");
+                    Thread.Sleep(options.PageLoadingTime);
+                }
 
                 var html = await _browser.GetSourceAsync();
                 var oldEvent = _pageDownloadEvent;
@@ -157,7 +160,7 @@ namespace D.Spider.Extension.Plugin
                     Url = oldEvent.Url
                 };
 
-                var completeEvent = _eventFactory.CreatePageDownloadCompleteEvent(this, oldEvent.FromPlugin, page);
+                var completeEvent = this.CreatePageDownloadCompleteEvent(oldEvent.FromPlugin, oldEvent.Uid, page);
 
                 _eventBus.Publish(completeEvent);
 

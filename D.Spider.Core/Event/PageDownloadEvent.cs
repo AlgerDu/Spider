@@ -11,14 +11,13 @@ namespace D.Spider.Core.Event
     {
         public IUrl Url { get; set; }
 
-        public PageDownloadEvent():base()
+        public IPageDownloadOptions DownloadOptions { get; set; }
+
+        public PageDownloadEvent() : base()
         {
             DealType = DealPluginEventType.First;
 
-            AddToPluginSymbol(new PluginSymbol
-            {
-                PType = PluginType.Downloader
-            });
+            AddToPluginSymbol(PluginType.Downloader);
         }
     }
 }

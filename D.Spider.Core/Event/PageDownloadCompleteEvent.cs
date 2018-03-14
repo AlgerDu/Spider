@@ -10,5 +10,7 @@ namespace D.Spider.Core.Event
     public class PageDownloadCompleteEvent : BaseEvent, IPageDownloadCompleteEvent
     {
         public IPage Page { get; set; }
+
+        public Guid PageDownloadEventUid { get; set; }
     }
 }

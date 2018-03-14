@@ -37,5 +37,13 @@ namespace D.Spider.Core.Event
             if (symbol != null)
                 _toPluginSymbols.Add(symbol);
         }
+
+        public void AddToPluginSymbol(PluginType toPluginType)
+        {
+            _toPluginSymbols.Add(new PluginSymbol
+            {
+                PType = toPluginType
+            });
+        }
     }
 }

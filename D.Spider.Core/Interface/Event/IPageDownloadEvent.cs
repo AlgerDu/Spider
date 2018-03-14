@@ -15,5 +15,10 @@ namespace D.Spider.Core.Interface
         /// 需要下载页面的 url
         /// </summary>
         IUrl Url { get; }
+
+        /// <summary>
+        /// 下载 url 对应的页面时使用的一些参数
+        /// </summary>
+        IPageDownloadOptions DownloadOptions { get; }
     }
 }

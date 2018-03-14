@@ -7,29 +7,29 @@ using System.Threading.Tasks;
 namespace D.Spider.Core.Interface
 {
     /// <summary>
-    /// 爬去 url 的一些参数，这个参数可能会在后面经常调整；
-    /// 暂时将所有类型任务的参数都写在这里了，应该分几个接口会比较好
+    /// 普通任务和紧急任务的参数
     /// </summary>
     public interface IUrlCrawlOptions
     {
         /// <summary>
-        /// 这个算是一个举例吧
+        /// 爬取任务的类型（默认是 Normal）
         /// </summary>
-        string Token { get; }
+        UrlCrwalEventType CrawlType { get; }
+    }
 
-        /// <summary>
-        /// 开始时间，定时任务和循环任务的开始时间
-        /// </summary>
-        DateTime? StartTime { get; }
-
+    /// <summary>
+    /// 循环任务的参数
+    /// </summary>
+    public interface ICycleCrawlOptions : IUrlCrawlOptions
+    {
         /// <summary>
         /// 循环任务的事件间隔
         /// </summary>
-        TimeSpan? Interval { get; }
+        TimeSpan Interval { get; }
 
         /// <summary>
         /// 循环次数（-1 时为无限循环）
         /// </summary>
-        int? CycleCount { get; }
+        int CycleCount { get; }
     }
 }

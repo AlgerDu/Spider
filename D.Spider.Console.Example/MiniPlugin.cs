@@ -23,13 +23,11 @@ namespace D.Spider.Example
         ILogger _logger;
 
         IEventBus _eventBus;
-        IEventFactory _eventFactory;
 
         ISpiderScriptEngine _ssEngine;
 
         public MiniPlugin(
             ILoggerFactory loggerFactory
-            , IEventFactory eventFactory
             , IEventBus eventBus
             , ISpiderScriptEngine spiderScriptEngine
             )
@@ -37,7 +35,6 @@ namespace D.Spider.Example
             _logger = loggerFactory.CreateLogger<MiniPlugin>();
 
             _eventBus = eventBus;
-            _eventFactory = eventFactory;
 
             _ssEngine = spiderScriptEngine;
 
@@ -50,7 +47,7 @@ namespace D.Spider.Example
         {
             _logger.LogInformation($"{this} run");
 
-            var e = _eventFactory.CreateUrlEvent(this, _exampleUrl);
+            var e = this.CreateUrlCrawlEvent(_exampleUrl, 0);
 
             _eventBus.Publish(e);
 
@@ -70,15 +67,13 @@ namespace D.Spider.Example
 
             if (html.Length < 400000)
             {
-                var ne = _eventFactory.CreateUrlEvent(this, "http://www.baidu.com");
+                var ne = this.CreateUrlCrawlEvent(_exampleUrl, 6);
 
                 _eventBus.Publish(ne);
 
                 return;
             }
-
-
-
+            
             var script = @"
                     var vs:array
                     foreach $('div.catalog-content-wrap div.volume-wrap div.volume')
@@ -98,7 +93,8 @@ namespace D.Spider.Example
 
             var data = _ssEngine.Run(html, script);
 
-            _logger.LogInformation($"{data}");
+            //_logger.LogInformation($"{data}");
+            _logger.LogInformation("解析完成");
         }
     }
 }

@@ -97,9 +97,9 @@ namespace D.Spider.Core
     }
 
     /// <summary>
-    /// url 爬取事件的类型
+    /// url 爬取事件 类型
     /// </summary>
-    public enum UrlEventType
+    public enum UrlCrwalEventType
     {
         /// <summary>
         /// 普通
@@ -112,18 +112,13 @@ namespace D.Spider.Core
         Cron,
 
         /// <summary>
-        /// 循环爬去任务
+        /// 循环爬取任务
         /// </summary>
         Cycle,
 
         /// <summary>
         /// 紧急
         /// </summary>
-        Emergency,
-
-        /// <summary>
-        /// 取消对 url 的爬取任务
-        /// </summary>
-        Cancel
+        Emergency
     }
 }
