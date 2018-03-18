@@ -54,6 +54,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\x64\Release\D.Spider.CefDownloader.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="D.Util, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
