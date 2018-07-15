@@ -82,12 +82,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
-      <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
-      <Name>D.Spider.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
