@@ -93,7 +93,7 @@ namespace D.Spider.Example
 
             var data = _ssEngine.Run(html, script);
 
-            //_logger.LogInformation($"{data}");
+            _logger.LogInformation($"{data}");
             _logger.LogInformation("解析完成");
         }
     }
