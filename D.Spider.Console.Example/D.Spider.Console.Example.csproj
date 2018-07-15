@@ -92,10 +92,6 @@
       <Project>{c9e71634-cf18-48d6-be39-3d0f8220beb0}</Project>
       <Name>D.Spider.CefDownloader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\D.Spider.SpiderScriptEngine\D.Spider.SpiderScriptEngine.csproj">
-      <Project>{00cac10e-534f-49e8-a484-f927203195f7}</Project>
-      <Name>D.Spider.SpiderScriptEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
