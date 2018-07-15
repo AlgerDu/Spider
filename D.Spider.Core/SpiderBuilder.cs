@@ -1,9 +1,9 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using D.Spider.Core.Interface;
-using D.Util.Config;
-using D.Util.Interface;
-using D.Util.Logger;
-using D.Utils.AutofacExt;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,72 +14,62 @@ namespace D.Spider.Core
 {
     public class SpiderBuilder : ISpiderBuilder
     {
-        Type _startupType;
+        IStartup _startup;
+
+        Action<IConfigurationBuilder> _configAction;
+        Action<ILoggerFactory, IConfiguration> _configureLoggingAction;
 
         public SpiderBuilder(string[] args)
         {
             //TODO 处理一些运行参数
         }
 
-        public ISpider Build()
-        {
-            var startup = _startupType.Assembly.CreateInstance(_startupType.FullName) as IStartup;
-
-            var configCollector = CreateConfigCollector(startup);
-            var pluginCollector = CreatePluginCollecter(startup);
-
-            var container = CreateAutofacContainer(startup, configCollector, pluginCollector);
-            
-            return container.Resolve<ISpider>();
-        }
-
         public ISpiderBuilder UseStartup<T>() where T : IStartup, new()
         {
-            _startupType = typeof(T);
+            _startup = new T();
 
             return this;
         }
 
-        /// <summary>
-        /// 创建一个 ConfigCollector，并且调用 Startup 
-        /// </summary>
-        /// <param name="startup"></param>
-        /// <returns></returns>
-        private IConfigCollector CreateConfigCollector(IStartup startup)
+        public ISpiderBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configAction)
         {
-            var configCollector = new ConfigCollector();
-
-            startup.CollectConfig(configCollector);
-
-            return configCollector;
+            _configAction = configAction;
+            return this;
         }
 
-        /// <summary>
-        /// 创建 autofac 的 container
-        /// </summary>
-        /// <param name="startup"></param>
-        /// <param name="configCollector"></param>
-        /// <returns></returns>
-        private IContainer CreateAutofacContainer(IStartup startup, IConfigCollector configCollector, IPluginCollecter pluginCollecter)
+        public ISpiderBuilder ConfigureLogging(Action<ILoggerFactory, IConfiguration> configureLoggingAction)
         {
-            //TODO：需要迁移到其它地方，暂时写在这里
+            _configureLoggingAction = configureLoggingAction;
+            return this;
+        }
+
+        public ISpider Build()
+        {
+            var configurationBuilder = new ConfigurationBuilder();
+            var loggerFactory = new LoggerFactory();
+
+            _configAction(configurationBuilder);
+
+            _startup.Configuration = configurationBuilder.Build();
+
+            _configureLoggingAction(loggerFactory, _startup.Configuration);
 
             var builder = new ContainerBuilder();
 
-            //builder.AddUtils();
+            IServiceCollection services = new ServiceCollection();
+            services.AddLogging();
+            services.AddSingleton<ILoggerFactory>(loggerFactory);
 
-            builder.RegisterType<LoggerFactory>()
-                .As<ILoggerFactory>()
-                .SingleInstance();
+            _startup.ConfigService(builder);
 
-            builder.AddConfigProvider(configCollector.CreateProvider());
+            builder.Populate(services);
 
             //TODO：需要迁移到其它地方，暂时写在这里
-            builder.RegisterInstance<IPluginCollecter>(pluginCollecter);
+            builder.RegisterInstance<IPluginCollecter>(CreatePluginCollecter(_startup));
 
-            startup.ConfigService(builder);
+            var container = builder.Build();
 
-            return builder.Build();
+            return container.Resolve<ISpider>();
         }
 
         /// <summary>
