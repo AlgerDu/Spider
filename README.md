@@ -1,31 +1,15 @@
 # Spider
 
-## 简介
+在 `D.Spider` 的框架下，你可以通过 `插件` 扩展的形式快速、灵活的完成自己的目标。通过已有的一些插件，你可以专注于业务的实现，不在为网页的下载、解析等等事情烦恼。
 
-自定义**爬虫**工具。目前用于网络小说的爬取。
+## 发布
 
-## 目标
+已经将稳定的版本发布到 `nuget` 上，供大家方便的使用。
 
-* 可方便扩展
-* 适应页面布局变化
+* [D.Spider.Core](https://www.nuget.org/packages/D.Spider.Core/)
+* [D.Spider.CefDownloader](https://www.nuget.org/packages/D.Spider.CefDownloader/)
+* [D.Spider.SpiderScriptEngine](https://www.nuget.org/packages/D.Spider.SpiderScriptEngine/)
 
-## 项目简要说明
+## 文档
 
-* `D.Util.x` 逐步积累的一些开发所必需的基础工具组件，比如 `log`、`config`等。在 `spider` 中逐步完善，当到达一定程度之后就会分离成为一个单独项目。
-
-    * 日志：`ILogWriter` 、`ILoggerFactory` 、`ILogger` 、`ILogContext`；
-    * 配置：`IConfig` 、`IConfigItem` 。
-
-* `D.Spider.x` 基本的爬虫流程。
-* `D.NovelCrawl.x` 小说爬取相关。
-
-## 计划
-
-* `v1.x` 
-
-1. 可以完成的用于网络小说的爬取；
-2. 稳定长时间运行。
-
-* `v2.x`
-
-1. 插件式架构，方便爬虫业务扩展
+待完善。
