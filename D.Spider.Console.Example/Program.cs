@@ -1,4 +1,5 @@
 ﻿using D.Spider.Core;
+using D.Spider.Core.Interface;
 using System;
 
 namespace D.Spider.Example
@@ -9,6 +10,7 @@ namespace D.Spider.Example
         {
             var spider = new SpiderBuilder(args)
                 .UseStartup<Startup>()
+                
                 .Build()
                 .Run();
 

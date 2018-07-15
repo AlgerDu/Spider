@@ -2,7 +2,7 @@
 using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
 using D.Spider.Core.SpiderScriptEngine;
-using D.Util.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,12 +27,12 @@ namespace D.Spider.Example
         ISpiderScriptEngine _ssEngine;
 
         public MiniPlugin(
-            ILoggerFactory loggerFactory
+            ILogger<MiniPlugin> logger
             , IEventBus eventBus
             , ISpiderScriptEngine spiderScriptEngine
             )
         {
-            _logger = loggerFactory.CreateLogger<MiniPlugin>();
+            _logger = logger;
 
             _eventBus = eventBus;
 

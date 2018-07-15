@@ -3,8 +3,7 @@ using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
 using D.Spider.Core.SpiderScriptEngine;
 using D.Spider.Extension.Plugin;
-using D.Util.Interface;
-using D.Utils.AutofacExt;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace D.Spider.Example
@@ -14,19 +13,14 @@ namespace D.Spider.Example
     /// </summary>
     class Startup : IStartup
     {
-        public void CollectConfig(IConfigCollector configCollector)
-        {
-            Console.WriteLine("Startup 收集配置");
-        }
+        public IConfiguration Configuration { get; set; }
 
         public void ConfigService(ContainerBuilder builder)
         {
             Console.WriteLine("Startup 配置服务（依赖注入）");
 
             builder.RegisterType<SsEngine>().As<ISpiderScriptEngine>().SingleInstance();
-
-            builder.AddConsoleLogWriter();
-
+            
             builder.AddSpiderCoreService();
         }
 
