@@ -1,5 +1,4 @@
-﻿using D.Util.Interface;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using D.Spider.Core.Interface;
 using Newtonsoft.Json.Linq;
@@ -8,6 +7,7 @@ using System.Reflection;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace D.Spider.Core.SpiderScriptEngine
 {
@@ -26,9 +26,10 @@ namespace D.Spider.Core.SpiderScriptEngine
         Dictionary<SsKeywordTypes, ISsKeywordHandler> _keywordHandlers;
 
         public SsEngine(
-            ILoggerFactory loggerFactory)
+            ILogger<SsEngine> logger
+            )
         {
-            _logger = loggerFactory.CreateLogger<SsEngine>();
+            _logger = logger;
 
             LoadAllKeywordHandlers();
         }

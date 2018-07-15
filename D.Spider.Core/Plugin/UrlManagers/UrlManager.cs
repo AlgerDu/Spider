@@ -1,7 +1,7 @@
 ﻿using D.Spider.Core.Extension;
 using D.Spider.Core.Interface;
 using D.Spider.Core.Plugin.UrlManagers;
-using D.Util.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,11 +35,11 @@ namespace D.Spider.Core.Plugin
         UrlCrawlTask _crawlingTask;
 
         public UrlManager(
-            ILoggerFactory loggerFactory
+            ILogger<UrlManager> logger
             , IEventBus eventBus
             )
         {
-            _logger = loggerFactory.CreateLogger<UrlManager>();
+            _logger = logger;
 
             _eventBus = eventBus;
 

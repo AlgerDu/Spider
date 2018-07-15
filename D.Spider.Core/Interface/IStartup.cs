@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using D.Util.Interface;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +14,16 @@ namespace D.Spider.Core.Interface
     public interface IStartup
     {
         /// <summary>
-        /// 手动添加一些配置或者设置配置文件等等
+        /// 全局加载的配置
         /// </summary>
-        /// <param name="configCollector"></param>
-        void CollectConfig(IConfigCollector configCollector);
+        IConfiguration Configuration { get; set; }
 
         /// <summary>
-        /// 依赖注入
+        /// 依赖注入；
+        /// 算了，还是使用 autofac 吧，哎，纠结
         /// </summary>
-        /// <param name="builder"></param>
-        void ConfigService(ContainerBuilder builder);
+        /// <param name="services"></param>
+        void ConfigService(ContainerBuilder services);
 
         /// <summary>
         /// 手动添加一些插件

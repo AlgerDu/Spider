@@ -6,7 +6,7 @@ using D.Spider.Core.Extension;
 using D.Spider.Core.Hnadler;
 using D.Spider.Core.Interface;
 using D.Spider.Core.Model.Crawl;
-using D.Util.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,11 +42,17 @@ namespace D.Spider.Extension.Plugin
 
         IPageDownloadEvent _pageDownloadEvent;
 
+        /// <summary>
+        /// 自定义对 CefSharp 的封装
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="eventBus"></param>
         public CefDownloader(
-            IEventBus eventBus
-            , ILoggerFactory loggerFactory)
+            ILogger<CefDownloader> logger
+            , IEventBus eventBus
+            )
         {
-            _logger = loggerFactory.CreateLogger<CefDownloader>();
+            _logger = logger;
 
             _eventBus = eventBus;
 
@@ -54,6 +60,10 @@ namespace D.Spider.Extension.Plugin
         }
 
         #region IPlugin 相关
+        /// <summary>
+        /// 开启本插件的任务
+        /// </summary>
+        /// <returns></returns>
         public override IPlugin Run()
         {
             lock (this)
@@ -76,6 +86,10 @@ namespace D.Spider.Extension.Plugin
             return this;
         }
 
+        /// <summary>
+        /// 停止本插件的任务
+        /// </summary>
+        /// <returns></returns>
         public override IPlugin Stop()
         {
             lock (this)
@@ -91,6 +105,10 @@ namespace D.Spider.Extension.Plugin
         #endregion
 
         #region Handlers
+        /// <summary>
+        /// 处理页面下载事件
+        /// </summary>
+        /// <param name="e"></param>
         public void Handle(IPageDownloadEvent e)
         {
             lock (this)

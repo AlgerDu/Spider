@@ -1,5 +1,4 @@
 ﻿using D.Spider.Core.Interface;
-using D.Util.Interface;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace D.Spider.Core
 {
@@ -23,12 +23,12 @@ namespace D.Spider.Core
         public bool IsRunning => throw new NotImplementedException();
 
         public DSpider(
-            ILoggerFactory loggerFactory
+            ILogger<DSpider> logger
             , IPluginManager pluginManager
             , IPluginEventManager pluginEventManager
             )
         {
-            _logger = loggerFactory.CreateLogger<DSpider>();
+            _logger = logger;
 
             _pluginManager = pluginManager;
             _pluginEventManager = pluginEventManager;

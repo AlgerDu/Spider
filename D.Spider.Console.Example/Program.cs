@@ -1,4 +1,6 @@
 ﻿using D.Spider.Core;
+using D.Spider.Core.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace D.Spider.Example
@@ -9,6 +11,10 @@ namespace D.Spider.Example
         {
             var spider = new SpiderBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureLogging((loggerFactory, configer) =>
+                {
+                    loggerFactory.AddConsole(LogLevel.Trace);
+                })
                 .Build()
                 .Run();
 

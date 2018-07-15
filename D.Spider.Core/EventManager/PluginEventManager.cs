@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using D.Util.Interface;
 using System.Collections.Concurrent;
 using D.Spider.Core.EventManager;
+using Microsoft.Extensions.Logging;
 
 namespace D.Spider.Core
 {
@@ -25,10 +25,10 @@ namespace D.Spider.Core
         public bool IsRunning => _isRunning;
 
         public PluginEventManager(
-            ILoggerFactory loggerFactory
+            ILogger<PluginEventManager> logger
             )
         {
-            _logger = loggerFactory.CreateLogger<PluginEventManager>();
+            _logger = logger;
 
             dic_EventTasks = new Dictionary<Guid, PluginEventTask>();
             dic_Plugins = new Dictionary<int, HandlerShell>();

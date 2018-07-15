@@ -34,9 +34,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\D.NovelCrawl.Console\bin\Debug\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NSoup, Version=0.8.0.0, Culture=neutral, PublicKeyToken=6d44e53f0a65e802, processorArchitecture=MSIL">
       <HintPath>..\packages\NSoup.0.8.0\lib\net40\NSoup.dll</HintPath>
@@ -81,16 +80,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\D.Spider.Core\D.Spider.Core.csproj">
-      <Project>{96D8A6C2-C50C-4961-9458-04EBED78CB69}</Project>
-      <Name>D.Spider.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\D.Spider.SpiderScriptEngine\D.Spider.SpiderScriptEngine.csproj">
-      <Project>{00cac10e-534f-49e8-a484-f927203195f7}</Project>
-      <Name>D.Spider.SpiderScriptEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
