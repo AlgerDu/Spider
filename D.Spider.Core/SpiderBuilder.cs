@@ -48,7 +48,8 @@ namespace D.Spider.Core
             var configurationBuilder = new ConfigurationBuilder();
             var loggerFactory = new LoggerFactory();
 
-            _configAction(configurationBuilder);
+            if (_configAction != null)
+                _configAction(configurationBuilder);
 
             _startup.Configuration = configurationBuilder.Build();
 
