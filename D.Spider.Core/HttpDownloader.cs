@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using D.Spider.Core.Events;
-using D.Util.Interface;
 using System.Net;
 using System.IO;
 using D.Util.Web;
 using D.Util.Models;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace D.Spider.Core
 {
@@ -63,8 +63,8 @@ namespace D.Spider.Core
         }
 
         public HttpDownloader(
-            IEventBus eventBus
-            , ILoggerFactory loggerFactory
+            ILogger<HttpDownloader> logger
+            , IEventBus eventBus
             , IUrlManager urlManager
             , IjQuery jQuery)
         {

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using D.Spider.Core.Interface;
-using D.Util.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +32,13 @@ namespace D.Spider.Core
         public bool IsRunning => _isRunning;
 
         public PluginManager(
-            ILoggerFactory loggerFactory
+            ILogger<PluginManager> logger
             , IPluginEventManager pluginEventManager
             , IPluginCollecter pluginCollecter
             , ILifetimeScope containerScope
             )
         {
-            _logger = loggerFactory.CreateLogger<PluginManager>();
+            _logger = logger;
 
             _pluginEventManager = pluginEventManager;
             _pluginCollecter = pluginCollecter;
